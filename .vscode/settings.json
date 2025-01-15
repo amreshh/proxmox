@@ -1,0 +1,24 @@
+{
+  "terminal.integrated.scrollback": 1000000,
+  "editor.formatOnSave": true,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "opentofu.experimentalFeatures.prefillRequiredFields": true,
+  "opentofu.codelens.referenceCount": true,
+  "opentofu.experimentalFeatures.validateOnSave": true,
+  "[terraform]": {
+    "editor.defaultFormatter": "gamunu.opentofu",
+    "editor.codeActionsOnSave": {
+      "source.formatAll.opentofu": "explicit"
+    },
+  },
+  "[terraform-vars]": {
+    "editor.defaultFormatter": "gamunu.opentofu",
+    "editor.codeActionsOnSave": {
+      "source.formatAll.opentofu": "explicit"
+    },
+  },
+  "files.associations": {
+    "*.tofu": "terraform"
+  }
+}

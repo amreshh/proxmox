@@ -1,0 +1,22 @@
+{
+  "name": "proxmox",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "runArgs": [
+    "--env-file",
+    ".devcontainer/devcontainer.env"
+  ],
+  "shutdownAction": "stopContainer",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "VisualStudioExptTeam.vscodeintellicode",
+        "docsmsft.docs-markdown",
+        "gamunu.opentofu",
+        "Codeium.codeium"
+      ]
+    }
+  }
+}

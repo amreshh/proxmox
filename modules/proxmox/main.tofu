@@ -1,14 +1,14 @@
 resource "proxmox_vm_qemu" "controlplanes" {
   for_each    = var.controlplanes
-  name        = each.value.proxmox_vm_name
+  name        = each.value.name
   target_node = "proxmox"
-  vmid        = each.value.proxmox_vmid
+  vmid        = each.value.vmid
   desc        = "kubernetes controlplane"
   bios        = "seabios"
   onboot      = "false"
-  memory      = each.value.proxmox_vm_memory
+  memory      = each.value.memory
   balloon     = 0
-  cores       = each.value.proxmox_vm_cores
+  cores       = each.value.cores
   sockets     = 1
   vcpus       = 0
   scsihw      = "virtio-scsi-single"
@@ -33,7 +33,7 @@ resource "proxmox_vm_qemu" "controlplanes" {
           cache      = "none"
           discard    = "false"
           emulatessd = true
-          size       = "${each.value.proxmox_vm_disk_size}G"
+          size       = "${each.value.disk_size}G"
           storage    = "local-zfs"
           replicate  = false
         }
@@ -45,21 +45,21 @@ resource "proxmox_vm_qemu" "controlplanes" {
     model    = "virtio"
     bridge   = "vmbr0"
     firewall = false
-    macaddr  = each.value.proxmox_vm_mac_addr
+    macaddr  = each.value.mac_addr
   }
 }
 
 resource "proxmox_vm_qemu" "workers" {
   for_each    = var.workers
-  name        = each.value.proxmox_vm_name
+  name        = each.value.name
   target_node = "proxmox"
-  vmid        = each.value.proxmox_vmid
+  vmid        = each.value.vmid
   desc        = "kubernetes worker"
   bios        = "seabios"
   onboot      = "false"
-  memory      = each.value.proxmox_vm_memory
+  memory      = each.value.memory
   balloon     = 0
-  cores       = each.value.proxmox_vm_cores
+  cores       = each.value.cores
   sockets     = 1
   vcpus       = 0
   scsihw      = "virtio-scsi-single"
@@ -84,7 +84,7 @@ resource "proxmox_vm_qemu" "workers" {
           cache      = "none"
           discard    = "false"
           emulatessd = true
-          size       = "${each.value.proxmox_vm_disk_size}G"
+          size       = "${each.value.disk_size}G"
           storage    = "local-zfs"
           replicate  = false
         }
@@ -96,6 +96,6 @@ resource "proxmox_vm_qemu" "workers" {
     model    = "virtio"
     bridge   = "vmbr0"
     firewall = false
-    macaddr  = each.value.proxmox_vm_mac_addr
+    macaddr  = each.value.mac_addr
   }
 }

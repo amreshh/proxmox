@@ -1,9 +1,9 @@
 locals {
-  nodes = merge(var.controlplanes, var.workers)
+  nodes = concat(var.controlplane_ips, var.worker_ips)
   common_machine_config = {
     machine = {
       certSANs = [
-        for node in local.nodes : node.address
+        for ip in local.nodes : ip
       ]
     }
     cluster = {

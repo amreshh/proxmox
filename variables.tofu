@@ -18,42 +18,50 @@ variable "cluster_name" {
 
 variable "controlplanes" {
   type = map(object({
-    proxmox_vm_name      = string
-    proxmox_vmid         = number
-    proxmox_vm_memory    = number
-    proxmox_vm_cores     = number
-    proxmox_vm_disk_size = number
-    proxmox_vm_mac_addr  = string
+    name      = string
+    vmid      = number
+    memory    = number
+    cores     = number
+    disk_size = number
+    mac_addr  = string
   }))
   default = {
     controlplane1 = {
-      proxmox_vm_name      = "k8s-controlplane-1"
-      proxmox_vmid         = 101
-      proxmox_vm_memory    = 4096 # MiB
-      proxmox_vm_cores     = 2
-      proxmox_vm_disk_size = 10 # GiB
-      proxmox_vm_mac_addr  = "AA:BB:CC:50:00:10"
+      name      = "k8s-controlplane-1"
+      vmid      = 101
+      memory    = 4096 # MiB
+      cores     = 2
+      disk_size = 10 # GiB
+      mac_addr  = "AA:BB:CC:50:00:10"
     }
   }
 }
 
 variable "workers" {
   type = map(object({
-    proxmox_vm_name      = string
-    proxmox_vmid         = number
-    proxmox_vm_memory    = number
-    proxmox_vm_cores     = number
-    proxmox_vm_disk_size = number
-    proxmox_vm_mac_addr  = string
+    name      = string
+    vmid      = number
+    memory    = number
+    cores     = number
+    disk_size = number
+    mac_addr  = string
   }))
   default = {
     worker1 = {
-      proxmox_vm_name      = "k8s-worker-1"
-      proxmox_vmid         = 102
-      proxmox_vm_memory    = 8192 # MiB
-      proxmox_vm_cores     = 4
-      proxmox_vm_disk_size = 100 # GiB
-      proxmox_vm_mac_addr  = "AA:BB:CC:50:00:11"
+      name      = "k8s-worker-1"
+      vmid      = 102
+      memory    = 8192 # MiB
+      cores     = 4
+      disk_size = 100 # GiB
+      mac_addr  = "AA:BB:CC:50:00:11"
+    }
+    worker2 = {
+      name      = "k8s-worker-2"
+      vmid      = 103
+      memory    = 8192 # MiB
+      cores     = 4
+      disk_size = 100 # GiB
+      mac_addr  = "AA:BB:CC:50:00:12"
     }
   }
 }

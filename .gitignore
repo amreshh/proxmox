@@ -2,5 +2,6 @@
 *.env
 *.hcl
 *.tfstate
+*.tfstate.*
 *.tfstate.backup
 *.terraform

@@ -9,6 +9,5 @@ module "proxmox" {
 #   talos_version      = var.talos_version
 #   kubernetes_version = var.kubernetes_version
 #   controlplane_ips   = module.proxmox.controlplane_ips
-#   controlplanes      = var.controlplanes
-#   workers            = var.workers
+#   worker_ips         = module.proxmox.worker_ips
 # }

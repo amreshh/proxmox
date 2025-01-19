@@ -6,6 +6,7 @@ resource "proxmox_vm_qemu" "controlplanes" {
   desc        = "kubernetes controlplane"
   bios        = "seabios"
   onboot      = "false"
+  vm_state    = "running"
   memory      = each.value.memory
   balloon     = 0
   cores       = each.value.cores
@@ -57,6 +58,7 @@ resource "proxmox_vm_qemu" "workers" {
   desc        = "kubernetes worker"
   bios        = "seabios"
   onboot      = "false"
+  vm_state    = "running"
   memory      = each.value.memory
   balloon     = 0
   cores       = each.value.cores

@@ -12,17 +12,16 @@ data "talos_machine_configuration" "controlplanes" {
   ]
 }
 
-data "talos_machine_configuration" "workers" {
-  count              = length(var.worker_ips)
-  cluster_name       = var.cluster_name
-  machine_type       = "worker"
-  cluster_endpoint   = "https://${var.controlplane_ips[0]}:6443"
-  machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
-  talos_version      = var.talos_version
-  kubernetes_version = var.kubernetes_version
-  examples           = false
-  docs               = false
-}
+# data "talos_machine_configuration" "workers" {
+#   cluster_name       = var.cluster_name
+#   machine_type       = "worker"
+#   cluster_endpoint   = "https://${var.controlplane_ips[0]}:6443"
+#   machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
+#   talos_version      = var.talos_version
+#   kubernetes_version = var.kubernetes_version
+#   examples           = false
+#   docs               = false
+# }
 
 data "talos_client_configuration" "talosconfig" {
   cluster_name         = var.cluster_name

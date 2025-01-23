@@ -1,103 +1,95 @@
-resource "proxmox_vm_qemu" "controlplanes" {
-  for_each    = var.controlplanes
-  name        = each.value.name
-  target_node = "proxmox"
-  vmid        = each.value.vmid
-  desc        = "kubernetes controlplane"
-  bios        = "seabios"
-  onboot      = "false"
-  vm_state    = "running"
-  memory      = each.value.memory
-  balloon     = 0
-  cores       = each.value.cores
-  sockets     = 1
-  vcpus       = 0
-  scsihw      = "virtio-scsi-single"
-  agent       = 1
-  boot        = "order=scsi0;ide2;net0"
-  skip_ipv6   = true
-  tags        = "kubernetes,controlplane"
+resource "proxmox_virtual_environment_vm" "controlplanes" {
+  for_each      = var.controlplanes
+  name          = each.value.name
+  description   = "kubernetes controlplane"
+  tags          = ["kubernetes", "controlplane"]
+  node_name     = "proxmox"
+  vm_id         = each.value.vm_id
+  boot_order    = ["scsi0", "ide2"]
+  tablet_device = false
+  bios          = "seabios"
 
-  disks {
-    ide {
-      ide2 {
-        cdrom {
-          iso = "local:iso/talos_1.9.1.iso"
-        }
-      }
-    }
-    scsi {
-      scsi0 {
-        disk {
-          asyncio    = "io_uring"
-          backup     = false
-          cache      = "none"
-          discard    = "false"
-          emulatessd = true
-          size       = "${each.value.disk_size}G"
-          storage    = "local-zfs"
-          replicate  = false
-        }
-      }
-    }
+  operating_system {
+    type = "l26"
   }
-  network {
-    id       = 0
-    model    = "virtio"
-    bridge   = "vmbr0"
-    firewall = false
-    macaddr  = each.value.mac_addr
+  agent {
+    enabled = true
+  }
+  cpu {
+    cores = each.value.cores
+    type  = "x86-64-v2-AES"
+  }
+  memory {
+    dedicated = each.value.memory
+    floating  = each.value.memory
+  }
+  disk {
+    datastore_id = "local-zfs"
+    backup       = false
+    size         = each.value.disk_size
+    ssd          = true
+    interface    = "scsi0"
+    file_format  = "raw"
+    discard      = "on"
+    cache        = "none"
+  }
+  cdrom {
+    enabled   = true
+    file_id   = "local:iso/talos_1.9.2.iso"
+    interface = "ide2"
+  }
+  network_device {
+    bridge      = "vmbr0"
+    mac_address = each.value.mac_addr
+    firewall    = false
+    model       = "virtio"
   }
 }
 
-resource "proxmox_vm_qemu" "workers" {
-  for_each    = var.workers
-  name        = each.value.name
-  target_node = "proxmox"
-  vmid        = each.value.vmid
-  desc        = "kubernetes worker"
-  bios        = "seabios"
-  onboot      = "false"
-  vm_state    = "running"
-  memory      = each.value.memory
-  balloon     = 0
-  cores       = each.value.cores
-  sockets     = 1
-  vcpus       = 0
-  scsihw      = "virtio-scsi-single"
-  agent       = 1
-  boot        = "order=scsi0;ide2;net0"
-  skip_ipv6   = true
-  tags        = "kubernetes,worker"
+resource "proxmox_virtual_environment_vm" "workers" {
+  for_each      = var.workers
+  name          = each.value.name
+  description   = "kubernetes worker"
+  tags          = ["kubernetes", "worker"]
+  node_name     = "proxmox"
+  vm_id         = each.value.vm_id
+  boot_order    = ["scsi0", "ide2"]
+  tablet_device = false
+  bios          = "seabios"
 
-  disks {
-    ide {
-      ide2 {
-        cdrom {
-          iso = "local:iso/talos_1.9.1.iso"
-        }
-      }
-    }
-    scsi {
-      scsi0 {
-        disk {
-          asyncio    = "io_uring"
-          backup     = false
-          cache      = "none"
-          discard    = "false"
-          emulatessd = true
-          size       = "${each.value.disk_size}G"
-          storage    = "local-zfs"
-          replicate  = false
-        }
-      }
-    }
+  operating_system {
+    type = "l26"
   }
-  network {
-    id       = 0
-    model    = "virtio"
-    bridge   = "vmbr0"
-    firewall = false
-    macaddr  = each.value.mac_addr
+  agent {
+    enabled = true
+  }
+  cpu {
+    cores = each.value.cores
+    type  = "x86-64-v2-AES"
+  }
+  memory {
+    dedicated = each.value.memory
+    floating  = each.value.memory
+  }
+  disk {
+    datastore_id = "local-zfs"
+    backup       = false
+    size         = each.value.disk_size
+    ssd          = true
+    interface    = "scsi0"
+    file_format  = "raw"
+    discard      = "on"
+    cache        = "none"
+  }
+  cdrom {
+    enabled   = true
+    file_id   = "local:iso/talos_1.9.2.iso"
+    interface = "ide2"
+  }
+  network_device {
+    bridge      = "vmbr0"
+    mac_address = each.value.mac_addr
+    firewall    = false
+    model       = "virtio"
   }
 }

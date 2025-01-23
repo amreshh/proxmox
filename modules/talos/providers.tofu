@@ -3,5 +3,8 @@ terraform {
     talos = {
       source = "siderolabs/talos"
     }
+    helm = {
+      source = "hashicorp/helm"
+    }
   }
 }

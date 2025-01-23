@@ -1,7 +1,11 @@
 output "controlplane_ips" {
-  value = [for ip in proxmox_vm_qemu.controlplanes : ip.default_ipv4_address]
+  value = setsubtract(flatten([
+    for ip in proxmox_virtual_environment_vm.controlplanes : ip.ipv4_addresses
+  ]), ["127.0.0.1"])
 }
 
 output "worker_ips" {
-  value = [for ip in proxmox_vm_qemu.workers : ip.default_ipv4_address]
+  value = setsubtract(flatten([
+    for ip in proxmox_virtual_environment_vm.workers : ip.ipv4_addresses
+  ]), ["127.0.0.1"])
 }

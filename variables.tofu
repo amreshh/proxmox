@@ -1,13 +1,25 @@
 variable "talos_version" {
   type        = string
-  default     = "1.9.1"
+  default     = "1.9.2"
   description = "Talos version"
+}
+
+variable "talos_image" {
+  type        = string
+  default     = "factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:v1.9.2"
+  description = "Talos image to use"
 }
 
 variable "kubernetes_version" {
   type        = string
-  default     = "1.31.1"
+  default     = "1.32.0"
   description = "Kubernetes version to provision"
+}
+
+variable "cilium_version" {
+  type        = string
+  default     = "1.17.0-rc.1"
+  description = "Cilium version to provision"
 }
 
 variable "cluster_name" {
@@ -19,20 +31,22 @@ variable "cluster_name" {
 variable "controlplanes" {
   type = map(object({
     name      = string
-    vmid      = number
+    vm_id     = number
     memory    = number
     cores     = number
     disk_size = number
     mac_addr  = string
+    ip_addr   = string
   }))
   default = {
     controlplane1 = {
       name      = "k8s-controlplane-1"
-      vmid      = 101
+      vm_id     = 101
       memory    = 4096 # MiB
       cores     = 2
       disk_size = 10 # GiB
-      mac_addr  = "AA:BB:CC:50:00:10"
+      mac_addr  = "00:00:00:00:00:01"
+      ip_addr   = "192.168.1.4"
     }
   }
 }
@@ -40,28 +54,31 @@ variable "controlplanes" {
 variable "workers" {
   type = map(object({
     name      = string
-    vmid      = number
+    vm_id     = number
     memory    = number
     cores     = number
     disk_size = number
     mac_addr  = string
+    ip_addr   = string
   }))
   default = {
     worker1 = {
       name      = "k8s-worker-1"
-      vmid      = 102
+      vm_id     = 102
       memory    = 8192 # MiB
       cores     = 4
       disk_size = 100 # GiB
-      mac_addr  = "AA:BB:CC:50:00:11"
+      mac_addr  = "00:00:00:00:00:02"
+      ip_addr   = "192.168.1.5"
     }
     worker2 = {
       name      = "k8s-worker-2"
-      vmid      = 103
+      vm_id     = 103
       memory    = 8192 # MiB
       cores     = 4
       disk_size = 100 # GiB
-      mac_addr  = "AA:BB:CC:50:00:12"
+      mac_addr  = "00:00:00:00:00:03"
+      ip_addr   = "192.168.1.6"
     }
   }
 }

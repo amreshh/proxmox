@@ -3,9 +3,19 @@ variable "talos_version" {
   description = "Talos version"
 }
 
+variable "talos_image" {
+  type        = string
+  description = "Talos image to use"
+}
+
 variable "kubernetes_version" {
   type        = string
   description = "Kubernetes version to provision"
+}
+
+variable "cilium_version" {
+  type        = string
+  description = "Cilium version to provision"
 }
 
 variable "cluster_name" {
@@ -14,12 +24,26 @@ variable "cluster_name" {
   description = "Name of the kubernetes cluster"
 }
 
-variable "controlplane_ips" {
-  type        = list(string)
-  description = "List of controlplane IPs"
+variable "controlplanes" {
+  type = map(object({
+    name      = string
+    vm_id     = number
+    memory    = number
+    cores     = number
+    disk_size = number
+    mac_addr  = string
+    ip_addr   = string
+  }))
 }
 
-variable "worker_ips" {
-  type        = list(string)
-  description = "List of worker IPs"
+variable "workers" {
+  type = map(object({
+    name      = string
+    vm_id     = number
+    memory    = number
+    cores     = number
+    disk_size = number
+    mac_addr  = string
+    ip_addr   = string
+  }))
 }

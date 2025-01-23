@@ -1,18 +1,27 @@
 terraform {
-  required_version = "~>1.8 "
+  required_version = "~>1.9"
 
   required_providers {
     proxmox = {
-      source  = "Telmate/proxmox"
-      version = "3.0.1-rc6"
+      source  = "bpg/proxmox"
+      version = "0.70.0"
     }
     talos = {
       source  = "siderolabs/talos"
       version = "0.7.0"
     }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "3.0.0-pre1"
+    }
   }
 }
 
-provider "proxmox" {
-  pm_tls_insecure = true
+provider "helm" {
+  kubernetes = {
+    host                   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
+    cluster_ca_certificate = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.ca_certificate)
+    client_certificate     = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_certificate)
+    client_key             = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_key)
+  }
 }

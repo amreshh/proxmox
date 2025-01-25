@@ -33,7 +33,6 @@ variable "controlplanes" {
     disk_size    = number
     mac_addr     = string
     ip_addr      = string
-    dns_domain   = string
   }))
 }
 
@@ -47,6 +46,5 @@ variable "workers" {
     disk_size    = number
     mac_addr     = string
     ip_addr      = string
-    dns_domain   = string
   }))
 }

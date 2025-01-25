@@ -45,7 +45,6 @@ variable "controlplanes" {
     disk_size    = number
     mac_addr     = string
     ip_addr      = string
-    dns_domain   = string
   }))
   default = {
     controlplane1 = {
@@ -57,7 +56,6 @@ variable "controlplanes" {
       disk_size    = 10 # GiB
       mac_addr     = "00:00:00:00:00:01"
       ip_addr      = "192.168.1.4"
-      dns_domain   = "home"
     }
   }
 }
@@ -72,7 +70,6 @@ variable "workers" {
     disk_size    = number
     mac_addr     = string
     ip_addr      = string
-    dns_domain   = string
   }))
   default = {
     worker1 = {
@@ -84,7 +81,6 @@ variable "workers" {
       disk_size    = 100 # GiB
       mac_addr     = "00:00:00:00:00:02"
       ip_addr      = "192.168.1.5"
-      dns_domain   = "home"
     }
     worker2 = {
       cluster_name = "talos"
@@ -95,7 +91,6 @@ variable "workers" {
       disk_size    = 100 # GiB
       mac_addr     = "00:00:00:00:00:03"
       ip_addr      = "192.168.1.6"
-      dns_domain   = "home"
     }
   }
 }

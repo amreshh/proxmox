@@ -16,7 +16,7 @@ RUN zypper install -y tar \
     tofu-${OPENTOFU_VERSION}
 RUN curl -L https://github.com/siderolabs/talos/releases/download/${TALOS_VERSION}/talosctl-linux-amd64 -o /usr/local/bin/talosctl && chmod +x /usr/local/bin/talosctl
 
-RUN helm repo add cilium https://helm.cilium.io/ && helm repo update
+RUN ln -s /usr/bin/tofu /usr/bin/terraform
 
 RUN echo 'complete -C /usr/bin/tofu tofu' >>~/.bashrc
 RUN echo 'alias ls="ls --color"' >>~/.bashrc

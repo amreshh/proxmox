@@ -13,37 +13,40 @@ variable "kubernetes_version" {
   description = "Kubernetes version to provision"
 }
 
+variable "kubernetes_extra_manifests" {
+  type        = list(string)
+  description = "Kubernetes Gateway API version to provision"
+}
+
 variable "cilium_version" {
   type        = string
   description = "Cilium version to provision"
 }
 
-variable "cluster_name" {
-  type        = string
-  default     = "talos"
-  description = "Name of the kubernetes cluster"
-}
-
 variable "controlplanes" {
   type = map(object({
-    name      = string
-    vm_id     = number
-    memory    = number
-    cores     = number
-    disk_size = number
-    mac_addr  = string
-    ip_addr   = string
+    cluster_name = string
+    name         = string
+    vm_id        = number
+    memory       = number
+    cores        = number
+    disk_size    = number
+    mac_addr     = string
+    ip_addr      = string
+    dns_domain   = string
   }))
 }
 
 variable "workers" {
   type = map(object({
-    name      = string
-    vm_id     = number
-    memory    = number
-    cores     = number
-    disk_size = number
-    mac_addr  = string
-    ip_addr   = string
+    cluster_name = string
+    name         = string
+    vm_id        = number
+    memory       = number
+    cores        = number
+    disk_size    = number
+    mac_addr     = string
+    ip_addr      = string
+    dns_domain   = string
   }))
 }

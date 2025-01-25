@@ -1,5 +1,5 @@
 data "talos_machine_configuration" "controlplanes" {
-  cluster_name       = var.cluster_name
+  cluster_name       = var.controlplanes.controlplane1.cluster_name
   machine_type       = "controlplane"
   cluster_endpoint   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
   machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
@@ -13,7 +13,7 @@ data "talos_machine_configuration" "controlplanes" {
 }
 
 data "talos_machine_configuration" "workers" {
-  cluster_name       = var.cluster_name
+  cluster_name       = var.controlplanes.controlplane1.cluster_name
   machine_type       = "worker"
   cluster_endpoint   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
   machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
@@ -24,7 +24,7 @@ data "talos_machine_configuration" "workers" {
 }
 
 data "talos_client_configuration" "talosconfig" {
-  cluster_name         = var.cluster_name
+  cluster_name         = var.controlplanes.controlplane1.cluster_name
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
   endpoints = [
     for ip in var.controlplanes : "https://${ip.ip_addr}:6443"

@@ -75,6 +75,14 @@ resource "helm_release" "cilium" {
       value = "true"
     },
     {
+      name  = "k8sServiceHost"
+      value = "localhost"
+    },
+    {
+      name  = "k8sServicePort"
+      value = "7445"
+    },
+    {
       name  = "securityContext.capabilities.ciliumAgent"
       value = "{CHOWN,KILL,NET_ADMIN,NET_RAW,IPC_LOCK,SYS_ADMIN,SYS_RESOURCE,DAC_OVERRIDE,FOWNER,SETGID,SETUID}"
     },
@@ -91,12 +99,20 @@ resource "helm_release" "cilium" {
       value = "/sys/fs/cgroup"
     },
     {
-      name  = "k8sServiceHost"
-      value = "localhost"
+      name  = "gatewayAPI.enabled"
+      value = "true"
     },
     {
-      name  = "k8sServicePort"
-      value = "7445"
+      name  = "gatewayAPI.enableAlpn"
+      value = "true"
+    },
+    {
+      name  = "gatewayAPI.enableAppProtocol"
+      value = "true"
+    },
+    {
+      name  = "l2announcements.enabled"
+      value = "true"
     }
   ]
 }

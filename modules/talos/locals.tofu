@@ -10,7 +10,9 @@ locals {
       }
     }
     cluster = {
+      allowSchedulingOnControlPlanes = true
       network = {
+        dnsDomain = var.controlplanes.controlplane1.dns_domain
         cni = {
           name = "none"
         }
@@ -18,6 +20,7 @@ locals {
       proxy = {
         disabled = true
       }
+      extraManifests = var.kubernetes_extra_manifests
     }
   }
 }

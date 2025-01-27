@@ -26,7 +26,8 @@ data "talos_machine_configuration" "workers" {
 data "talos_client_configuration" "talosconfig" {
   cluster_name         = var.controlplanes.controlplane1.cluster_name
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoints = [
-    for ip in var.controlplanes : "https://${ip.ip_addr}:6443"
+  endpoints            = [var.controlplanes.controlplane1.ip_addr]
+  nodes = [
+    for ip in local.nodes : ip.ip_addr
   ]
 }

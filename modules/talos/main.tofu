@@ -44,17 +44,36 @@ resource "talos_cluster_kubeconfig" "kubeconfig" {
   ]
 }
 
-resource "local_file" "kubeconfig_file" {
+resource "local_sensitive_file" "kubeconfig_file" {
   content         = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
   filename        = "/root/.kube/config"
   file_permission = "0711"
 }
 
-resource "local_file" "talosconfig_file" {
+resource "local_sensitive_file" "talosconfig_file" {
   content         = data.talos_client_configuration.talosconfig.talos_config
   filename        = "/root/.talos/config"
   file_permission = "0600"
 }
+
+# resource "local_sensitive_file" "talosconfig_file" {
+#   filename        = "/root/.talos/config"
+#   file_permission = "0600"
+#   content         = <<-EOT
+#     context: talos
+#     contexts:
+#       talos:
+#         endpoints:
+#           - ${var.controlplanes.controlplane1.ip_addr}
+#         nodes:
+#           %{for ip in local.nodes~}
+#             - ${ip.ip_addr}
+#           %{endfor~}
+#         ca: ${data.talos_client_configuration.talosconfig.talos_config.ca_certificate}
+#         crt: ${data.talos_client_configuration.talosconfig.talos_config.client_certificate}
+#         key: ${data.talos_client_configuration.talosconfig.talos_config.client_key}
+#   EOT
+# }
 
 resource "helm_release" "cilium" {
   name            = "cilium"

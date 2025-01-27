@@ -56,25 +56,6 @@ resource "local_sensitive_file" "talosconfig_file" {
   file_permission = "0600"
 }
 
-# resource "local_sensitive_file" "talosconfig_file" {
-#   filename        = "/root/.talos/config"
-#   file_permission = "0600"
-#   content         = <<-EOT
-#     context: talos
-#     contexts:
-#       talos:
-#         endpoints:
-#           - ${var.controlplanes.controlplane1.ip_addr}
-#         nodes:
-#           %{for ip in local.nodes~}
-#             - ${ip.ip_addr}
-#           %{endfor~}
-#         ca: ${data.talos_client_configuration.talosconfig.talos_config.ca_certificate}
-#         crt: ${data.talos_client_configuration.talosconfig.talos_config.client_certificate}
-#         key: ${data.talos_client_configuration.talosconfig.talos_config.client_key}
-#   EOT
-# }
-
 resource "helm_release" "cilium" {
   name            = "cilium"
   repository      = "https://helm.cilium.io/"
@@ -83,6 +64,7 @@ resource "helm_release" "cilium" {
   namespace       = "kube-system"
   atomic          = true
   cleanup_on_fail = true
+  timeout         = 600
 
   set = [
     {
@@ -132,6 +114,57 @@ resource "helm_release" "cilium" {
     {
       name  = "l2announcements.enabled"
       value = "true"
+    },
+    {
+      name  = "hubble.relay.enabled"
+      value = "true"
+    },
+    {
+      name  = "hubble.ui.enabled"
+      value = "true"
     }
+  ]
+
+  depends_on = [
+    data.http.kubernetes_health
+  ]
+}
+
+resource "kubernetes_manifest" "l2_policy" {
+  manifest = {
+    apiVersion = "cilium.io/v2alpha1"
+    kind       = "CiliumL2AnnouncementPolicy"
+    metadata = {
+      name = "default-l2-announcement-policy"
+    }
+    spec = {
+      externalIPs     = true
+      loadBalancerIPs = true
+    }
+  }
+
+  depends_on = [
+    helm_release.cilium
+  ]
+}
+
+resource "kubernetes_manifest" "lb_ip_pool" {
+  manifest = {
+    apiVersion = "cilium.io/v2alpha1"
+    kind       = "CiliumLoadBalancerIPPool"
+    metadata = {
+      name = "ip-pool"
+    }
+    spec = {
+      blocks = [
+        {
+          cidr = var.cilium_lb_ip_pool
+        }
+      ]
+    }
+  }
+
+  depends_on = [
+    helm_release.cilium
   ]
 }

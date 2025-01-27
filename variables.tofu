@@ -19,6 +19,7 @@ variable "kubernetes_version" {
 variable "kubernetes_extra_manifests" {
   type = list(string)
   default = [
+    "https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml",
     "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml",
     "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/standard/gateway.networking.k8s.io_gateways.yaml",
     "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.1.0/config/crd/standard/gateway.networking.k8s.io_httproutes.yaml",
@@ -33,6 +34,12 @@ variable "cilium_version" {
   type        = string
   default     = "1.16.6"
   description = "Cilium version to provision"
+}
+
+variable "cilium_lb_ip_pool" {
+  type        = string
+  default     = "192.168.1.7/32"
+  description = "Cilium load balancer IP pool"
 }
 
 variable "controlplanes" {

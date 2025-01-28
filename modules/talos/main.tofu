@@ -44,18 +44,6 @@ resource "talos_cluster_kubeconfig" "kubeconfig" {
   ]
 }
 
-resource "local_sensitive_file" "kubeconfig_file" {
-  content         = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
-  filename        = "/root/.kube/config"
-  file_permission = "0711"
-}
-
-resource "local_sensitive_file" "talosconfig_file" {
-  content         = data.talos_client_configuration.talosconfig.talos_config
-  filename        = "/root/.talos/config"
-  file_permission = "0600"
-}
-
 resource "helm_release" "cilium" {
   name            = "cilium"
   repository      = "https://helm.cilium.io/"
@@ -64,7 +52,6 @@ resource "helm_release" "cilium" {
   namespace       = "kube-system"
   atomic          = true
   cleanup_on_fail = true
-  timeout         = 600
 
   set = [
     {
@@ -130,41 +117,62 @@ resource "helm_release" "cilium" {
   ]
 }
 
-resource "kubernetes_manifest" "l2_policy" {
-  manifest = {
-    apiVersion = "cilium.io/v2alpha1"
-    kind       = "CiliumL2AnnouncementPolicy"
-    metadata = {
-      name = "default-l2-announcement-policy"
-    }
-    spec = {
-      externalIPs     = true
-      loadBalancerIPs = true
-    }
-  }
+resource "flux_bootstrap_git" "flux_gitops_repo" {
+  embedded_manifests = true
+  path               = "flux"
 
   depends_on = [
-    helm_release.cilium
+    data.http.kubernetes_health
   ]
 }
 
-resource "kubernetes_manifest" "lb_ip_pool" {
-  manifest = {
-    apiVersion = "cilium.io/v2alpha1"
-    kind       = "CiliumLoadBalancerIPPool"
-    metadata = {
-      name = "ip-pool"
-    }
-    spec = {
-      blocks = [
-        {
-          cidr = var.cilium_lb_ip_pool
-        }
-      ]
-    }
-  }
-
-  depends_on = [
-    helm_release.cilium
-  ]
+resource "local_sensitive_file" "kubeconfig_file" {
+  content         = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
+  filename        = "/root/.kube/config"
+  file_permission = "0711"
 }
+
+resource "local_sensitive_file" "talosconfig_file" {
+  content         = data.talos_client_configuration.talosconfig.talos_config
+  filename        = "/root/.talos/config"
+  file_permission = "0600"
+}
+
+# resource "kubernetes_manifest" "l2_policy" {
+#   manifest = {
+#     apiVersion = "cilium.io/v2alpha1"
+#     kind       = "CiliumL2AnnouncementPolicy"
+#     metadata = {
+#       name = "default-l2-announcement-policy"
+#     }
+#     spec = {
+#       externalIPs     = true
+#       loadBalancerIPs = true
+#     }
+#   }
+
+#   depends_on = [
+#     helm_release.cilium
+#   ]
+# }
+
+# resource "kubernetes_manifest" "lb_ip_pool" {
+#   manifest = {
+#     apiVersion = "cilium.io/v2alpha1"
+#     kind       = "CiliumLoadBalancerIPPool"
+#     metadata = {
+#       name = "ip-pool"
+#     }
+#     spec = {
+#       blocks = [
+#         {
+#           cidr = var.cilium_lb_ip_pool
+#         }
+#       ]
+#     }
+#   }
+
+#   depends_on = [
+#     helm_release.cilium
+#   ]
+# }

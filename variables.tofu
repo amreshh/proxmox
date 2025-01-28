@@ -10,6 +10,11 @@ variable "talos_image" {
   description = "Talos image to use"
 }
 
+variable "github_token" {
+  type        = string
+  description = "GitHub token"
+}
+
 variable "kubernetes_version" {
   type        = string
   default     = "1.32.0"

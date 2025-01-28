@@ -14,9 +14,9 @@ terraform {
       source  = "hashicorp/helm"
       version = "3.0.0-pre1"
     }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "2.35.1"
+    flux = {
+      source  = "fluxcd/flux"
+      version = "1.4.0"
     }
     http = {
       source  = "hashicorp/http"
@@ -34,9 +34,18 @@ provider "helm" {
   }
 }
 
-provider "kubernetes" {
-  host                   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
-  cluster_ca_certificate = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.ca_certificate)
-  client_certificate     = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_certificate)
-  client_key             = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_key)
+provider "flux" {
+  kubernetes = {
+    host                   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
+    cluster_ca_certificate = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.ca_certificate)
+    client_certificate     = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_certificate)
+    client_key             = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_key)
+  }
+  git = {
+    url = "https://github.com/amreshh/proxmox.git"
+    http = {
+      username = "git"
+      password = var.github_token
+    }
+  }
 }

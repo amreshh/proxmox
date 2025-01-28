@@ -6,8 +6,8 @@ terraform {
     helm = {
       source = "hashicorp/helm"
     }
-    kubernetes = {
-      source = "hashicorp/kubernetes"
+    flux = {
+      source = "fluxcd/flux"
     }
     http = {
       source = "hashicorp/http"

@@ -1,0 +1,41 @@
+version: v1
+nodes:
+    - name: controlplane-1
+      drives:
+        - id: 8:3$beeFdP6Rn5menqFmyVoiYzInKlKV3aKyPKXyMy3NtJA=
+          name: sda3
+          size: 1048576000
+          make: QEMU QEMU_HARDDISK (Part 3)
+          fs: xfs
+          select: "no"
+        - id: 8:16$1VW5Vot4InGCUgSm5S6WQrp9+0H4pJu/xGGJLrIGL/8=
+          name: sdb
+          size: 107374182400
+          make: QEMU QEMU_HARDDISK
+          select: "yes"
+    - name: worker-1
+      drives:
+        - id: 8:16$KZuQNl5Tn5+a5yp+tCqYtK4y/hTmDeyFksijNLcJQVY=
+          name: sdb
+          size: 107374182400
+          make: QEMU QEMU_HARDDISK
+          select: "yes"
+        - id: 8:3$wzbGvVp9URBe11dVOcFCPWWd1vYgBq3ivaeQpTo0bhA=
+          name: sda3
+          size: 1048576000
+          make: QEMU QEMU_HARDDISK (Part 3)
+          fs: xfs
+          select: "no"
+    - name: worker-2
+      drives:
+        - id: 8:19$kWyH33YxvrU6CPOTMsNPfBNaLOqAW0HFJEKqSWv35zU=
+          name: sdb3
+          size: 1048576000
+          make: QEMU QEMU_HARDDISK (Part 3)
+          fs: xfs
+          select: "no"
+        - id: 8:0$7LiN6+9aFODo+/jHJfq07RBSptselNeT0AR0sC8e9iQ=
+          name: sda
+          size: 107374182400
+          make: QEMU QEMU_HARDDISK
+          select: "yes"

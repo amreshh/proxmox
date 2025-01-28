@@ -17,7 +17,7 @@ spec:
   chart:
     spec:
       chart: prometheus-community/kube-prometheus-stack
-      version: v0.79.2
+      version: 68.3.2
       sourceRef:
         kind: HelmRepository
         name: kube-prometheus-stack

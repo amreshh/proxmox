@@ -1,7 +1,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: kube-prometheus-stack
+  name: prometheus-community
   namespace: flux-system
 spec:
   interval: 5m
@@ -16,7 +16,7 @@ spec:
   interval: 10m
   chart:
     spec:
-      chart: prometheus-community/kube-prometheus-stack
+      chart: kube-prometheus-stack
       version: "68.3.2"
       sourceRef:
         kind: HelmRepository

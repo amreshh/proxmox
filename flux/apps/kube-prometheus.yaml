@@ -23,4 +23,3 @@ spec:
         name: kube-prometheus-stack
         namespace: flux-system
       interval: 10m
-  releaseName: kube-prometheus-stack

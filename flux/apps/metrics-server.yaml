@@ -5,6 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m
+  prune: true
   sourceRef:
     kind: GitRepository
     name: metrics-server

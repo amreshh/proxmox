@@ -6,3 +6,4 @@
 *.tfstate.backup
 *.terraform
 *.tfvars
+k8s

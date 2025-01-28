@@ -1,12 +1,16 @@
 locals {
-  nodes = concat(var.controlplane_ips, var.worker_ips)
+  nodes = merge(var.controlplanes, var.workers)
   common_machine_config = {
     machine = {
       certSANs = [
-        for ip in local.nodes : ip
+        for ip in local.nodes : ip.ip_addr
       ]
+      install = {
+        image = var.talos_image
+      }
     }
     cluster = {
+      allowSchedulingOnControlPlanes = true
       network = {
         cni = {
           name = "none"
@@ -15,6 +19,7 @@ locals {
       proxy = {
         disabled = true
       }
+      extraManifests = var.kubernetes_extra_manifests
     }
   }
 }

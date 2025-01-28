@@ -3,42 +3,31 @@ resource "talos_machine_secrets" "machine_secrets" {
 }
 
 resource "talos_machine_configuration_apply" "controlplanes" {
-  count                       = length(var.controlplane_ips)
+  for_each                    = var.controlplanes
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.controlplanes.machine_configuration
-  endpoint                    = var.controlplane_ips[0]
-  node                        = var.controlplane_ips[count.index]
+  endpoint                    = var.controlplanes.controlplane1.ip_addr
+  node                        = var.controlplanes[each.key].ip_addr
   config_patches = [
     yamlencode(local.common_machine_config)
   ]
 }
 
-# resource "talos_machine_configuration_apply" "workers" {
-#   count                       = length(var.worker_ips)
-#   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
-#   machine_configuration_input = data.talos_machine_configuration.workers.machine_configuration
-#   endpoint                    = var.controlplane_ips[0]
-#   node                        = var.worker_ips[count.index]
-#   config_patches = [
-#     yamlencode(local.common_machine_config)
-#   ]
-# }
-
-# resource "talos_machine_configuration_apply" "workers" {
-#   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
-#   machine_configuration_input = data.talos_machine_configuration.workers.machine_configuration
-#   # endpoint                    = "192.168.1.45"
-#   node = "192.168.1.47"
-#   config_patches = [
-#     yamlencode(local.common_machine_config)
-#   ]
-# }
+resource "talos_machine_configuration_apply" "workers" {
+  for_each                    = var.workers
+  client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
+  machine_configuration_input = data.talos_machine_configuration.workers.machine_configuration
+  node                        = var.workers[each.key].ip_addr
+  config_patches = [
+    yamlencode(local.common_machine_config)
+  ]
+}
 
 resource "talos_machine_bootstrap" "talos" {
-  count                = length(var.controlplane_ips)
+  for_each             = var.controlplanes
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoint             = var.controlplane_ips[0]
-  node                 = var.controlplane_ips[count.index]
+  endpoint             = each.value.ip_addr
+  node                 = each.value.ip_addr
 
   depends_on = [
     talos_machine_configuration_apply.controlplanes
@@ -47,22 +36,143 @@ resource "talos_machine_bootstrap" "talos" {
 
 resource "talos_cluster_kubeconfig" "kubeconfig" {
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  endpoint             = var.controlplane_ips[0]
-  node                 = var.controlplane_ips[0]
+  endpoint             = var.controlplanes.controlplane1.ip_addr
+  node                 = var.controlplanes.controlplane1.ip_addr
 
   depends_on = [
     talos_machine_bootstrap.talos
   ]
 }
 
-resource "local_file" "kubeconfig_file" {
+resource "helm_release" "cilium" {
+  name            = "cilium"
+  repository      = "https://helm.cilium.io/"
+  version         = var.cilium_version
+  chart           = "cilium"
+  namespace       = "kube-system"
+  atomic          = true
+  cleanup_on_fail = true
+
+  set = [
+    {
+      name  = "ipam.mode"
+      value = "kubernetes"
+    },
+    {
+      name  = "kubeProxyReplacement"
+      value = "true"
+    },
+    {
+      name  = "k8sServiceHost"
+      value = "localhost"
+    },
+    {
+      name  = "k8sServicePort"
+      value = "7445"
+    },
+    {
+      name  = "securityContext.capabilities.ciliumAgent"
+      value = "{CHOWN,KILL,NET_ADMIN,NET_RAW,IPC_LOCK,SYS_ADMIN,SYS_RESOURCE,DAC_OVERRIDE,FOWNER,SETGID,SETUID}"
+    },
+    {
+      name  = "securityContext.capabilities.cleanCiliumState"
+      value = "{NET_ADMIN,SYS_ADMIN,SYS_RESOURCE}"
+    },
+    {
+      name  = "cgroup.autoMount.enabled"
+      value = "false"
+    },
+    {
+      name  = "cgroup.hostRoot"
+      value = "/sys/fs/cgroup"
+    },
+    {
+      name  = "gatewayAPI.enabled"
+      value = "true"
+    },
+    {
+      name  = "gatewayAPI.enableAlpn"
+      value = "true"
+    },
+    {
+      name  = "gatewayAPI.enableAppProtocol"
+      value = "true"
+    },
+    {
+      name  = "l2announcements.enabled"
+      value = "true"
+    },
+    {
+      name  = "hubble.relay.enabled"
+      value = "true"
+    },
+    {
+      name  = "hubble.ui.enabled"
+      value = "true"
+    }
+  ]
+
+  depends_on = [
+    data.http.kubernetes_health
+  ]
+}
+
+resource "flux_bootstrap_git" "flux_gitops_repo" {
+  embedded_manifests = true
+  path               = "flux"
+
+  depends_on = [
+    data.http.kubernetes_health
+  ]
+}
+
+resource "local_sensitive_file" "kubeconfig_file" {
   content         = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
   filename        = "/root/.kube/config"
   file_permission = "0711"
 }
 
-resource "local_file" "talosconfig_file" {
+resource "local_sensitive_file" "talosconfig_file" {
   content         = data.talos_client_configuration.talosconfig.talos_config
   filename        = "/root/.talos/config"
   file_permission = "0600"
 }
+
+# resource "kubernetes_manifest" "l2_policy" {
+#   manifest = {
+#     apiVersion = "cilium.io/v2alpha1"
+#     kind       = "CiliumL2AnnouncementPolicy"
+#     metadata = {
+#       name = "default-l2-announcement-policy"
+#     }
+#     spec = {
+#       externalIPs     = true
+#       loadBalancerIPs = true
+#     }
+#   }
+
+#   depends_on = [
+#     helm_release.cilium
+#   ]
+# }
+
+# resource "kubernetes_manifest" "lb_ip_pool" {
+#   manifest = {
+#     apiVersion = "cilium.io/v2alpha1"
+#     kind       = "CiliumLoadBalancerIPPool"
+#     metadata = {
+#       name = "ip-pool"
+#     }
+#     spec = {
+#       blocks = [
+#         {
+#           cidr = var.cilium_lb_ip_pool
+#         }
+#       ]
+#     }
+#   }
+
+#   depends_on = [
+#     helm_release.cilium
+#   ]
+# }

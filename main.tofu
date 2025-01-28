@@ -5,11 +5,15 @@ module "proxmox" {
 }
 
 module "talos" {
-  source             = "./modules/talos"
-  talos_version      = var.talos_version
-  kubernetes_version = var.kubernetes_version
-  controlplane_ips   = module.proxmox.controlplane_ips
-  worker_ips         = module.proxmox.worker_ips
+  source                     = "./modules/talos"
+  talos_version              = var.talos_version
+  talos_image                = var.talos_image
+  kubernetes_version         = var.kubernetes_version
+  kubernetes_extra_manifests = var.kubernetes_extra_manifests
+  cilium_version             = var.cilium_version
+  cilium_lb_ip_pool          = var.cilium_lb_ip_pool
+  controlplanes              = var.controlplanes
+  workers                    = var.workers
 
   depends_on = [
     module.proxmox

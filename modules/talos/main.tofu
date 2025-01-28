@@ -122,7 +122,7 @@ resource "flux_bootstrap_git" "flux_gitops_repo" {
   path               = "flux"
 
   depends_on = [
-    data.http.kubernetes_health
+    helm_release.cilium
   ]
 }
 

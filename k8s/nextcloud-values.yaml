@@ -1,4 +1,0 @@
-nextcloud:
-  host: nextcloud.kubernetes.home
-  username: admin
-  password: admin

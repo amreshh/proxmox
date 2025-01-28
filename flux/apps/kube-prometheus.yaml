@@ -4,7 +4,7 @@ metadata:
   name: kube-prometheus-stack
   namespace: flux-system
 spec:
-  # interval: 1d
+  interval: 5m
   url: https://prometheus-community.github.io
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2

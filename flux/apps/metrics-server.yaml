@@ -11,10 +11,10 @@ spec:
     name: metrics-server
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
+kind: HelmRepository
 metadata:
   name: metrics-server
   namespace: flux-system
 spec:
-  interval: 5m0s
-  url: https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.7.2/components.yaml
+  interval: 1m
+  url: https://kubernetes-sigs.github.io/metrics-server/

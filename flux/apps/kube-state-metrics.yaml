@@ -23,3 +23,4 @@ spec:
         name: kube-state-metrics
         namespace: flux-system
       interval: 10m
+    releaseName: kube-state-metrics

@@ -20,6 +20,12 @@ locals {
         disabled = true
       }
       extraManifests = var.kubernetes_extra_manifests
+      externalCloudProvider = {
+        enabled = true
+        manifests = [
+          "https://raw.githubusercontent.com/sergelogvinov/proxmox-csi-plugin/main/docs/deploy/proxmox-csi-plugin.yml"
+        ]
+      }
     }
   }
 }

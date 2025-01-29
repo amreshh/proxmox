@@ -5,3 +5,6 @@ resources:
 - namespaces.yaml
 - kube-state-metrics.yaml
 - kube-prometheus.yaml
+- gateway.yaml
+- routes.yaml
+

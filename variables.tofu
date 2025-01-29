@@ -42,12 +42,6 @@ variable "cilium_version" {
   description = "Cilium version to provision"
 }
 
-variable "cilium_lb_ip_pool" {
-  type        = string
-  default     = "192.168.1.7/32"
-  description = "Cilium load balancer IP pool"
-}
-
 variable "controlplanes" {
   type = map(object({
     cluster_name = string

@@ -99,6 +99,10 @@ resource "helm_release" "cilium" {
       value = "true"
     },
     {
+      name  = "api-versions"
+      value = "gateway.networking.k8s.io/v1/GatewayClass"
+    },
+    {
       name  = "l2announcements.enabled"
       value = "true"
     },

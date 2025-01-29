@@ -11,7 +11,6 @@ module "talos" {
   kubernetes_version         = var.kubernetes_version
   kubernetes_extra_manifests = var.kubernetes_extra_manifests
   cilium_version             = var.cilium_version
-  cilium_lb_ip_pool          = var.cilium_lb_ip_pool
   controlplanes              = var.controlplanes
   workers                    = var.workers
 

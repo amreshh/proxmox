@@ -4,9 +4,10 @@ resources:
 - storageclass.yaml
 - cilium-l2-policy.yaml
 - cilium-ip-pool.yaml
+- gateway.yaml
 - helm-repositories.yaml
 - namespaces.yaml
 - kube-state-metrics.yaml
 - kube-prometheus-stack.yaml
-- gateway.yaml
+- nextcloud.yaml
 - routes.yaml

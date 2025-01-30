@@ -40,6 +40,9 @@ spec:
         databaseKey: database
     postgresql:
       enabled: true
+      primary:
+        persistence:
+          enabled: true
       global:
         postgresql:
           auth:

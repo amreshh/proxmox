@@ -43,6 +43,7 @@ spec:
       primary:
         persistence:
           enabled: true
+          storageClass: proxmox-external-data
       global:
         postgresql:
           auth:

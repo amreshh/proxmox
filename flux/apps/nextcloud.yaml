@@ -29,8 +29,8 @@ spec:
         passwordKey: password
         hostKey: host
         databaseKey: database
-    # postgres:
-    #   enabled: true
+    postgres:
+      enabled: true
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute

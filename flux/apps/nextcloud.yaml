@@ -17,6 +17,12 @@ spec:
   values:
     nextcloud:
       host: nextcloud.kubernetes.home
+    # internalDatabase:
+    #   enabled: false
+    # externalDatabase:
+    #   enabled: true
+    postgres:
+      enabled: true
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute

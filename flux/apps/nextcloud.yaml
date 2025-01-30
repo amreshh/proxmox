@@ -17,6 +17,11 @@ spec:
   values:
     nextcloud:
       host: nextcloud.kubernetes.home
+      existingSecret:
+        enabled: true
+        secretName: nextcloud
+        usernameKey: username
+        passwordKey: password
     internalDatabase:
       enabled: false
     externalDatabase:

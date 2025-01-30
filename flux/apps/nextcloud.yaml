@@ -17,10 +17,10 @@ spec:
   values:
     nextcloud:
       host: nextcloud.kubernetes.home
-    # internalDatabase:
-    #   enabled: false
-    # externalDatabase:
-    #   enabled: true
+    internalDatabase:
+      enabled: false
+    externalDatabase:
+      enabled: true
     postgres:
       enabled: true
 ---

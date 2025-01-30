@@ -8,9 +8,6 @@ resource "talos_machine_configuration_apply" "controlplanes" {
   machine_configuration_input = data.talos_machine_configuration.controlplanes.machine_configuration
   endpoint                    = var.controlplanes.controlplane1.ip_addr
   node                        = var.controlplanes[each.key].ip_addr
-  config_patches = [
-    yamlencode(local.common_machine_config)
-  ]
 }
 
 resource "talos_machine_configuration_apply" "workers" {
@@ -18,9 +15,6 @@ resource "talos_machine_configuration_apply" "workers" {
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.workers.machine_configuration
   node                        = var.workers[each.key].ip_addr
-  config_patches = [
-    yamlencode(local.common_machine_config)
-  ]
 }
 
 resource "talos_machine_bootstrap" "talos" {

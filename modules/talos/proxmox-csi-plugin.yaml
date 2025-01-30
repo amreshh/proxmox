@@ -1,0 +1,16 @@
+name: proxmox-csi-plugin
+contents: |-
+  apiVersion: v1
+  kind: Secret
+  type: Opaque
+  metadata:
+    name: proxmox-csi-plugin
+    namespace: csi-proxmox
+  stringData:
+    config.yaml: |
+      clusters:
+        - url: ${proxmox_api}
+          insecure: true
+          token_id: "${proxmox_csi_full_tokenid}"
+          token_secret: "${proxmox_csi_token_value}"
+          region: proxmox-cluster

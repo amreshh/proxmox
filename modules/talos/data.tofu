@@ -21,6 +21,9 @@ data "talos_machine_configuration" "workers" {
   kubernetes_version = var.kubernetes_version
   examples           = false
   docs               = false
+  config_patches = [
+    yamlencode(local.common_machine_config)
+  ]
 }
 
 data "talos_client_configuration" "talosconfig" {

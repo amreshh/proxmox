@@ -24,17 +24,17 @@ spec:
         passwordKey: password
     internalDatabase:
       enabled: false
-    # externalDatabase:
-    #   enabled: true
-    #   type: postgresql
-    #   host: nextcloud-postgresql
-    #   existingSecret:
-    #     enabled: true
-    #     secretName: nextcloud-postgresql
-    #     usernameKey: username
-    #     passwordKey: password
-    #     hostKey: host
-    #     databaseKey: database
+    externalDatabase:
+      # enabled: true
+      # type: postgresql
+      # host: nextcloud-postgresql
+      existingSecret:
+        enabled: true
+        secretName: nextcloud-postgresql
+        usernameKey: username
+        passwordKey: password
+        hostKey: host
+        databaseKey: database
     postgres:
       enabled: true
       global:

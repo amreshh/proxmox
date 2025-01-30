@@ -15,9 +15,10 @@ spec:
         namespace: flux-system
       interval: 10m
   values:
-    # persistence:
-    #   enabled: true
-    #   storageClass: proxmox-external-data
+    persistence:
+      enabled: true
+      storageClass: proxmox-external-data
+      size: 100Gi
     nextcloud:
       host: nextcloud.kubernetes.home
       existingSecret:

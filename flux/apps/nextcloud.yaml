@@ -31,6 +31,12 @@ spec:
         databaseKey: database
     postgres:
       enabled: true
+      global:
+        auth:
+          existingSecret: nextcloud-postgresql
+          secretKeys:
+            adminPasswordKey: password
+            userPasswordKey: password
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute

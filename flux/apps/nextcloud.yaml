@@ -28,7 +28,7 @@ spec:
         usernameKey: username
         passwordKey: password
         hostKey: host
-        databaseKey: nextcloud
+        databaseKey: database
     # postgres:
     #   enabled: true
 ---

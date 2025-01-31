@@ -8,6 +8,6 @@ resources:
 - helm-repositories.yaml
 - namespaces.yaml
 - kube-state-metrics.yaml
-# - kube-prometheus-stack.yaml
+- kube-prometheus-stack.yaml
 - nextcloud.yaml
 - routes.yaml

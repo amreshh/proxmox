@@ -23,6 +23,16 @@ spec:
         enabled: true
         storageClassName: proxmox-external-data
         size: 20Gi
+    prometheus:
+      prometheusSpec:
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: proxmox-external-data
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 50Gi
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute

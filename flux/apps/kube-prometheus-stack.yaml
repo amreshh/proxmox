@@ -18,8 +18,11 @@ spec:
     alertmanager:
       enabled: false
     grafana:
-      defaultDashboardsEnabled: false
       defaultDashboardsTimezone: Europe/Amsterdam
+      persistence:
+        enabled: true
+        storageClassName: proxmox-external-data
+        size: 20Gi
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute

@@ -9,5 +9,5 @@ resources:
 - namespaces.yaml
 - kube-state-metrics.yaml
 - kube-prometheus-stack.yaml
-- nextcloud.yaml
+# - nextcloud.yaml
 - routes.yaml

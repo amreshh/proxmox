@@ -17,6 +17,9 @@ spec:
   values:
     alertmanager:
       enabled: false
+    grafana:
+      defaultDashboardsEnabled: false
+      defaultDashboardsTimezone: Europe/Amsterdam
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute

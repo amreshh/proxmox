@@ -8,12 +8,18 @@ spec:
   listeners:
     - protocol: HTTPS
       port: 443
-      name: default-gateway
+      name: default-gateway-https
       hostname: "*.kubernetes.home"
       tls:
         certificateRefs:
           - kind: Secret
             name: gateway-cert
+      allowedRoutes:
+        namespaces:
+          from: All
+    - protocol: HTTP
+      port: 80
+      name: default-gateway-http
       allowedRoutes:
         namespaces:
           from: All

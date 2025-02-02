@@ -17,6 +17,9 @@ spec:
   values:
     alertmanager:
       enabled: false
+    mimir:
+      structuredConfig:
+        multitenancy_enabled: false
     ingester:
       replicas: 1
       persistentVolume:
@@ -32,7 +35,7 @@ spec:
       persistentVolume:
         storageClass: proxmox-external-data
     minio:
-      enabled: false
+      enabled: true
     admin-cache:
       enabled: true
       replicas: 1

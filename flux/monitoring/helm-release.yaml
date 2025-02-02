@@ -48,6 +48,10 @@ spec:
         namespace: flux-system
       interval: 10m
   values:
+    persistence:
+      enabled: true
+      storageClassName: proxmox-external-data
+      size: 5Gi
     route:
       main:
         enabled: true

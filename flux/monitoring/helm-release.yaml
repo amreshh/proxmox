@@ -18,7 +18,11 @@ spec:
     alertmanager:
       enabled: false
     ingester:
+      replicas: 1
       storageClass: proxmox-external-data
+      zoneAwareReplication:
+        enabled: false
+    store_gateway:
       zoneAwareReplication:
         enabled: false
     # nginx:

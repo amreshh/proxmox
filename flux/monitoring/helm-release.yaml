@@ -19,3 +19,5 @@ spec:
       enabled: false
     ingester:
       storageClass: proxmox-external-data
+      zoneAwareReplication:
+        enabled: false

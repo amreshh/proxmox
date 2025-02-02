@@ -39,13 +39,17 @@ spec:
     chunks-cache:
       enabled: true
       replicas: 1
+      allocatedMemory: 1024
     index-cache:
       enabled: true
       replicas: 1
+      allocatedMemory: 1024
     metadata-cache:
       enabled: true
+      allocatedMemory: 256
     results-cache:
       enabled: true
       replicas: 1
+      allocatedMemory: 256
     # nginx:
     #   enabled: false

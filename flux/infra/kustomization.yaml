@@ -6,3 +6,4 @@ resources:
 - cilium-ip-pool.yaml
 - gateway.yaml
 - storageclass.yaml
+- routes.yaml

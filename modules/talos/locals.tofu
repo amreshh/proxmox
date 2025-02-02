@@ -10,7 +10,7 @@ locals {
       }
     }
     cluster = {
-      allowSchedulingOnControlPlanes = true
+      allowSchedulingOnControlPlanes = false
       network = {
         cni = {
           name = "none"

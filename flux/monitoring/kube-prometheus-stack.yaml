@@ -20,11 +20,10 @@ spec:
     grafana:
       defaultDashboardsTimezone: Europe/Amsterdam
       persistence:
-        type: pvc
         enabled: true
         storageClassName: proxmox-external-data
         accessModes: ["ReadWriteOnce"]
-        size: 20Gi
+        size: 5Gi
     prometheus:
       prometheusSpec:
         storageSpec:

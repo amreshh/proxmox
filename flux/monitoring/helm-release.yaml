@@ -25,6 +25,8 @@ spec:
     store_gateway:
       zoneAwareReplication:
         enabled: false
+    compactor:
+      storageClass: proxmox-external-data
     # nginx:
     #   enabled: false
 ---

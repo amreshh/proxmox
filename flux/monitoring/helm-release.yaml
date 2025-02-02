@@ -17,3 +17,5 @@ spec:
   values:
     alertmanager:
       enabled: false
+    ingester:
+      storageClass: proxmox-external-data

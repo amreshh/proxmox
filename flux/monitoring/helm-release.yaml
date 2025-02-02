@@ -23,6 +23,7 @@ spec:
       zoneAwareReplication:
         enabled: false
     store_gateway:
+      storageClass: proxmox-external-data
       zoneAwareReplication:
         enabled: false
     compactor:

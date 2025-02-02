@@ -31,5 +31,7 @@ spec:
     compactor:
       persistentVolume:
         storageClass: proxmox-external-data
+    minio:
+      enabled: false
     # nginx:
     #   enabled: false

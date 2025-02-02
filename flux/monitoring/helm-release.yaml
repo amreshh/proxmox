@@ -21,3 +21,5 @@ spec:
       storageClass: proxmox-external-data
       zoneAwareReplication:
         enabled: false
+    # nginx:
+    #   enabled: false

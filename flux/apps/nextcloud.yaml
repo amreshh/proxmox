@@ -43,12 +43,10 @@ spec:
       primary:
         persistence:
           enabled: true
-          storageClass: proxmox-external-data
+          defaultStorageClass: proxmox-external-data
+          size: 100Gi
       auth:
         existingSecret: nextcloud-mariadb
-        secretKeys:
-          adminPasswordKey: password
-          userPasswordKey: password
     phpClientHttpsFix:
       enabled: true
       protocol: https

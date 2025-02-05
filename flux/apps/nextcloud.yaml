@@ -30,27 +30,25 @@ spec:
       enabled: false
     externalDatabase:
       enabled: true
-      type: postgresql
+      type: mysql
       existingSecret:
         enabled: true
-        secretName: nextcloud-postgresql
+        secretName: nextcloud-mariadb
         usernameKey: username
         passwordKey: password
         hostKey: host
         databaseKey: database
-    postgresql:
+    mariadb:
       enabled: true
       primary:
         persistence:
           enabled: true
           storageClass: proxmox-external-data
-      global:
-        postgresql:
-          auth:
-            existingSecret: nextcloud-postgresql
-            secretKeys:
-              adminPasswordKey: password
-              userPasswordKey: password
+      auth:
+        existingSecret: nextcloud-mariadb
+        secretKeys:
+          adminPasswordKey: password
+          userPasswordKey: password
     phpClientHttpsFix:
       enabled: true
       protocol: https

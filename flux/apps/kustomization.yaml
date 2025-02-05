@@ -4,4 +4,4 @@ resources:
 - helm-repositories.yaml
 - namespaces.yaml
 # - influxdb.yaml
-- nextcloud.yaml
+# - nextcloud.yaml

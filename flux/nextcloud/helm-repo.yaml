@@ -6,12 +6,3 @@ metadata:
 spec:
   interval: 15m
   url: https://nextcloud.github.io/helm
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: influxdb
-  namespace: flux-system
-spec:
-  interval: 15m
-  url: https://helm.influxdata.com

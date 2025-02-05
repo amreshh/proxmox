@@ -40,7 +40,7 @@ spec:
       persistence:
         storageClass: proxmox-external-data
 
-    chunkCache:
+    chunksCache:
       enabled: false
           
     deploymentMode: SingleBinary

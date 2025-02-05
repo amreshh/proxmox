@@ -44,6 +44,8 @@ spec:
 
     singleBinary:
       replicas: 1
+      persistence:
+        storageClass: proxmox-external-data
 
     # Zero out replica counts of other deployment modes
     backend:

@@ -37,6 +37,8 @@ spec:
 
     minio:
       enabled: true
+      persistence:
+        storageClass: proxmox-external-data
           
     deploymentMode: SingleBinary
 

@@ -36,6 +36,9 @@ spec:
       enabled: true
       alertmanager:
         enabled: false
+      compactor:
+        persistentVolume:
+          storageClass: proxmox-external-data
     tempo:
       enabled: false
     grafana-oncall:

@@ -26,10 +26,14 @@ spec:
               type: loki
               url: http://{{ .Release.Name }}-loki-gateway
               isDefault: false
+            - name: Mimir
+              uid: prom
+              type: prometheus
+              url: http://{{ .Release.Name }}-mimir-nginx/prometheus
     loki:
       enabled: true
     mimir:
-      enabled: false
+      enabled: true
     tempo:
       enabled: false
     grafana-oncall:

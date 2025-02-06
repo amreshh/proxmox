@@ -45,9 +45,6 @@ spec:
       store_gateway:
         persistentVolume:
           storageClass: proxmox-external-data-delete
-      minio:
-        persistentVolume:
-          storageClass: proxmox-external-data-delete
     tempo:
       enabled: false
     grafana-oncall:

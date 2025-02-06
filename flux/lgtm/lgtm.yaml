@@ -17,6 +17,15 @@ spec:
   values:
     grafana:
       enabled: true
+      datasources:
+        datasources.yaml:
+          apiVersion: 1
+          datasources:
+            - name: Loki
+              uid: loki
+              type: loki
+              url: http://{{ .Release.Name }}-loki-gateway
+              isDefault: false
     loki:
       enabled: true
     mimir:

@@ -2,6 +2,8 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: proxmox-external-data-retain
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
 parameters:
   csi.storage.k8s.io/fstype: xfs
   storage: external_data
@@ -16,6 +18,8 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: proxmox-external-data-delete
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
 parameters:
   csi.storage.k8s.io/fstype: xfs
   storage: external_data

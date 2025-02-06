@@ -18,7 +18,7 @@ spec:
     grafana:
       enabled: true
     loki:
-      enabled: false
+      enabled: true
     mimir:
       enabled: false
     tempo:

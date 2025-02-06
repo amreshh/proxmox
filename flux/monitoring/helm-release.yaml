@@ -30,6 +30,7 @@ spec:
               uid: prom
               type: prometheus
               url: http://{{ .Release.Name }}-mimir-nginx/prometheus
+              isDefault: true
     loki:
       enabled: true
     mimir:

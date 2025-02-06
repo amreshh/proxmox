@@ -38,7 +38,7 @@ spec:
         enabled: false
       compactor:
         persistentVolume:
-          storageClass: proxmox-external-data
+          storageClass: proxmox-external-data-delete
     tempo:
       enabled: false
     grafana-oncall:

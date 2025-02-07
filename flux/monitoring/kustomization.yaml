@@ -5,3 +5,4 @@ resources:
 - helm-repos.yaml
 - helm-releases.yaml
 - routes.yaml
+- service-monitors.yaml

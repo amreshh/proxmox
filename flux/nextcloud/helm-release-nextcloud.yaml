@@ -43,7 +43,7 @@ spec:
       primary:
         persistence:
           enabled: true
-          defaultStorageClass: proxmox-external-data-retain
+          storageClass: proxmox-external-data-retain
           size: 100Gi
       auth:
         existingSecret: nextcloud-mariadb

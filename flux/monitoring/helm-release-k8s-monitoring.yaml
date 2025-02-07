@@ -14,3 +14,8 @@ spec:
         name: grafana
         namespace: flux-system
       interval: 10m
+  values:
+    cluster:
+      name: "talos"
+    destinations:
+      - http://lgtm-distributed-mimir-nginx.monitoring.svc.cluster.local/api/v1/push

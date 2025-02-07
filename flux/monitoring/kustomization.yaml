@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
 - namespace.yaml
 - helm-repos.yaml
+- grafana-dashboards.yaml
 - helm-release-k8s-monitoring.yaml
 - helm-release-lgtm-distributed.yaml
 - routes.yaml

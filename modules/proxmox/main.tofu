@@ -35,7 +35,7 @@ resource "proxmox_virtual_environment_vm" "controlplanes" {
   }
   cdrom {
     enabled   = true
-    file_id   = "local:iso/talos_1.9.2.iso"
+    file_id   = "local:iso/talos_1.9.3.iso"
     interface = "ide2"
   }
   network_device {
@@ -83,7 +83,7 @@ resource "proxmox_virtual_environment_vm" "workers" {
   }
   cdrom {
     enabled   = true
-    file_id   = "local:iso/talos_1.9.2.iso"
+    file_id   = "local:iso/talos_1.9.3.iso"
     interface = "ide2"
   }
   network_device {

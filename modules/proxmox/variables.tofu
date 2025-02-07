@@ -1,3 +1,11 @@
+variable "talos" {
+  type = object({
+    version = string
+    iso     = string
+    image   = string
+  })
+}
+
 variable "controlplanes" {
   type = map(object({
     name      = string

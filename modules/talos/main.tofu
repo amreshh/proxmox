@@ -1,5 +1,5 @@
 resource "talos_machine_secrets" "machine_secrets" {
-  talos_version = var.talos_version
+  talos_version = var.talos.version
 }
 
 resource "talos_machine_configuration_apply" "controlplanes" {

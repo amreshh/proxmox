@@ -1,11 +1,9 @@
-variable "talos_version" {
-  type        = string
-  description = "Talos version"
-}
-
-variable "talos_image" {
-  type        = string
-  description = "Talos image to use"
+variable "talos" {
+  type = object({
+    version = string
+    iso     = string
+    image   = string
+  })
 }
 
 variable "kubernetes_version" {

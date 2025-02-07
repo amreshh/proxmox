@@ -3,7 +3,7 @@ data "talos_machine_configuration" "controlplanes" {
   machine_type       = "controlplane"
   cluster_endpoint   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
   machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
-  talos_version      = var.talos_version
+  talos_version      = var.talos.version
   kubernetes_version = var.kubernetes_version
   examples           = false
   docs               = false
@@ -17,7 +17,7 @@ data "talos_machine_configuration" "workers" {
   machine_type       = "worker"
   cluster_endpoint   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
   machine_secrets    = talos_machine_secrets.machine_secrets.machine_secrets
-  talos_version      = var.talos_version
+  talos_version      = var.talos.version
   kubernetes_version = var.kubernetes_version
   examples           = false
   docs               = false

@@ -6,7 +6,7 @@ locals {
         for ip in local.nodes : ip.ip_addr
       ]
       install = {
-        image = var.talos_image
+        image = var.talos.image
       }
     }
     cluster = {

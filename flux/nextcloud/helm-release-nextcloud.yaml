@@ -50,3 +50,7 @@ spec:
     phpClientHttpsFix:
       enabled: true
       protocol: https
+    metrics:
+      enabled: true
+      info:
+        apps: true

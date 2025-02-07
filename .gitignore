@@ -8,3 +8,4 @@
 *.tfvars
 k8s
 certs
+secrets.yaml

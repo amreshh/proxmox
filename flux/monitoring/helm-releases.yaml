@@ -54,6 +54,8 @@ spec:
       enabled: true
       alertmanager:
         enabled: false
+      usage_stats:
+        enabled: false
       metaMonitoring:
         dashboards:
           enabled: true

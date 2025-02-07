@@ -107,19 +107,19 @@ resource "helm_release" "cilium" {
     {
       name  = "hubble.ui.enabled"
       value = "true"
-    },
-    {
-      name  = "prometheus.enabled"
-      value = "true"
-    },
-    {
-      name  = "operator.prometheus.enabled"
-      value = "true"
-    },
-    {
-      name  = "hubble.metrics.enabled"
-      value = "{dns,drop,tcp,flow,port-distribution,icmp,httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction}"
     }
+    # {
+    #   name  = "prometheus.enabled"
+    #   value = "true"
+    # },
+    # {
+    #   name  = "operator.prometheus.enabled"
+    #   value = "true"
+    # },
+    # {
+    #   name  = "hubble.metrics.enabled"
+    #   value = "{dns,drop,tcp,flow,port-distribution,icmp,httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction}"
+    # }
   ]
 
   depends_on = [

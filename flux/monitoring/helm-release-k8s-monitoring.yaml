@@ -23,5 +23,5 @@ spec:
         url: http://lgtm-distributed-mimir-nginx.monitoring.svc.cluster.local/api/v1/push
     clusterMetrics:
       enabled: true
-    prometheusOperatorObjects:
+    alloy-metrics:
       enabled: true

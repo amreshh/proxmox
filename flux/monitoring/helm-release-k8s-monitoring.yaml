@@ -21,3 +21,7 @@ spec:
       - name: mimir
         type: prometheus
         url: http://lgtm-distributed-mimir-nginx.monitoring.svc.cluster.local/api/v1/push
+    clusterMetrics:
+      enabled: true
+    prometheusOperatorObjects:
+      enabled: true

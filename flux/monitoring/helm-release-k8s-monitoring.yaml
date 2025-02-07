@@ -27,3 +27,6 @@ spec:
       enabled: true
     alloy-metrics:
       enabled: true
+      annotations:
+        scrape: prometheus.io/scrape
+        metricsPortNumber: prometheus.io/port

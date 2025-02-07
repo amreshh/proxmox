@@ -17,6 +17,9 @@ spec:
   values:
     grafana:
       enabled: true
+      persistence:
+        enabled: true
+        size: 5Gi
       datasources:
         datasources.yaml:
           apiVersion: 1

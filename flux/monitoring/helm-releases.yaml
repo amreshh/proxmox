@@ -54,6 +54,11 @@ spec:
       enabled: true
       alertmanager:
         enabled: false
+      metaMonitoring:
+        serviceMonitor:
+          enabled: true
+          labels:
+            release: kube-state-metrics
     tempo:
       enabled: false
     grafana-oncall:

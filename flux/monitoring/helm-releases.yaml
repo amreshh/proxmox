@@ -55,10 +55,12 @@ spec:
       alertmanager:
         enabled: false
       metaMonitoring:
+        dashboards:
+          enabled: true
         serviceMonitor:
           enabled: true
           labels:
-            release: kube-state-metrics
+            app.kubernetes.io/name: kube-state-metrics
     tempo:
       enabled: false
     grafana-oncall:

@@ -3,8 +3,6 @@ kind: Kustomization
 resources:
 - namespace.yaml
 - helm-repos.yaml
-- helm-release-k8s-monitoring.yaml
-# - helm-release-kube-state-metrics.yaml
-- helm-release-lgtm-distributed.yaml
-- routes.yaml
-# - service-monitors.yaml
+# - helm-release-k8s-monitoring.yaml
+# - helm-release-lgtm-distributed.yaml
+# - routes.yaml

@@ -23,6 +23,8 @@ spec:
         url: http://lgtm-distributed-mimir-nginx.monitoring.svc.cluster.local/api/v1/push
     annotationAutoDiscovery:
       enabled: true
+      destinations:
+        - mimir
     clusterMetrics:
       enabled: true
       destinations:

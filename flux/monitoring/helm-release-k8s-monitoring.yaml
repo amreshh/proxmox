@@ -25,6 +25,8 @@ spec:
       enabled: true
     clusterMetrics:
       enabled: true
+      destinations:
+        - mimir
     alloy-metrics:
       enabled: true
       # annotations:

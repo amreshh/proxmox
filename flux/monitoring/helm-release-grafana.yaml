@@ -14,18 +14,7 @@ spec:
         name: grafana
         namespace: flux-system
       interval: 10m
-  # values:
-  #   selfReporting:
-  #     enabled: false
-  #   cluster:
-  #     name: "talos"
-  #   destinations:
-  #     - name: mimir
-  #       type: prometheus
-  #       url: http://lgtm-distributed-mimir-nginx.monitoring.svc.cluster.local/api/v1/push
-  #   clusterMetrics:
-  #     enabled: true
-  #   alloy-metrics:
-  #     enabled: true
-  #   annotationAutoDiscovery:
-  #     enabled: true
+  values:
+    persistence:
+      enabled: true
+    size: 5Gi

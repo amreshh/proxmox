@@ -56,5 +56,5 @@ spec:
         apps: true
       serviceMonitor:
         enabled: true
-        namespace: monitoring
+        namespace: nextcloud
         jobLabel: app.kubernetes.io/name

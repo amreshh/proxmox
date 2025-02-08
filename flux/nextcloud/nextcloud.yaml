@@ -54,12 +54,3 @@ spec:
       enabled: true
       info:
         apps: true
-      service:
-        annotations:
-          k8s.grafana.com/scrape: "true"
-          k8s.grafana.com/job: nextcloud
-          k8s.grafana.com/instance: talos
-          k8s.grafana.com/metrics.path: /metrics
-          k8s.grafana.com/metrics.portName: metrics
-          k8s.grafana.com/metrics.scheme: http
-          k8s.grafana.com/metrics.scrapeInterval: 60s

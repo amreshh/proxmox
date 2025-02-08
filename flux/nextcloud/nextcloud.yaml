@@ -56,5 +56,5 @@ spec:
         apps: true
       serviceMonitor:
         enabled: true
-        namespace: nextcloud
+        namespace: monitoring
         jobLabel: nextcloud

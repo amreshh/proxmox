@@ -54,7 +54,7 @@ spec:
       enabled: true
       info:
         apps: true
-      serviceMonitor:
-        enabled: true
-        namespace: nextcloud
-        jobLabel: nextcloud
+      # serviceMonitor:
+      #   enabled: true
+      #   namespace: nextcloud
+      #   jobLabel: nextcloud

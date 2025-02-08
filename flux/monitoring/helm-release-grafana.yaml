@@ -17,4 +17,4 @@ spec:
   values:
     persistence:
       enabled: true
-    size: 5Gi
+      size: 5Gi

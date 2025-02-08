@@ -21,3 +21,7 @@ spec:
       persistence:
         enabled: true
         size: 5Gi
+    prometheus:
+      prometheusSpec:
+        podMonitorSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false

@@ -49,6 +49,11 @@ locals {
           bind-address = "0.0.0.0"
         }
       }
+      scheduler = {
+        extraArgs = {
+          bind-address = "0.0.0.0"
+        }
+      }
     }
   }
 }

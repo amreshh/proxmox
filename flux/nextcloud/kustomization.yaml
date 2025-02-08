@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - helm-repos.yaml
-  - helm-release-nextcloud.yaml
+  - nextcloud.yaml
   - routes.yaml

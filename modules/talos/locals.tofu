@@ -44,6 +44,11 @@ locals {
           "https://raw.githubusercontent.com/sergelogvinov/proxmox-cloud-controller-manager/main/docs/deploy/cloud-controller-manager.yml"
         ]
       }
+      controllerManager = {
+        extraArgs = {
+          bind-address = "0.0.0.0"
+        }
+      }
     }
   }
 }

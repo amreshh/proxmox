@@ -23,16 +23,9 @@ spec:
       - name: mimir
         type: prometheus
         url: http://lgtm-distributed-mimir-nginx.monitoring.svc.cluster.local/api/v1/push
-    annotationAutoDiscovery:
-      enabled: true
-      destinations:
-        - mimir
     clusterMetrics:
       enabled: true
-      destinations:
-        - mimir
     alloy-metrics:
       enabled: true
-      # annotations:
-      #   scrape: prometheus.io/scrape
-      #   metricsPortNumber: prometheus.io/port
+    annotationAutoDiscovery:
+      enabled: true

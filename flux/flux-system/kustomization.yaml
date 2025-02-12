@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - gotk-sync.yaml
+  - gotk-components.yaml
+patches:
+- patch: |-
+    - op: replace
+      path: /spec/ref/branch
+      value: dev
+  target:
+    group: source.toolkit.fluxcd.io
+    kind: GitRepository
+    name: flux-system
+    version: v1

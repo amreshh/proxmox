@@ -4,12 +4,12 @@ resources:
   - gotk-sync.yaml
   - gotk-components.yaml
 patches:
-  - patch: |
-      apiVersion: source.toolkit.fluxcd.io/v1
-      kind: GitRepository
-      spec:
-        ref:
-          branch: ${branch}
-    target:
-      kind: GitRepository
-      name: "flux-system"
+- patch: |-
+    - op: replace
+      path: /spec/ref/branch
+      value: ${branch}
+  target:
+    group: source.toolkit.fluxcd.io
+    kind: GitRepository
+    name: flux-system
+    version: v1

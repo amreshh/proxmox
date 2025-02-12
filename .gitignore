@@ -1,0 +1,11 @@
+*.md
+*.env
+*.hcl
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+*.terraform
+*.tfvars
+k8s
+certs
+secrets.yaml

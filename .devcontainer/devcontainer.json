@@ -1,0 +1,26 @@
+{
+  "name": "proxmox",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "runArgs": [
+    "--env-file",
+    ".devcontainer/devcontainer.env"
+  ],
+  "shutdownAction": "stopContainer",
+  "mounts": [
+    "source=${localEnv:HOME}/.kube,target=/root/.kube,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.talos,target=/root/.talos,type=bind,consistency=cached"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "VisualStudioExptTeam.vscodeintellicode",
+        "docsmsft.docs-markdown",
+        "Codeium.codeium",
+        "HashiCorp.terraform"
+      ]
+    }
+  }
+}

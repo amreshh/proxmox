@@ -132,8 +132,9 @@ resource "helm_release" "cilium" {
 }
 
 resource "flux_bootstrap_git" "flux_gitops_repo" {
-  embedded_manifests = true
-  path               = "flux"
+  embedded_manifests   = true
+  path                 = "flux"
+  delete_git_manifests = false
   kustomization_override = templatefile("${path.module}/flux-kustomization-patch.yaml",
     {
       branch = "dev"

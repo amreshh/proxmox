@@ -154,7 +154,7 @@ resource "helm_release" "flux2" {
 resource "kubernetes_secret" "github_token" {
   metadata {
     name      = "github-token"
-    namespace = "flux-system"
+    namespace = helm_release.flux2.namespace
   }
   data = {
     username = "fluxcd"
@@ -167,7 +167,7 @@ resource "helm_release" "flux2_sync" {
   chart           = "flux2-sync"
   version         = var.flux_version.sync_version
   name            = "flux-system"
-  namespace       = "flux-system"
+  namespace       = helm_release.flux2.namespace
   atomic          = true
   cleanup_on_fail = true
   lint            = true
@@ -182,7 +182,7 @@ resource "helm_release" "flux2_sync" {
   }
   set {
     name  = "gitRepository.spec.secretRef.name"
-    value = "github-token"
+    value = kubernetes_secret.github_token.metadata[0].name
   }
   set {
     name  = "kustomization.spec.path"

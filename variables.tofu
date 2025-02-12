@@ -41,6 +41,17 @@ variable "cilium_version" {
   description = "Cilium version to provision"
 }
 
+variable "flux_version" {
+  type = object({
+    version      = string
+    sync_version = string
+  })
+  default = {
+    version      = "2.14.1"
+    sync_version = "1.10.0"
+  }
+}
+
 variable "controlplanes" {
   type = map(object({
     cluster_name = string

@@ -46,138 +46,151 @@ resource "helm_release" "cilium" {
   namespace       = "kube-system"
   atomic          = true
   cleanup_on_fail = true
+  lint            = true
 
-  set = [
-    {
-      name  = "ipam.mode"
-      value = "kubernetes"
-    },
-    {
-      name  = "kubeProxyReplacement"
-      value = "true"
-    },
-    {
-      name  = "k8sServiceHost"
-      value = "localhost"
-    },
-    {
-      name  = "k8sServicePort"
-      value = "7445"
-    },
-    {
-      name  = "securityContext.capabilities.ciliumAgent"
-      value = "{CHOWN,KILL,NET_ADMIN,NET_RAW,IPC_LOCK,SYS_ADMIN,SYS_RESOURCE,DAC_OVERRIDE,FOWNER,SETGID,SETUID}"
-    },
-    {
-      name  = "securityContext.capabilities.cleanCiliumState"
-      value = "{NET_ADMIN,SYS_ADMIN,SYS_RESOURCE}"
-    },
-    {
-      name  = "cgroup.autoMount.enabled"
-      value = "false"
-    },
-    {
-      name  = "cgroup.hostRoot"
-      value = "/sys/fs/cgroup"
-    },
-    {
-      name  = "gatewayAPI.enabled"
-      value = "true"
-    },
-    {
-      name  = "gatewayAPI.enableAlpn"
-      value = "true"
-    },
-    {
-      name  = "gatewayAPI.enableAppProtocol"
-      value = "true"
-    },
-    {
-      name  = "l2announcements.enabled"
-      value = "true"
-    },
-    {
-      name  = "prometheus.enabled"
-      value = "true"
-    },
-    {
-      name  = "operator.prometheus.enabled"
-      value = "true"
-    },
-    {
-      name  = "hubble.relay.enabled"
-      value = "true"
-    },
-    {
-      name  = "hubble.ui.enabled"
-      value = "true"
-    },
-    {
-      name  = "hubble.metrics.enableOpenMetrics"
-      value = "true"
-    },
-    {
-      name  = "hubble.metrics.enabled"
-      value = "{dns,drop,tcp,flow,port-distribution,icmp,httpV2:exemplars=true;labelsContext=source_ip\\,source_namespace\\,source_workload\\,destination_ip\\,destination_namespace\\,destination_workload\\,traffic_direction}"
-    },
-    {
-      name  = "hubble.metrics.serviceMonitor.enabled"
-      value = "false" # need to do this after monitoring stack is installed with the crds
-    }
-  ]
+  set {
+    name  = "ipam.mode"
+    value = "kubernetes"
+  }
+  set {
+    name  = "kubeProxyReplacement"
+    value = "true"
+  }
+  set {
+    name  = "k8sServiceHost"
+    value = "localhost"
+  }
+  set {
+    name  = "k8sServicePort"
+    value = "7445"
+  }
+  set {
+    name  = "securityContext.capabilities.ciliumAgent"
+    value = "{CHOWN,KILL,NET_ADMIN,NET_RAW,IPC_LOCK,SYS_ADMIN,SYS_RESOURCE,DAC_OVERRIDE,FOWNER,SETGID,SETUID}"
+  }
+  set {
+    name  = "securityContext.capabilities.cleanCiliumState"
+    value = "{NET_ADMIN,SYS_ADMIN,SYS_RESOURCE}"
+  }
+  set {
+    name  = "cgroup.autoMount.enabled"
+    value = "false"
+  }
+  set {
+    name  = "cgroup.hostRoot"
+    value = "/sys/fs/cgroup"
+  }
+  set {
+    name  = "gatewayAPI.enabled"
+    value = "true"
+  }
+  set {
+    name  = "gatewayAPI.enableAlpn"
+    value = "true"
+  }
+  set {
+    name  = "gatewayAPI.enableAppProtocol"
+    value = "true"
+  }
+  set {
+    name  = "l2announcements.enabled"
+    value = "true"
+  }
+  set {
+    name  = "prometheus.enabled"
+    value = "true"
+  }
+  set {
+    name  = "operator.prometheus.enabled"
+    value = "true"
+  }
+  set {
+    name  = "hubble.relay.enabled"
+    value = "true"
+  }
+  set {
+    name  = "hubble.ui.enabled"
+    value = "true"
+  }
+  set {
+    name  = "hubble.metrics.enableOpenMetrics"
+    value = "true"
+  }
+  set {
+    name  = "hubble.metrics.enabled"
+    value = "{dns,drop,tcp,flow,port-distribution,icmp,httpV2:exemplars=true;labelsContext=source_ip\\,source_namespace\\,source_workload\\,destination_ip\\,destination_namespace\\,destination_workload\\,traffic_direction}"
+  }
+  set {
+    name  = "hubble.metrics.serviceMonitor.enabled"
+    value = "false" # need to do this after monitoring stack is installed with the crds
+  }
 
   depends_on = [
     data.http.kubernetes_health
   ]
 }
 
-# resource "flux_bootstrap_git" "flux_gitops_repo" {
-#   embedded_manifests   = true
-#   path                 = "flux"
-#   delete_git_manifests = false
-#   kustomization_override = templatefile("${path.module}/flux-kustomization-patch.yaml",
-#     {
-#       branch = "dev"
-#   })
+resource "helm_release" "flux2" {
+  repository       = "https://fluxcd-community.github.io/helm-charts"
+  chart            = "flux2"
+  version          = var.flux_version.version
+  name             = "flux2"
+  namespace        = "flux-system"
+  create_namespace = true
+  atomic           = true
+  cleanup_on_fail  = true
+  lint             = true
 
-#   depends_on = [
-#     helm_release.cilium
-#   ]
-# }
-
-resource "kubernetes_namespace" "flux2" {
-  metadata {
-    name = "flux-system"
+  set {
+    name  = "imageReflectionController.create"
+    value = "false"
+  }
+  set {
+    name  = "imageAutomationController.create"
+    value = "false"
   }
 }
 
-resource "helm_release" "flux2" {
-  repository = "https://fluxcd-community.github.io/helm-charts"
-  chart      = "flux2"
-  version    = "2.14.1"
-  name       = "flux2"
+resource "kubernetes_secret" "github_token" {
+  metadata {
+    name      = "github-token"
+    namespace = "flux-system"
+  }
+  data = {
+    username = "fluxcd"
+    password = var.github_token
+  }
 }
 
 resource "helm_release" "flux2_sync" {
-  repository = "https://fluxcd-community.github.io/helm-charts"
-  chart      = "flux2-sync"
-  version    = "1.10.0"
-  name       = "flux-system"
-  namespace  = "flux-system"
+  repository      = "https://fluxcd-community.github.io/helm-charts"
+  chart           = "flux2-sync"
+  version         = var.flux_version.sync_version
+  name            = "flux-system"
+  namespace       = "flux-system"
+  atomic          = true
+  cleanup_on_fail = true
+  lint            = true
 
-  set = [
-    {
-      name  = "gitRepository.spec.url"
-      value = "https://fluxcd:${var.github_token}@github.com/amreshh/proxmox.git"
-    },
-    {
-      name  = "gitRepository.spec.ref.branch"
-      value = "dev"
-    },
-    {
-      name  = "kustomize.spec.path"
-      value = "flux"
-    }
+  set {
+    name  = "gitRepository.spec.url"
+    value = "https://github.com/amreshh/proxmox.git"
+  }
+  set {
+    name  = "gitRepository.spec.ref.branch"
+    value = "dev"
+  }
+  set {
+    name  = "gitRepository.spec.secretRef.name"
+    value = "github-token"
+  }
+  set {
+    name  = "kustomization.spec.path"
+    value = "flux"
+  }
+
+  depends_on = [
+    helm_release.flux2
   ]
 }
 

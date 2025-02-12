@@ -26,6 +26,13 @@ variable "cilium_version" {
   description = "Cilium version to provision"
 }
 
+variable "flux_version" {
+  type = object({
+    version      = string
+    sync_version = string
+  })
+}
+
 variable "controlplanes" {
   type = map(object({
     cluster_name = string

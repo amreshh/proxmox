@@ -12,6 +12,7 @@ module "talos" {
   kubernetes_version         = var.kubernetes_version
   kubernetes_extra_manifests = var.kubernetes_extra_manifests
   cilium_version             = var.cilium_version
+  flux_version               = var.flux_version
   controlplanes              = var.controlplanes
   workers                    = var.workers
   proxmox_api                = var.proxmox_api

@@ -173,6 +173,10 @@ resource "helm_release" "flux2_sync" {
     {
       name  = "gitRepository.spec.ref.branch"
       value = "dev"
+    },
+    {
+      name  = "kustomize.spec.path"
+      value = "flux"
     }
   ]
 }

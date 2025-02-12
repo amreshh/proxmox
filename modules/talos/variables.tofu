@@ -6,6 +6,11 @@ variable "talos" {
   })
 }
 
+variable "github_token" {
+  type        = string
+  description = "GitHub token"
+}
+
 variable "kubernetes_version" {
   type        = string
   description = "Kubernetes version to provision"

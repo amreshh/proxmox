@@ -131,17 +131,49 @@ resource "helm_release" "cilium" {
   ]
 }
 
-resource "flux_bootstrap_git" "flux_gitops_repo" {
-  embedded_manifests   = true
-  path                 = "flux"
-  delete_git_manifests = false
-  kustomization_override = templatefile("${path.module}/flux-kustomization-patch.yaml",
-    {
-      branch = "dev"
-  })
+# resource "flux_bootstrap_git" "flux_gitops_repo" {
+#   embedded_manifests   = true
+#   path                 = "flux"
+#   delete_git_manifests = false
+#   kustomization_override = templatefile("${path.module}/flux-kustomization-patch.yaml",
+#     {
+#       branch = "dev"
+#   })
 
-  depends_on = [
-    helm_release.cilium
+#   depends_on = [
+#     helm_release.cilium
+#   ]
+# }
+
+resource "kubernetes_namespace" "flux2" {
+  metadata {
+    name = "flux-system"
+  }
+}
+
+resource "helm_release" "flux2" {
+  repository = "https://fluxcd-community.github.io/helm-charts"
+  chart      = "flux2"
+  version    = "2.14.1"
+  name       = "flux2"
+}
+
+resource "helm_release" "flux2_sync" {
+  repository = "https://fluxcd-community.github.io/helm-charts"
+  chart      = "flux2-sync"
+  version    = "1.10.0"
+  name       = "flux-system"
+  namespace  = "flux-system"
+
+  set = [
+    {
+      name  = "gitRepository.spec.url"
+      value = "https://fluxcd:${var.github_token}@github.com/amreshh/proxmox.git"
+    },
+    {
+      name  = "gitRepository.spec.ref.branch"
+      value = "dev"
+    }
   ]
 }
 

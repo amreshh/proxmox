@@ -111,18 +111,3 @@ variable "workers" {
     }
   }
 }
-
-variable "proxmox_api" {
-  type        = string
-  description = "Proxmox api url"
-}
-
-variable "proxmox_csi_full_tokenid" {
-  type        = string
-  description = "Token id of the proxmox csi user"
-}
-
-variable "proxmox_csi_token_value" {
-  type        = string
-  description = "Token value of the proxmox csi user"
-}

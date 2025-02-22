@@ -5,6 +5,10 @@ metadata:
   namespace: nextcloud
 spec:
   interval: 10m
+  install:
+    timeout: 20m
+  upgrade:
+    timeout: 20m
   chart:
     spec:
       chart: nextcloud

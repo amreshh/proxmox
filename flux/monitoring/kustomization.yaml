@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - helm-repos.yaml
-  - kube-prometheus-stack.yaml
+  # - kube-prometheus-stack.yaml
   - routes.yaml
   # - helm-release-mimir.yaml
 # - grafana-dashboards.yaml

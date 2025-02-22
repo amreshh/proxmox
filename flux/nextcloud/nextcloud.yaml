@@ -24,9 +24,7 @@ spec:
       containerPort: 8080
       podSecurityContext:
         runAsUser: 33
-        runAsGroup: 33
-        runAsNonRoot: true
-        readOnlyRootFilesystem: false
+        runAsGroup: 0
       existingSecret:
         enabled: true
         secretName: nextcloud

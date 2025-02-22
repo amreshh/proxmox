@@ -6,7 +6,7 @@ provisioner: nfs.csi.k8s.io
 parameters:
   server: proxmox.home
   share: /external-data/nextcloud
-  mountPermissions: "777"
+  # mountPermissions: "777"
 reclaimPolicy: Retain
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true

@@ -17,7 +17,7 @@ spec:
   values:
     persistence:
       enabled: true
-      storageClass: proxmox-external-data-retain
+      storageClass: external-data-nfs-retain
       size: 100Gi
     nextcloud:
       host: nextcloud.kubernetes.home
@@ -43,7 +43,7 @@ spec:
       primary:
         persistence:
           enabled: true
-          storageClass: proxmox-external-data-retain
+          storageClass: external-data-nfs-retain
           size: 100Gi
       auth:
         existingSecret: nextcloud-mariadb

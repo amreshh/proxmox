@@ -22,8 +22,10 @@ spec:
     nextcloud:
       host: nextcloud.kubernetes.home
       containerPort: 8080
-      securityContext:
-        - CAP_NET_BIND_SERVICE
+      podSecurityContext:
+        capabilities:
+          add:
+            - NET_BIND_SERVICE
       existingSecret:
         enabled: true
         secretName: nextcloud

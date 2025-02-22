@@ -149,6 +149,10 @@ resource "helm_release" "flux2" {
     name  = "imageAutomationController.create"
     value = "false"
   }
+
+  depends_on = [
+    helm_release.cilium
+  ]
 }
 
 resource "kubernetes_secret" "github_token" {

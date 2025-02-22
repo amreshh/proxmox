@@ -18,7 +18,7 @@ resource "proxmox_virtual_environment_vm" "controlplanes" {
   }
   cpu {
     cores = each.value.cores
-    type  = "x86-64-v2-AES"
+    type  = "host"
   }
   memory {
     dedicated = each.value.memory
@@ -67,7 +67,7 @@ resource "proxmox_virtual_environment_vm" "workers" {
   }
   cpu {
     cores = each.value.cores
-    type  = "x86-64-v2-AES"
+    type  = "host"
   }
   memory {
     dedicated = each.value.memory

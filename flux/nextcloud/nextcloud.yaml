@@ -15,16 +15,16 @@ spec:
         namespace: flux-system
       interval: 10m
   values:
+    readinessProbe:
+      initialDelaySeconds: 900
+    livenessProbe:
+      initialDelaySeconds: 900
     persistence:
       enabled: true
       storageClass: external-data-nextcloud
       size: 100Gi
     nextcloud:
       host: nextcloud.kubernetes.home
-      containerPort: 8080
-      podSecurityContext:
-        runAsUser: 33
-        runAsGroup: 0
       existingSecret:
         enabled: true
         secretName: nextcloud

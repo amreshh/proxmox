@@ -9,3 +9,4 @@ resources:
 - gateway.yaml
 - storageclasses.yaml
 - routes.yaml
+- metrics-server.yaml

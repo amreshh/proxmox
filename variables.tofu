@@ -37,7 +37,7 @@ variable "kubernetes_extra_manifests" {
 
 variable "cilium_version" {
   type        = string
-  default     = "1.17.0"
+  default     = "1.17.3"
   description = "Cilium version to provision"
 }
 
@@ -47,8 +47,8 @@ variable "flux_version" {
     sync_version = string
   })
   default = {
-    version      = "2.14.1"
-    sync_version = "1.10.0"
+    version      = "2.15.0"
+    sync_version = "1.12.0"
   }
 }
 

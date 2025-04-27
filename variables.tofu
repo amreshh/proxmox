@@ -18,7 +18,7 @@ variable "github_token" {
 
 variable "kubernetes_version" {
   type        = string
-  default     = "1.32.2"
+  default     = "1.33.0"
   description = "Kubernetes version to provision"
 }
 

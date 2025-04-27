@@ -12,15 +12,13 @@ spec:
   chart:
     spec:
       chart: nextcloud
-      version: "6.6.9"
+      version: "6.6.10"
       sourceRef:
         kind: HelmRepository
         name: nextcloud
         namespace: flux-system
       interval: 10m
   values:
-    image:
-      tag: 31.0.2-apache
     readinessProbe:
       initialDelaySeconds: 900
     livenessProbe:

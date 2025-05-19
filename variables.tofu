@@ -37,7 +37,7 @@ variable "kubernetes_extra_manifests" {
 
 variable "cilium_version" {
   type        = string
-  default     = "1.17.3"
+  default     = "1.17.4"
   description = "Cilium version to provision"
 }
 

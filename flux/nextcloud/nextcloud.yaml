@@ -20,7 +20,7 @@ spec:
       interval: 10m
   values:
     image:
-      tag: 31.0.4-apache
+      tag: 31.0.5-apache
     readinessProbe:
       initialDelaySeconds: 900
     livenessProbe:

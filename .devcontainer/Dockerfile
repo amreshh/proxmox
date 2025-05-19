@@ -1,7 +1,7 @@
 FROM registry.opensuse.org/opensuse/leap:15.6
 
-ENV OPENTOFU_VERSION="1.9.0"
-ENV TALOS_VERSION="v1.9.3"
+ENV OPENTOFU_VERSION="1.9.1"
+ENV TALOS_VERSION="v1.10.2"
 
 ADD ./opentofu.repo /etc/zypp/repos.d/opentofu.repo
 
@@ -23,3 +23,5 @@ RUN echo 'alias ls="ls --color"' >>~/.bashrc
 RUN echo 'source <(talosctl completion bash)' >>~/.bashrc
 RUN echo 'source <(kubectl completion bash)' >>~/.bashrc
 RUN echo 'source <(helm completion bash)' >>~/.bashrc
+
+USER root

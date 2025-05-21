@@ -93,7 +93,7 @@ variable "workers" {
       cluster_name = "talos"
       name         = "k8s-worker-1"
       vm_id        = 102
-      memory       = 8192 # MiB
+      memory       = 16384 # MiB
       cores        = 4
       disk_size    = 100 # GiB
       mac_addr     = "00:00:00:00:00:02"
@@ -103,7 +103,7 @@ variable "workers" {
       cluster_name = "talos"
       name         = "k8s-worker-2"
       vm_id        = 103
-      memory       = 8192 # MiB
+      memory       = 16384 # MiB
       cores        = 4
       disk_size    = 100 # GiB
       mac_addr     = "00:00:00:00:00:03"

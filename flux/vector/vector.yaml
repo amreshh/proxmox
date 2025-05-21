@@ -20,3 +20,7 @@ spec:
       interval: 10m
   values:
     role: Agent
+    toleations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists

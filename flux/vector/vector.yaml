@@ -30,10 +30,12 @@ spec:
           address: 0.0.0.0:6000
           type: vector
           version: "2"
+        kubernetes:
+          type: kubernetes_logs
       sinks:
         stdout:
           type: console
-          inputs: [vector]
+          inputs: [kubernetes]
           encoding:
             codec: json
     # customConfig:

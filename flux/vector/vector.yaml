@@ -24,6 +24,18 @@ spec:
       - effect: NoSchedule
         key: node-role.kubernetes.io/control-plane
         operator: Exists
+    customConfig:
+      sources:
+        vector:
+          address: 0.0.0.0:6000
+          type: vector
+          version: "2"
+      sinks:
+        stdout:
+          type: console
+          inputs: [vector]
+          encoding:
+            codec: json
     # customConfig:
     #   sources:
     #     kubernetes_logs:

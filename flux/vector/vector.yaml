@@ -24,3 +24,8 @@ spec:
       - effect: NoSchedule
         key: node-role.kubernetes.io/control-plane
         operator: Exists
+    customConfig:
+      sinks:
+        loki:
+          type: loki
+          endpoint: http://loki-gateway.loki.svc.cluster.local

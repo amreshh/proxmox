@@ -23,5 +23,3 @@ RUN echo 'alias ls="ls --color"' >>~/.bashrc
 RUN echo 'source <(talosctl completion bash)' >>~/.bashrc
 RUN echo 'source <(kubectl completion bash)' >>~/.bashrc
 RUN echo 'source <(helm completion bash)' >>~/.bashrc
-
-USER root

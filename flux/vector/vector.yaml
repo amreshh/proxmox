@@ -20,13 +20,12 @@ spec:
       interval: 10m
   values:
     role: Agent
-    securityContext:
-      privileged: true
     tolerations:
       - effect: NoSchedule
         key: node-role.kubernetes.io/control-plane
         operator: Exists
     customConfig:
+      data_dir: "/vector-data-dir"
       sources:
         vector:
           address: 0.0.0.0:6000

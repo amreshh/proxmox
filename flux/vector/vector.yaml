@@ -36,6 +36,7 @@ spec:
           inputs:
             - kubernetes_logs
           endpoint: http://loki-gateway.loki.svc.cluster.local
+          encoding.codec: json
       transforms:
         - type: "log_to_json"
           inputs:

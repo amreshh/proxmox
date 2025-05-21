@@ -26,13 +26,18 @@ spec:
         operator: Exists
     customConfig:
       sources:
-        type: "kubernetes_logs"
+        kubernetes_logs:
+          type: "kubernetes_logs"
+          include:
+            - namespaces: ["kube-system"]
       sinks:
         loki:
           type: loki
-          inputs: ["kubernetes_logs"]
+          inputs:
+            - kubernetes_logs
           endpoint: http://loki-gateway.loki.svc.cluster.local
-          healthcheck: true
-          encoding:
-            codec: "json"
+      transforms:
+        - type: "log_to_json"
+          inputs:
+            - kubernetes_logs
       # https://github.com/vectordotdev/vector/issues/3057

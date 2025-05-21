@@ -21,6 +21,17 @@ spec:
       persistence:
         enabled: true
         size: 5Gi
+      additionalDataSources:
+        - name: Loki
+          access: proxy
+          type: loki
+          isDefault: false
+          jsonData:
+            httpHeaderName1: X-Scope-OrgID
+          secureJsonData:
+            httpHeaderValue1: 1
+          orgId: 1
+          url: http://loki-gateway.loki.svc.cluster.local/
     prometheus:
       prometheusSpec:
         podMonitorSelectorNilUsesHelmValues: false

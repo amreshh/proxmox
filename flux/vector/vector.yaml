@@ -33,5 +33,6 @@ spec:
           inputs: ["kubernetes_logs"]
           endpoint: http://loki-gateway.loki.svc.cluster.local
           healthcheck: true
-          encoding.codec: "json"
-# https://github.com/vectordotdev/vector/issues/3057
+          encoding:
+            codec: "json"
+      # https://github.com/vectordotdev/vector/issues/3057

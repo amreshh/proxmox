@@ -25,7 +25,13 @@ spec:
         key: node-role.kubernetes.io/control-plane
         operator: Exists
     customConfig:
+      sources:
+        type: "kubernetes_logs"
       sinks:
         loki:
           type: loki
+          inputs: ["kubernetes_logs"]
           endpoint: http://loki-gateway.loki.svc.cluster.local
+          healthcheck: true
+          encoding.codec: "json"
+# https://github.com/vectordotdev/vector/issues/3057

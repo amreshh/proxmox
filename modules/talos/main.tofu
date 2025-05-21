@@ -122,7 +122,7 @@ resource "helm_release" "cilium" {
   }
   set {
     name  = "hubble.metrics.serviceMonitor.enabled"
-    value = "true" # need to do this after monitoring stack is installed with the crds
+    value = "true" # need to set this to true after monitoring stack is installed with the crds
   }
 
   depends_on = [

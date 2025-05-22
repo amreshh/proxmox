@@ -20,6 +20,13 @@ spec:
       interval: 10m
   values:
     role: Agent
+    resources:
+      requests:
+        cpu: 500m
+        memory: 64Mi
+      limits:
+        cpu: 6000m
+        memory: 1024Mi
     tolerations:
       - effect: NoSchedule
         key: node-role.kubernetes.io/control-plane
@@ -38,27 +45,8 @@ spec:
         loki:
           type: loki
           inputs: [kubernetes]
-          # endpoint: http://loki.loki.svc.cluster.local:3100/loki/api/v1/push
           endpoint: http://loki-gateway.loki.svc.cluster.local
           encoding:
             codec: json
           labels:
             job: vector
-    # customConfig:
-    #   sources:
-    #     kubernetes_logs:
-    #       type: "kubernetes_logs"
-    #       include:
-    #         - namespaces: ["kube-system"]
-    #   sinks:
-    #     loki:
-    #       type: loki
-    #       inputs:
-    #         - kubernetes_logs
-    #       endpoint: http://loki-gateway.loki.svc.cluster.local
-    #       encoding: json
-    #   transforms:
-    #     - type: "log_to_json"
-    #       inputs:
-    #         - kubernetes_logs
-    #   # https://github.com/vectordotdev/vector/issues/3057

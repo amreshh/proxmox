@@ -20,6 +20,8 @@ spec:
       interval: 10m
   values:
     role: Agent
+    service:
+      enabled: false
     resources:
       requests:
         cpu: 500m

@@ -30,11 +30,11 @@ spec:
         kubernetes:
           type: kubernetes_logs
       sinks:
-        stdout:
-          type: console
-          inputs: [kubernetes]
-          encoding:
-            codec: json
+        # stdout:
+        #   type: console
+        #   inputs: [kubernetes]
+        #   encoding:
+        #     codec: json
         loki:
           type: loki
           inputs: [kubernetes]

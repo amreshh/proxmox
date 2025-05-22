@@ -73,6 +73,3 @@ spec:
               {{ print "{{ kubernetes.pod_owner }}" }}
             pod_uid: |-
               {{ print "{{ kubernetes.pod_uid }}" }}
-            message: |-
-              {{ print "{{ message }}" }}
-

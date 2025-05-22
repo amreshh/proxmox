@@ -45,6 +45,8 @@ spec:
           endpoint: http://loki.loki.svc.cluster.local:3100/loki/api/v1/push
           encoding:
             codec: json
+          labels:
+            job: vector
     # customConfig:
     #   sources:
     #     kubernetes_logs:

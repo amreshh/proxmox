@@ -20,7 +20,7 @@ spec:
       interval: 10m
   values:
     role: Agent
-    service:
+    serviceHeadless:
       enabled: false
     resources:
       requests:

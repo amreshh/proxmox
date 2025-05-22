@@ -49,17 +49,30 @@ spec:
           encoding:
             codec: json
           labels:
-            source_type: "{{ source_type }}"
-            stream: "{{ stream }}"
-            container_id: "{{ kubernetes.container_id }}"
-            container_image: "{{ kubernetes.container_image }}"
-            container_image_id: "{{ kubernetes.container_image_id }}"
-            container_name: "{{ kubernetes.container_name }}"
-            pod_ip: "{{ kubernetes.pod_ip }}"
-            pod_name: "{{ kubernetes.pod_name }}"
-            pod_namespace: "{{ kubernetes.pod_namespace }}"
-            pod_node_name: "{{ kubernetes.pod_node_name }}"
-            pod_owner: "{{ kubernetes.pod_owner }}"
-            pod_uid: "{{ kubernetes.pod_uid }}"
-            message: "{{ message }}"
+            source_type: |-
+              {{ print "{{ source_type }}" }}
+            stream: |-
+              {{ print "{{ stream }}" }}
+            container_id: |-
+              {{ print "{{ kubernetes.container_id }}" }}
+            container_image: |-
+              {{ print "{{ kubernetes.container_image }}" }}
+            container_image_id: |-
+              {{ print "{{ kubernetes.container_image_id }}" }}
+            container_name: |-
+              {{ print "{{ kubernetes.container_name }}" }}
+            pod_ip: |-
+              {{ print "{{ kubernetes.pod_ip }}" }}
+            pod_name: |-
+              {{ print "{{ kubernetes.pod_name }}" }}
+            pod_namespace: |-
+              {{ print "{{ kubernetes.pod_namespace }}" }}
+            pod_node_name: |-
+              {{ print "{{ kubernetes.pod_node_name }}" }}
+            pod_owner: |-
+              {{ print "{{ kubernetes.pod_owner }}" }}
+            pod_uid: |-
+              {{ print "{{ kubernetes.pod_uid }}" }}
+            message: |-
+              {{ print "{{ message }}" }}
 

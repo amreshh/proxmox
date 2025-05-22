@@ -40,6 +40,7 @@ spec:
           inputs: [kubernetes]
           # endpoint: http://loki.loki.svc.cluster.local:3100/loki/api/v1/push
           endpoint: http://loki-gateway.loki.svc.cluster.local
+          tenant_id: 1
           encoding:
             codec: json
           labels:

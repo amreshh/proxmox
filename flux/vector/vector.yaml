@@ -49,4 +49,17 @@ spec:
           encoding:
             codec: json
           labels:
-            job: vector
+            source_type: "{{ source_type }}"
+            stream: "{{ stream }}"
+            container_id: "{{ kubernetes.container_id }}"
+            container_image: "{{ kubernetes.container_image }}"
+            container_image_id: "{{ kubernetes.container_image_id }}"
+            container_name: "{{ kubernetes.container_name }}"
+            pod_ip: "{{ kubernetes.pod_ip }}"
+            pod_name: "{{ kubernetes.pod_name }}"
+            pod_namespace: "{{ kubernetes.pod_namespace }}"
+            pod_node_name: "{{ kubernetes.pod_node_name }}"
+            pod_owner: "{{ kubernetes.pod_owner }}"
+            pod_uid: "{{ kubernetes.pod_uid }}"
+            message: "{{ message }}"
+

@@ -39,6 +39,12 @@ spec:
           inputs: [kubernetes]
           encoding:
             codec: json
+        loki:
+          type: loki
+          inputs: [kubernetes]
+          endpoint: http://loki.loki.svc.cluster.local:3100/loki/api/v1/push
+          encoding:
+            codec: json
     # customConfig:
     #   sources:
     #     kubernetes_logs:

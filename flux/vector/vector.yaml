@@ -27,10 +27,6 @@ spec:
     customConfig:
       data_dir: "/vector-data-dir"
       sources:
-        vector:
-          address: 0.0.0.0:6000
-          type: vector
-          version: "2"
         kubernetes:
           type: kubernetes_logs
       sinks:
@@ -42,7 +38,8 @@ spec:
         loki:
           type: loki
           inputs: [kubernetes]
-          endpoint: http://loki.loki.svc.cluster.local:3100/loki/api/v1/push
+          # endpoint: http://loki.loki.svc.cluster.local:3100/loki/api/v1/push
+          endpoint: http://loki-gateway.loki.svc.cluster.local
           encoding:
             codec: json
           labels:

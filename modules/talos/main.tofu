@@ -149,6 +149,10 @@ resource "helm_release" "flux2" {
     name  = "imageAutomationController.create"
     value = "false"
   }
+  set {
+    name  = "policies.create"
+    value = "false"
+  }
 
   depends_on = [
     helm_release.cilium

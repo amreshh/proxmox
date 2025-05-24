@@ -23,9 +23,9 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-    - protocol: HTTP
-      port: 3100
-      name: loki-service
-      allowedRoutes:
-        namespaces:
-          from: All
+    # - protocol: HTTP
+    #   port: 3100
+    #   name: loki-service
+    #   allowedRoutes:
+    #     namespaces:
+    #       from: All

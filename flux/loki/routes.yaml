@@ -7,8 +7,6 @@ spec:
   parentRefs:
     - name: default-gateway
       namespace: gateway
-  # hostnames:
-  #   - loki-gateway.kubernetes.home
   rules:
     - matches:
         - path:

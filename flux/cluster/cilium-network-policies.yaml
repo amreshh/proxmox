@@ -5,11 +5,12 @@ metadata:
 spec:
   endpointSelector: {}
   ingress:
-    - from:
-        - ipBlock:
-            cidr: 0.0.0.0/0
-      ports:
-        - port: 443
+    - fromEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
     - fromEndpoints:
         - {}
     - fromEntities:

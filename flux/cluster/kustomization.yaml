@@ -6,7 +6,7 @@ resources:
 - namespace.yaml
 - cilium-l2-policy.yaml
 - cilium-ip-pool.yaml
-- gateway.yaml
+# - gateway.yaml
 - storageclasses.yaml
 - routes.yaml
 - metrics-server.yaml

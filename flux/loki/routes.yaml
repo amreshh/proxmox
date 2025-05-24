@@ -8,12 +8,12 @@ spec:
     - name: default-gateway
       namespace: gateway
   # hostnames:
-  #   - 192.168.1.7
+  #   - loki-gateway.kubernetes.home
   rules:
     - matches:
         - path:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: loki-gateway
-          port: 80
+        - name: loki
+          port: 3100

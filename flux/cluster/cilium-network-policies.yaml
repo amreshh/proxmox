@@ -42,4 +42,21 @@ spec:
         - ports:
             - port: "443"
               protocol: TCP
-
+    - toFQDNs:
+        - matchPattern: "*.github.io"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    - toFQDNs:
+        - matchPattern: "*.githubusercontent.com"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    - toFQDNs:
+        - matchName: "helm.vector.dev"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

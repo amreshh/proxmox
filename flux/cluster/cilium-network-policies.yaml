@@ -37,7 +37,7 @@ spec:
         - ports:
             - port: "53"
     - toFQDNs:
-        - matchPattern: "*.github.com"
+        - matchName: "github.com"
       toPorts:
         - ports:
             - port: "443"

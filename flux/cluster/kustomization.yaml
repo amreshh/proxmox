@@ -10,4 +10,4 @@ resources:
 - storageclasses.yaml
 - routes.yaml
 - metrics-server.yaml
-- cilium-network-policies.yaml
+# - cilium-network-policies.yaml

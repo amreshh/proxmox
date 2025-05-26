@@ -18,6 +18,8 @@ spec:
     alertmanager:
       enabled: false
     grafana:
+      analytics:
+        reporting_enabled: false
       persistence:
         enabled: true
         size: 5Gi

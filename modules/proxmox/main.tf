@@ -35,7 +35,6 @@ resource "proxmox_virtual_environment_vm" "controlplanes" {
     cache        = "none"
   }
   cdrom {
-    enabled   = true
     file_id   = var.talos.iso
     interface = "ide2"
   }
@@ -84,7 +83,6 @@ resource "proxmox_virtual_environment_vm" "workers" {
     cache        = "none"
   }
   cdrom {
-    enabled   = true
     file_id   = var.talos.iso
     interface = "ide2"
   }

@@ -5,9 +5,9 @@ variable "talos" {
     image   = string
   })
   default = {
-    version = "1.9.3"
-    iso     = "local:iso/talos_1.9.3.iso"
-    image   = "factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:v1.9.3"
+    version = "1.10.2"
+    iso     = "local:iso/talos_1.10.2.iso"
+    image   = "factory.talos.dev/metal-installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:v1.10.2"
   }
 }
 
@@ -18,7 +18,7 @@ variable "github_token" {
 
 variable "kubernetes_version" {
   type        = string
-  default     = "1.32.0"
+  default     = "1.33.1"
   description = "Kubernetes version to provision"
 }
 
@@ -37,7 +37,7 @@ variable "kubernetes_extra_manifests" {
 
 variable "cilium_version" {
   type        = string
-  default     = "1.17.0"
+  default     = "1.17.4"
   description = "Cilium version to provision"
 }
 
@@ -47,8 +47,8 @@ variable "flux_version" {
     sync_version = string
   })
   default = {
-    version      = "2.14.1"
-    sync_version = "1.10.0"
+    version      = "2.15.0"
+    sync_version = "1.12.0"
   }
 }
 
@@ -93,7 +93,7 @@ variable "workers" {
       cluster_name = "talos"
       name         = "k8s-worker-1"
       vm_id        = 102
-      memory       = 8192 # MiB
+      memory       = 16384 # MiB
       cores        = 4
       disk_size    = 100 # GiB
       mac_addr     = "00:00:00:00:00:02"
@@ -103,26 +103,11 @@ variable "workers" {
       cluster_name = "talos"
       name         = "k8s-worker-2"
       vm_id        = 103
-      memory       = 8192 # MiB
+      memory       = 16384 # MiB
       cores        = 4
       disk_size    = 100 # GiB
       mac_addr     = "00:00:00:00:00:03"
       ip_addr      = "192.168.1.6"
     }
   }
-}
-
-variable "proxmox_api" {
-  type        = string
-  description = "Proxmox api url"
-}
-
-variable "proxmox_csi_full_tokenid" {
-  type        = string
-  description = "Token id of the proxmox csi user"
-}
-
-variable "proxmox_csi_token_value" {
-  type        = string
-  description = "Token value of the proxmox csi user"
 }

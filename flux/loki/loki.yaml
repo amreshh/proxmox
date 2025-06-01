@@ -16,6 +16,7 @@ spec:
       interval: 10m
   values:
     loki:
+      reporting_enabled: false
       auth_enabled: false
       commonConfig:
         replication_factor: 1

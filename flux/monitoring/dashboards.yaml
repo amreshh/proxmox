@@ -4,9 +4,9 @@ metadata:
   name: pfsense-dashboard
   namespace: monitoring
   labels:
-    grafana_dashboard: "true"
+    grafana_dashboard: "1"
 data:
-  pfsense.dnsbl.json: |
+  pfsense.dnsbl.json: |-
     {
       "annotations": {
         "list": [
@@ -491,7 +491,7 @@ data:
       "uid": "5cd84290-aedf-474d-a389-655c3ec84c0f",
       "version": 94
     }
-  pfsense.firewall.json: |
+  pfsense.firewall.json: |-
     {
       "annotations": {
         "list": [

@@ -6,7 +6,8 @@
   },
   "runArgs": [
     "--env-file",
-    ".devcontainer/devcontainer.env"
+    ".devcontainer/devcontainer.env",
+    "--userns=host"
   ],
   "containerUser": "root",
   "shutdownAction": "stopContainer",

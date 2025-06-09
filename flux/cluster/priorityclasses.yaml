@@ -21,6 +21,6 @@ kind: PriorityClass
 metadata:
   name: low-priority
 spec:
-  value: 900
+  value: 800
   globalDefault: true
   description: "Low priority class for components which can be scheduled as last"

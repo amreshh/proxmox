@@ -9,7 +9,6 @@
     ".devcontainer/devcontainer.env",
     "--userns=host"
   ],
-  "containerUser": "root",
   "shutdownAction": "stopContainer",
   "mounts": [
     "source=${localEnv:HOME}/.kube,target=/root/.kube,type=bind,consistency=cached",

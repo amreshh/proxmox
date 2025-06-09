@@ -1,9 +1,20 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
+    "config:base",
     "config:recommended"
+  ],
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "Renovate Dashboard",
+  "labels": [
+    "renovatebot"
   ],
   "baseBranches": [
     "dev"
-  ]
+  ],
+  "flux": {
+    "fileMatch": [
+      "flux/.+\\.ya?ml$"
+    ]
+  }
 }

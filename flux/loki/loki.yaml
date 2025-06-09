@@ -39,6 +39,8 @@ spec:
         volume_enabled: true
       ruler:
         enable_api: true
+    resultsCache:
+      priorityClassName: high-priority
 
     minio:
       enabled: true

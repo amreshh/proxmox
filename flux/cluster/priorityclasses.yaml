@@ -1,0 +1,26 @@
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+spec:
+  value: 1000
+  globalDefault: false
+  description: "High priority class used for components which need to be scheduled after the cluster components are running"
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: medium-priority
+spec:
+  value: 900
+  globalDefault: false
+  description: "Medium priority class used for components which are non critical for the rest of applications to run"
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: low-priority
+spec:
+  value: 900
+  globalDefault: true
+  description: "Low priority class for components which can be scheduled as last"

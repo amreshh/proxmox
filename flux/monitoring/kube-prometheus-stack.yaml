@@ -20,6 +20,11 @@ spec:
     grafana:
       analytics:
         reporting_enabled: false
+      defaultDashboardsTimezone: browser
+      sidecar:
+        dashboards:
+          searchNamespace: monitoring
+      priorityClassName: low-priority
       persistence:
         enabled: true
         size: 5Gi

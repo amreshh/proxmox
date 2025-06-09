@@ -1,23 +1,20 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
+    "config:base",
     "config:recommended"
   ],
-  "packageRules": [
-    {
-      "groupName": "Mend high confidence minor and patch dependency updates",
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "matchConfidence": [
-        "very high",
-        "high"
-      ]
-    }
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "Renovate Dashboard",
+  "labels": [
+    "renovatebot"
   ],
   "baseBranches": [
-    "main",
     "dev"
-  ]
+  ],
+  "flux": {
+    "fileMatch": [
+      "flux/.+\\.ya?ml$"
+    ]
+  }
 }

@@ -47,6 +47,7 @@ spec:
 
     singleBinary:
       replicas: 1
+      priorityClassName: high-priority
 
     # Zero out replica counts of other deployment modes
     backend:

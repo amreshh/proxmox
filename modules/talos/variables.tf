@@ -37,6 +37,7 @@ variable "controlplanes" {
   type = map(object({
     cluster_name = string
     name         = string
+    proxmox_node = string
     vm_id        = number
     memory       = number
     cores        = number
@@ -50,6 +51,7 @@ variable "workers" {
   type = map(object({
     cluster_name = string
     name         = string
+    proxmox_node = string
     vm_id        = number
     memory       = number
     cores        = number

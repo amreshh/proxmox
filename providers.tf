@@ -20,7 +20,7 @@ terraform {
     }
     flux = {
       source  = "fluxcd/flux"
-      version = "1.6.1"
+      version = "1.6.2"
     }
     http = {
       source  = "hashicorp/http"

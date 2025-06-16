@@ -27,7 +27,7 @@ spec:
       initialDelaySeconds: 900
     persistence:
       enabled: true
-      storageClass: external-data-nextcloud
+      storageClass: retain
       size: 100Gi
     nextcloud:
       host: nextcloud.kubernetes.home
@@ -53,7 +53,7 @@ spec:
       primary:
         persistence:
           enabled: true
-          storageClass: external-data-nextcloud
+          storageClass: retain
           size: 100Gi
       auth:
         existingSecret: nextcloud-mariadb

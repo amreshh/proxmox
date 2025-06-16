@@ -3,7 +3,7 @@ resource "proxmox_virtual_environment_vm" "controlplanes" {
   name          = each.value.name
   description   = "kubernetes controlplane"
   tags          = ["kubernetes", "controlplane"]
-  node_name     = "proxmox"
+  node_name     = each.value.proxmox_node
   vm_id         = each.value.vm_id
   on_boot       = false
   boot_order    = ["scsi0", "ide2"]
@@ -51,7 +51,7 @@ resource "proxmox_virtual_environment_vm" "workers" {
   name          = each.value.name
   description   = "kubernetes worker"
   tags          = ["kubernetes", "worker"]
-  node_name     = "proxmox"
+  node_name     = each.value.proxmox_node
   vm_id         = each.value.vm_id
   on_boot       = false
   boot_order    = ["scsi0", "ide2"]

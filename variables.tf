@@ -70,7 +70,7 @@ variable "controlplanes" {
       name         = "k8s-controlplane-1"
       proxmox_node = "proxmox76"
       vm_id        = 101
-      memory       = 4096 # MiB
+      memory       = 8192 # MiB
       cores        = 2
       disk_size    = 10 # GiB
       mac_addr     = "00:00:00:00:00:01"

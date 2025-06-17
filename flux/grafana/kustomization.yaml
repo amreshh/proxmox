@@ -4,5 +4,5 @@ resources:
   - namespace.yaml
   - helm-repos.yaml
   - grafana.yaml
-  # - routes.yaml
+  - routes.yaml
   

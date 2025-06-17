@@ -14,4 +14,12 @@ spec:
         name: grafana
         namespace: flux-system
       interval: 10m
+  values:
+    persistence:
+      enabled: true
+      size: 5Gi
+    admin:
+      existingSecret: grafana-admin
+      userKey: admin-user
+      passwordKey: admin-password
   

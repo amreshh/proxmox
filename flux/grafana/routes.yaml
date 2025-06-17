@@ -13,5 +13,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: loki
-          port: 3100
+        - name: grafana
+          port: 80

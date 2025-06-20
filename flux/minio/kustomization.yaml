@@ -3,7 +3,6 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - helm-repos.yaml
-  - secrets.yaml
   - minio.yaml
   - observability.yaml
   - routes.yaml

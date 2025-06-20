@@ -1,13 +1,11 @@
 apiVersion: minio.min.io/v2
 kind: Tenant
 metadata:
-  name: observability
+  name: minio
   namespace: minio
-  labels:
-    app: observability
 spec:
   users:
-    - name: storage-user
+    - name: storage-users
   configuration:
     name: storage-configuration
   requestAutoCert: false

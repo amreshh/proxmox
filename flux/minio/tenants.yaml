@@ -8,6 +8,8 @@ metadata:
 spec:
   users:
     - name: storage-user
+  configuration:
+    name: storage-configuration
   pools:
     - servers: 4
       name: pool-0

@@ -5,7 +5,7 @@ metadata:
   namespace: minio
 spec:
   users:
-    - name: storage-users
+    - name: loki
   configuration:
     name: storage-configuration
   requestAutoCert: false

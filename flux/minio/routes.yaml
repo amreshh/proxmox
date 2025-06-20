@@ -16,4 +16,4 @@ spec:
             value: /
       backendRefs:
         - name: observability-console
-          port: 9443
+          port: 9090

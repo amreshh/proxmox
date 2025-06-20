@@ -4,5 +4,6 @@ resources:
   - namespace.yaml
   - helm-repos.yaml
   - minio.yaml
+  - observability.yaml
   - routes.yaml
   

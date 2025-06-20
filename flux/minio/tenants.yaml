@@ -3,7 +3,11 @@ kind: Tenant
 metadata:
   name: observability
   namespace: minio
+  labels:
+    app: observability
 spec:
+  users:
+    - name: storage-user
   pools:
     - servers: 4
       name: pool-0

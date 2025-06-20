@@ -8,12 +8,12 @@ spec:
     - name: default-gateway
       namespace: gateway
   hostnames:
-    - minio.kubernetes.home
+    - observability.minio.kubernetes.home
   rules:
     - matches:
         - path:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: nextcloud
-          port: 8080
+        - name: observability-console
+          port: 9443

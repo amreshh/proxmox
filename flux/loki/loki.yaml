@@ -15,10 +15,6 @@ spec:
         namespace: flux-system
       interval: 10m
   values:
-    global:
-      extraEnvFrom:
-        - secretRef:
-            name: loki-minio
     loki:
       analytics:
         reporting_enabled: false
@@ -65,6 +61,9 @@ spec:
     singleBinary:
       replicas: 1
       extraArgs: ["-config.expand-env=true"]
+      extraEnvFrom:
+        - secretRef:
+            name: loki-minio
 
     # Zero out replica counts of other deployment modes
     backend:

@@ -15,6 +15,10 @@ spec:
         namespace: flux-system
       interval: 10m
   values:
+    global:
+      extraEnvFrom:
+        - secretRef:
+            name: loki-minio
     loki:
       analytics:
         reporting_enabled: false
@@ -37,9 +41,9 @@ spec:
           ruler: loki-ruler
           admin: loki-admin
         s3:
-          accessKeyId: ${MINIO_ACCESS_KEYID}
-          secretAccessKey: ${MINIO_SECRET_ACCESS_KEY}
-          endpoint: ${MINIO_ENDPOINT}
+          accessKeyId: ${accessKeyId}
+          secretAccessKey: ${secretAccessKey}
+          endpoint: ${endpoint}
           insecure: true
           s3ForcePathStyle: true
       storageConfig:
@@ -61,22 +65,6 @@ spec:
     singleBinary:
       replicas: 1
       extraArgs: ["-config.expand-env=true"]
-      extraEnv:
-        - name: MINIO_ACCESS_KEYID
-          valueFrom:
-            secretKeyRef:
-              name: loki-minio
-              key: accessKeyId
-        - name: MINIO_SECRET_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: loki-minio
-              key: secretAccessKey
-        - name: MINIO_ENDPOINT
-          valueFrom:
-            secretKeyRef:
-              name: loki-minio
-              key: endpoint
 
     # Zero out replica counts of other deployment modes
     backend:

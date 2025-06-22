@@ -60,10 +60,6 @@ spec:
 
     singleBinary:
       replicas: 1
-
-    # Zero out replica counts of other deployment modes
-    backend:
-      replicas: 0
       extraEnv:
         - name: MINIO_ACCESS_KEYID
           valueFrom:
@@ -80,6 +76,10 @@ spec:
             secretKeyRef:
               name: loki-minio
               key: endpoint
+
+    # Zero out replica counts of other deployment modes
+    backend:
+      replicas: 0
     read:
       replicas: 0
     write:

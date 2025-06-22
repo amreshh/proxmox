@@ -15,8 +15,6 @@ spec:
         namespace: flux-system
       interval: 10m
   values:
-    global:
-      priorityClassName: high-priority
     loki:
       analytics:
         reporting_enabled: false
@@ -32,6 +30,21 @@ spec:
             index:
               prefix: loki_index_
               period: 24h
+      storage:
+        type: s3
+        bucketNames:
+          chunks: loki-chunks
+          ruler: loki-ruler
+          admin: loki-admin
+        s3:
+          accessKeyId: ${accessKeyId}
+          secretAccessKey: ${secretAccessKey}
+          endpoint: ${endpoint}
+          insecure: true
+          s3ForcePathStyle: true
+      storageConfig:
+        tsdb_shipper:
+          object_store: s3
       pattern_ingester:
           enabled: true
       limits_config:
@@ -39,19 +52,16 @@ spec:
         volume_enabled: true
       ruler:
         enable_api: true
-    resultsCache:
-      priorityClassName: high-priority
-    chunksCache:
-      priorityClassName: high-priority
 
     minio:
-      enabled: true
+      enabled: false
           
     deploymentMode: SingleBinary
 
     singleBinary:
       replicas: 1
-      priorityClassName: high-priority
+      extraArgs: ["-config.expand-env=true"]
+      extraEnvFrom: ["loki-minio"]
 
     # Zero out replica counts of other deployment modes
     backend:

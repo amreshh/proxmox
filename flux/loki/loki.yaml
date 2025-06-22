@@ -44,6 +44,8 @@ spec:
           s3ForcePathStyle: true
       storageConfig:
         tsdb_shipper:
+          active_index_directory: /data/tsdb-index
+          cache_location: /data/tsdb-cache
           object_store: s3
       pattern_ingester:
           enabled: true

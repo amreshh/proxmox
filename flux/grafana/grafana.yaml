@@ -46,5 +46,5 @@ spec:
             access: proxy
             type: prometheus
             isDefault: true
-            url: http://mimir-nginx.mimir.svc:80/prometheus
+            url: http://mimir-nginx.mimir.svc.cluster.local/prometheus
   

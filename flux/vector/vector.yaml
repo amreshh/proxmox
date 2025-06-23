@@ -38,6 +38,9 @@ spec:
       sources:
         kubernetes:
           type: kubernetes_logs
+        mimir:
+          type: prometheus_remote_write
+          address: http://mimir.mimir.svc.cluster.local/api/v1/push
       sinks:
         # stdout:
         #   type: console

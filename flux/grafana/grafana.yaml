@@ -42,4 +42,9 @@ spec:
               httpHeaderName1: X-Scope-OrgID
             secureJsonData:
               httpHeaderValue1: 1
+          - name: Mimir
+            access: proxy
+            type: prometheus
+            isDefault: true
+            url: http://mimir-nginx.mimir.svc:80/prometheus
   

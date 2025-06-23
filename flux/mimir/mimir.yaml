@@ -37,6 +37,7 @@ spec:
     metaMonitoring:
       dashboards:
         enabled: true
+        namespace: grafana
       serviceMonitor:
         enabled: true
       grafanaAgent:

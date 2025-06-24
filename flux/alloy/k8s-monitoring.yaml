@@ -17,6 +17,14 @@ spec:
   values:
     cluster:
       name: talos
+    alloy-metrics:
+      enabled: false
+    alloy-singleton:
+      enabled: true
+    alloy-logs:
+      enabled: true
+    alloy-receiver:
+      enabled: false
     destinations:
       - name: loki
         type: loki

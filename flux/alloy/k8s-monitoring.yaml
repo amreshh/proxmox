@@ -22,7 +22,7 @@ spec:
     alloy-singleton:
       enabled: true
     alloy-logs:
-      enabled: true
+      enabled: false
     alloy-receiver:
       enabled: false
     destinations:
@@ -31,6 +31,22 @@ spec:
         url: http://loki-gateway.loki.svc.cluster.local/loki/api/v1/push
     clusterEvents:
       enabled: true
-      collector: alloy-logs
+      collector: alloy-singleton
     nodeLogs:
       enabled: false
+    podLogs:
+      enabled: true
+      collector: alloy-singleton
+      structuredMetadata:
+        pod: pod
+      labelsToKeep:
+        - app
+        - app_kubernetes_io_name
+        - component
+        - container
+        - job
+        - level
+        - namespace
+        - pod
+        - service_name
+      gatherMethod: kubernetesApi

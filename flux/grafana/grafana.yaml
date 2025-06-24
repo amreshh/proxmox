@@ -28,6 +28,9 @@ spec:
     sidecar:
       dashboards:
         enabled: true
+        folderAnnotation: grafana_folder
+        provider:
+          foldersFromFilesStructure: true
     datasources:
       datasources.yaml:
         apiVersion: 1

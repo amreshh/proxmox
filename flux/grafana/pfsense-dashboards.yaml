@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pfsense-dashboard
+  name: pfsense-dashboards
   namespace: grafana
   labels:
     grafana_dashboard: "1"

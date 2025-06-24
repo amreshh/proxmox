@@ -17,10 +17,12 @@ spec:
   values:
     cluster:
       name: talos
-      destinations:
-        - name: loki
-          type: loki
-          url: http://loki-gateway.loki.svc.cluster.local/loki/api/v1/push
-      clusterEvents:
-        enabled: true
-        # collector: alloy-logs
+    destinations:
+      - name: loki
+        type: loki
+        url: http://loki-gateway.loki.svc.cluster.local/loki/api/v1/push
+    clusterEvents:
+      enabled: true
+      # collector: alloy-logs
+    nodeLogs:
+      enabled: true

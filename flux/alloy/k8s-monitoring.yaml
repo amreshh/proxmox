@@ -1,0 +1,26 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: k8s-monitoring
+  namespace: alloy
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: k8s-monitoring
+      version: "3.0.2"
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+        namespace: flux-system
+      interval: 10m
+  values:
+    cluster:
+      name: talos
+      destinations:
+        - name: loki
+          type: loki
+          url: http://loki-gateway.loki.svc.cluster.local/loki/api/v1/push
+      clusterEvents:
+        enabled: true
+        # collector: alloy-logs

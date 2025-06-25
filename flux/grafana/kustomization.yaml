@@ -7,4 +7,5 @@ resources:
   - routes.yaml
   - pfsense-dashboards.yaml
   - kubernetes-dashboards.yaml
+  - flux-dashboards.yaml
   

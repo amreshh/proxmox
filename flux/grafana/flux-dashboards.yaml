@@ -10,6 +10,55 @@ metadata:
 data:
   flux.json: |-
     {
+      "__inputs": [
+        {
+          "name": "DS_PROMETHEUS",
+          "label": "Prometheus",
+          "description": "",
+          "type": "datasource",
+          "pluginId": "prometheus",
+          "pluginName": "Prometheus"
+        }
+      ],
+      "__elements": {},
+      "__requires": [
+        {
+          "type": "panel",
+          "id": "bargauge",
+          "name": "Bar gauge",
+          "version": ""
+        },
+        {
+          "type": "grafana",
+          "id": "grafana",
+          "name": "Grafana",
+          "version": "9.0.5"
+        },
+        {
+          "type": "datasource",
+          "id": "prometheus",
+          "name": "Prometheus",
+          "version": "1.0.0"
+        },
+        {
+          "type": "panel",
+          "id": "stat",
+          "name": "Stat",
+          "version": ""
+        },
+        {
+          "type": "panel",
+          "id": "table",
+          "name": "Table",
+          "version": ""
+        },
+        {
+          "type": "panel",
+          "id": "timeseries",
+          "name": "Time series",
+          "version": ""
+        }
+      ],
       "annotations": {
         "list": [
           {
@@ -35,14 +84,16 @@ data:
       "description": "Basic monitoring of FluxCD resources.",
       "editable": true,
       "fiscalYearStartMonth": 0,
+      "gnetId": 16714,
       "graphTooltip": 1,
-      "id": 348,
+      "id": null,
       "links": [],
+      "liveNow": false,
       "panels": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAE45454D0EDB9216"
+            "uid": "${DS_PROMETHEUS}"
           },
           "description": "",
           "fieldConfig": {
@@ -53,7 +104,8 @@ data:
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "semi-dark-blue"
+                    "color": "semi-dark-blue",
+                    "value": null
                   },
                   {
                     "color": "dark-red",
@@ -77,7 +129,6 @@ data:
             "graphMode": "area",
             "justifyMode": "auto",
             "orientation": "auto",
-            "percentChangeColorMode": "standard",
             "reduceOptions": {
               "calcs": [
                 "last"
@@ -85,17 +136,15 @@ data:
               "fields": "",
               "values": false
             },
-            "showPercentChange": false,
             "text": {},
-            "textMode": "value",
-            "wideLayout": true
+            "textMode": "value"
           },
-          "pluginVersion": "12.0.2",
+          "pluginVersion": "9.0.5",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "PAE45454D0EDB9216"
+                "uid": "${DS_PROMETHEUS}"
               },
               "expr": "count(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"True\",kind=~\"GitRepository|HelmRepository|Bucket\"})\n-\nsum(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"Deleted\",kind=~\"GitRepository|HelmRepository|Bucket\"})",
               "interval": "",
@@ -109,7 +158,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAE45454D0EDB9216"
+            "uid": "${DS_PROMETHEUS}"
           },
           "description": "",
           "fieldConfig": {
@@ -120,7 +169,8 @@ data:
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "dark-green"
+                    "color": "dark-green",
+                    "value": null
                   },
                   {
                     "color": "dark-red",
@@ -144,7 +194,6 @@ data:
             "graphMode": "area",
             "justifyMode": "auto",
             "orientation": "auto",
-            "percentChangeColorMode": "standard",
             "reduceOptions": {
               "calcs": [
                 "last"
@@ -152,17 +201,15 @@ data:
               "fields": "",
               "values": false
             },
-            "showPercentChange": false,
             "text": {},
-            "textMode": "value",
-            "wideLayout": true
+            "textMode": "value"
           },
-          "pluginVersion": "12.0.2",
+          "pluginVersion": "9.0.5",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "PAE45454D0EDB9216"
+                "uid": "${DS_PROMETHEUS}"
               },
               "expr": "sum(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"False\",kind=~\"GitRepository|HelmRepository|Bucket\"})",
               "interval": "",
@@ -176,7 +223,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAE45454D0EDB9216"
+            "uid": "${DS_PROMETHEUS}"
           },
           "description": "",
           "fieldConfig": {
@@ -186,7 +233,8 @@ data:
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "dark-green"
+                    "color": "dark-green",
+                    "value": null
                   },
                   {
                     "color": "dark-orange",
@@ -211,16 +259,8 @@ data:
           "id": 31,
           "options": {
             "displayMode": "basic",
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": false
-            },
-            "maxVizHeight": 300,
             "minVizHeight": 10,
             "minVizWidth": 0,
-            "namePlacement": "auto",
             "orientation": "horizontal",
             "reduceOptions": {
               "calcs": [
@@ -230,16 +270,14 @@ data:
               "values": false
             },
             "showUnfilled": true,
-            "sizing": "auto",
-            "text": {},
-            "valueMode": "color"
+            "text": {}
           },
-          "pluginVersion": "12.0.2",
+          "pluginVersion": "9.0.5",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "PAE45454D0EDB9216"
+                "uid": "${DS_PROMETHEUS}"
               },
               "expr": "sum(rate(gotk_reconcile_duration_seconds_sum{exported_namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket\"}[5m])) by (kind)\n/\nsum(rate(gotk_reconcile_duration_seconds_count{exported_namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket\"}[5m])) by (kind)",
               "interval": "",
@@ -253,7 +291,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAE45454D0EDB9216"
+            "uid": "${DS_PROMETHEUS}"
           },
           "description": "",
           "fieldConfig": {
@@ -264,7 +302,8 @@ data:
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "semi-dark-blue"
+                    "color": "semi-dark-blue",
+                    "value": null
                   },
                   {
                     "color": "dark-red",
@@ -288,7 +327,6 @@ data:
             "graphMode": "area",
             "justifyMode": "auto",
             "orientation": "auto",
-            "percentChangeColorMode": "standard",
             "reduceOptions": {
               "calcs": [
                 "last"
@@ -296,17 +334,15 @@ data:
               "fields": "",
               "values": false
             },
-            "showPercentChange": false,
             "text": {},
-            "textMode": "value",
-            "wideLayout": true
+            "textMode": "value"
           },
-          "pluginVersion": "12.0.2",
+          "pluginVersion": "9.0.5",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "PAE45454D0EDB9216"
+                "uid": "${DS_PROMETHEUS}"
               },
               "exemplar": true,
               "expr": "count(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"True\",kind=~\"Kustomization|HelmRelease\"})\n-\nsum(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"Deleted\",kind=~\"Kustomization|HelmRelease\"})",
@@ -321,7 +357,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAE45454D0EDB9216"
+            "uid": "${DS_PROMETHEUS}"
           },
           "description": "",
           "fieldConfig": {
@@ -332,7 +368,8 @@ data:
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "dark-green"
+                    "color": "dark-green",
+                    "value": null
                   },
                   {
                     "color": "dark-red",
@@ -356,7 +393,6 @@ data:
             "graphMode": "area",
             "justifyMode": "auto",
             "orientation": "auto",
-            "percentChangeColorMode": "standard",
             "reduceOptions": {
               "calcs": [
                 "last"
@@ -364,17 +400,15 @@ data:
               "fields": "",
               "values": false
             },
-            "showPercentChange": false,
             "text": {},
-            "textMode": "value",
-            "wideLayout": true
+            "textMode": "value"
           },
-          "pluginVersion": "12.0.2",
+          "pluginVersion": "9.0.5",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "PAE45454D0EDB9216"
+                "uid": "${DS_PROMETHEUS}"
               },
               "expr": "sum(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"False\",kind=~\"Kustomization|HelmRelease\"})",
               "interval": "",
@@ -388,7 +422,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAE45454D0EDB9216"
+            "uid": "${DS_PROMETHEUS}"
           },
           "description": "",
           "fieldConfig": {
@@ -398,7 +432,8 @@ data:
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "dark-green"
+                    "color": "dark-green",
+                    "value": null
                   },
                   {
                     "color": "dark-orange",
@@ -423,16 +458,8 @@ data:
           "id": 8,
           "options": {
             "displayMode": "basic",
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": false
-            },
-            "maxVizHeight": 300,
             "minVizHeight": 10,
             "minVizWidth": 0,
-            "namePlacement": "auto",
             "orientation": "horizontal",
             "reduceOptions": {
               "calcs": [
@@ -442,16 +469,14 @@ data:
               "values": false
             },
             "showUnfilled": true,
-            "sizing": "auto",
-            "text": {},
-            "valueMode": "color"
+            "text": {}
           },
-          "pluginVersion": "12.0.2",
+          "pluginVersion": "9.0.5",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "PAE45454D0EDB9216"
+                "uid": "${DS_PROMETHEUS}"
               },
               "expr": "sum(rate(gotk_reconcile_duration_seconds_sum{exported_namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind)\n/\nsum(rate(gotk_reconcile_duration_seconds_count{exported_namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind)",
               "interval": "",
@@ -464,6 +489,10 @@ data:
         },
         {
           "collapsed": false,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -472,23 +501,29 @@ data:
           },
           "id": 15,
           "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "Status",
           "type": "row"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAE45454D0EDB9216"
+            "uid": "${DS_PROMETHEUS}"
           },
           "description": "",
           "fieldConfig": {
             "defaults": {
               "custom": {
                 "align": "auto",
-                "cellOptions": {
-                  "mode": "basic",
-                  "type": "color-background"
-                },
+                "displayMode": "color-background-solid",
                 "filterable": true,
                 "inspect": false
               },
@@ -523,7 +558,8 @@ data:
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "transparent"
+                    "color": "transparent",
+                    "value": null
                   }
                 ]
               }
@@ -536,11 +572,8 @@ data:
                 },
                 "properties": [
                   {
-                    "id": "custom.cellOptions",
-                    "value": {
-                      "mode": "gradient",
-                      "type": "color-background"
-                    }
+                    "id": "custom.displayMode",
+                    "value": "color-background"
                   }
                 ]
               }
@@ -554,9 +587,7 @@ data:
           },
           "id": 34,
           "options": {
-            "cellHeight": "sm",
             "footer": {
-              "countRows": false,
               "fields": "",
               "reducer": [
                 "sum"
@@ -565,12 +596,12 @@ data:
             },
             "showHeader": true
           },
-          "pluginVersion": "12.0.2",
+          "pluginVersion": "9.0.5",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "PAE45454D0EDB9216"
+                "uid": "${DS_PROMETHEUS}"
               },
               "expr": "label_join(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"False\",kind=~\"GitRepository|HelmRepository|Bucket\"}, \"join_key\", \",\", \"kind\", \"exported_namespace\", \"name\")",
               "format": "table",
@@ -582,7 +613,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "PAE45454D0EDB9216"
+                "uid": "${DS_PROMETHEUS}"
               },
               "editorMode": "code",
               "expr": "label_join(gotk_suspend_status{exported_namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket\"} - 2, \"join_key\", \",\", \"kind\", \"exported_namespace\", \"name\")",
@@ -701,7 +732,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAE45454D0EDB9216"
+            "uid": "${DS_PROMETHEUS}"
           },
           "description": "",
           "fieldConfig": {
@@ -711,10 +742,7 @@ data:
               },
               "custom": {
                 "align": "auto",
-                "cellOptions": {
-                  "mode": "basic",
-                  "type": "color-background"
-                },
+                "displayMode": "color-background-solid",
                 "filterable": true,
                 "inspect": false
               },
@@ -749,7 +777,8 @@ data:
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "transparent"
+                    "color": "transparent",
+                    "value": null
                   }
                 ]
               }
@@ -762,11 +791,8 @@ data:
                 },
                 "properties": [
                   {
-                    "id": "custom.cellOptions",
-                    "value": {
-                      "mode": "gradient",
-                      "type": "color-background"
-                    }
+                    "id": "custom.displayMode",
+                    "value": "color-background"
                   }
                 ]
               }
@@ -780,9 +806,7 @@ data:
           },
           "id": 33,
           "options": {
-            "cellHeight": "sm",
             "footer": {
-              "countRows": false,
               "fields": "",
               "reducer": [
                 "sum"
@@ -791,12 +815,12 @@ data:
             },
             "showHeader": true
           },
-          "pluginVersion": "12.0.2",
+          "pluginVersion": "9.0.5",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "PAE45454D0EDB9216"
+                "uid": "${DS_PROMETHEUS}"
               },
               "expr": "label_join(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"False\",kind=~\"Kustomization|HelmRelease\"}, \"join_key\", \",\", \"kind\", \"exported_namespace\", \"name\")",
               "format": "table",
@@ -808,7 +832,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "PAE45454D0EDB9216"
+                "uid": "${DS_PROMETHEUS}"
               },
               "editorMode": "code",
               "expr": "label_join(gotk_suspend_status{exported_namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"} - 2, \"join_key\", \",\", \"kind\", \"exported_namespace\", \"name\")",
@@ -928,6 +952,10 @@ data:
         },
         {
           "collapsed": false,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -936,13 +964,22 @@ data:
           },
           "id": 17,
           "panels": [],
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "refId": "A"
+            }
+          ],
           "title": "Timing",
           "type": "row"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAE45454D0EDB9216"
+            "uid": "${DS_PROMETHEUS}"
           },
           "description": "",
           "fieldConfig": {
@@ -951,13 +988,9 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
-                "barWidthFactor": 0.6,
                 "drawStyle": "line",
                 "fillOpacity": 10,
                 "gradientMode": "none",
@@ -966,7 +999,6 @@ data:
                   "tooltip": false,
                   "viz": false
                 },
-                "insertNulls": false,
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
                 "pointSize": 5,
@@ -988,7 +1020,8 @@ data:
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   }
                 ]
               },
@@ -1010,21 +1043,18 @@ data:
                 "lastNotNull"
               ],
               "displayMode": "table",
-              "placement": "right",
-              "showLegend": true
+              "placement": "right"
             },
             "tooltip": {
-              "hideZeros": false,
               "mode": "single",
               "sort": "none"
             }
           },
-          "pluginVersion": "12.0.2",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "PAE45454D0EDB9216"
+                "uid": "${DS_PROMETHEUS}"
               },
               "editorMode": "code",
               "expr": "sum(rate(gotk_reconcile_duration_seconds_sum{exported_namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket\"}[5m])) by (kind, exported_namespace, name)\n/\nsum(rate(gotk_reconcile_duration_seconds_count{exported_namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket\"}[5m])) by (kind, exported_namespace, name)",
@@ -1040,7 +1070,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PAE45454D0EDB9216"
+            "uid": "${DS_PROMETHEUS}"
           },
           "description": "",
           "fieldConfig": {
@@ -1049,13 +1079,9 @@ data:
                 "mode": "palette-classic"
               },
               "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
-                "barWidthFactor": 0.6,
                 "drawStyle": "line",
                 "fillOpacity": 10,
                 "gradientMode": "none",
@@ -1064,7 +1090,6 @@ data:
                   "tooltip": false,
                   "viz": false
                 },
-                "insertNulls": false,
                 "lineInterpolation": "linear",
                 "lineWidth": 1,
                 "pointSize": 5,
@@ -1086,7 +1111,8 @@ data:
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   }
                 ]
               },
@@ -1108,21 +1134,18 @@ data:
                 "lastNotNull"
               ],
               "displayMode": "table",
-              "placement": "right",
-              "showLegend": true
+              "placement": "right"
             },
             "tooltip": {
-              "hideZeros": false,
               "mode": "single",
               "sort": "none"
             }
           },
-          "pluginVersion": "12.0.2",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "PAE45454D0EDB9216"
+                "uid": "${DS_PROMETHEUS}"
               },
               "editorMode": "code",
               "expr": "sum(rate(gotk_reconcile_duration_seconds_sum{exported_namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind, name, exported_namespace)\n/\nsum(rate(gotk_reconcile_duration_seconds_count{exported_namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind, name, exported_namespace)",
@@ -1136,9 +1159,9 @@ data:
           "type": "timeseries"
         }
       ],
-      "preload": false,
       "refresh": "10s",
-      "schemaVersion": 41,
+      "schemaVersion": 36,
+      "style": "light",
       "tags": [
         "flux",
         "flux2",
@@ -1150,28 +1173,47 @@ data:
       "templating": {
         "list": [
           {
-            "allValue": ".*",
             "current": {
-              "text": "All",
-              "value": "$__all"
+              "selected": false,
+              "text": "Prometheus",
+              "value": "Prometheus"
             },
+            "hide": 2,
+            "includeAll": false,
+            "multi": false,
+            "name": "DS_PROMETHEUS",
+            "options": [],
+            "query": "prometheus",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "type": "datasource"
+          },
+          {
+            "allValue": ".*",
+            "current": {},
             "datasource": {
               "type": "prometheus",
-              "uid": "PAE45454D0EDB9216"
+              "uid": "$DS_PROMETHEUS"
             },
-            "definition": "label_values(gotk_reconcile_duration_seconds_count,namespace)",
+            "definition": "label_values(gotk_reconcile_condition, exported_namespace)",
+            "hide": 0,
             "includeAll": true,
+            "multi": false,
             "name": "namespace",
             "options": [],
             "query": {
-              "qryType": 1,
-              "query": "label_values(gotk_reconcile_duration_seconds_count,namespace)",
-              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+              "query": "label_values(gotk_reconcile_condition, exported_namespace)",
+              "refId": "StandardVariableQuery"
             },
             "refresh": 2,
             "regex": "",
+            "skipUrlSync": false,
             "sort": 5,
-            "type": "query"
+            "tagValuesQuery": "",
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
           }
         ]
       },
@@ -1195,5 +1237,6 @@ data:
       "timezone": "",
       "title": "Flux2",
       "uid": "eM7_f4V7z",
-      "version": 4
+      "version": 32,
+      "weekStart": ""
     }

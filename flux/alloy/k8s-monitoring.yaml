@@ -37,6 +37,9 @@ spec:
     clusterEvents:
       enabled: true
       collector: alloy-singleton
+    clusterMetrics:
+      enabled: true
+      collector: alloy-metrics
     nodeLogs:
       enabled: false
     podLogs:

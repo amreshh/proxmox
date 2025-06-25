@@ -48,82 +48,87 @@ resource "helm_release" "cilium" {
   cleanup_on_fail = true
   lint            = true
 
-  set {
+  set = [{
     name  = "ipam.mode"
     value = "kubernetes"
-  }
-  set {
-    name  = "kubeProxyReplacement"
-    value = "true"
-  }
-  set {
-    name  = "k8sServiceHost"
-    value = "localhost"
-  }
-  set {
-    name  = "k8sServicePort"
-    value = "7445"
-  }
-  set {
-    name  = "securityContext.capabilities.ciliumAgent"
-    value = "{CHOWN,KILL,NET_ADMIN,NET_RAW,IPC_LOCK,SYS_ADMIN,SYS_RESOURCE,DAC_OVERRIDE,FOWNER,SETGID,SETUID}"
-  }
-  set {
-    name  = "securityContext.capabilities.cleanCiliumState"
-    value = "{NET_ADMIN,SYS_ADMIN,SYS_RESOURCE}"
-  }
-  set {
-    name  = "cgroup.autoMount.enabled"
-    value = "false"
-  }
-  set {
-    name  = "cgroup.hostRoot"
-    value = "/sys/fs/cgroup"
-  }
-  set {
-    name  = "gatewayAPI.enabled"
-    value = "true"
-  }
-  set {
-    name  = "gatewayAPI.enableAlpn"
-    value = "true"
-  }
-  set {
-    name  = "gatewayAPI.enableAppProtocol"
-    value = "true"
-  }
-  set {
-    name  = "l2announcements.enabled"
-    value = "true"
-  }
-  set {
-    name  = "prometheus.enabled"
-    value = "true"
-  }
-  set {
-    name  = "operator.prometheus.enabled"
-    value = "true"
-  }
-  set {
-    name  = "hubble.relay.enabled"
-    value = "true"
-  }
-  set {
-    name  = "hubble.ui.enabled"
-    value = "true"
-  }
-  set {
-    name  = "hubble.metrics.enableOpenMetrics"
-    value = "true"
-  }
-  set {
-    name  = "hubble.metrics.enabled"
-    value = "{dns,drop,tcp,flow,port-distribution,icmp,httpV2:exemplars=true;labelsContext=source_ip\\,source_namespace\\,source_workload\\,destination_ip\\,destination_namespace\\,destination_workload\\,traffic_direction}"
-  }
-  set {
-    name  = "hubble.metrics.serviceMonitor.enabled"
-    value = "false" # need to set this to true after monitoring stack is installed with the crds
-  }
+    },
+    {
+      name  = "kubeProxyReplacement"
+      value = "true"
+    },
+    {
+      name  = "k8sServiceHost"
+      value = "localhost"
+    },
+    {
+      name  = "k8sServicePort"
+      value = "7445"
+    },
+    {
+      name  = "securityContext.capabilities.ciliumAgent"
+      value = "{CHOWN,KILL,NET_ADMIN,NET_RAW,IPC_LOCK,SYS_ADMIN,SYS_RESOURCE,DAC_OVERRIDE,FOWNER,SETGID,SETUID}"
+    },
+    {
+      name  = "securityContext.capabilities.cleanCiliumState"
+      value = "{NET_ADMIN,SYS_ADMIN,SYS_RESOURCE}"
+    },
+    {
+      name  = "cgroup.autoMount.enabled"
+      value = "false"
+    },
+    {
+      name  = "cgroup.autoMount.enabled"
+      value = "false"
+    },
+    {
+      name  = "cgroup.hostRoot"
+      value = "/sys/fs/cgroup"
+    },
+    {
+      name  = "gatewayAPI.enabled"
+      value = "true"
+    },
+    {
+      name  = "gatewayAPI.enableAlpn"
+      value = "true"
+    },
+    {
+      name  = "gatewayAPI.enableAppProtocol"
+      value = "true"
+    },
+    {
+      name  = "l2announcements.enabled"
+      value = "true"
+    },
+    {
+      name  = "prometheus.enabled"
+      value = "true"
+    },
+    {
+      name  = "operator.prometheus.enabled"
+      value = "true"
+    },
+    {
+      name  = "hubble.relay.enabled"
+      value = "true"
+    },
+    {
+      name  = "hubble.ui.enabled"
+      value = "true"
+    },
+    {
+      name  = "hubble.metrics.enableOpenMetrics"
+      value = "true"
+    },
+    {
+      name  = "hubble.metrics.enabled"
+      value = "{dns,drop,tcp,flow,port-distribution,icmp,httpV2:exemplars=true;labelsContext=source_ip\\,source_namespace\\,source_workload\\,destination_ip\\,destination_namespace\\,destination_workload\\,traffic_direction}"
+    },
+    {
+      name  = "hubble.metrics.serviceMonitor.enabled"
+      value = "false" # need to set this to true after monitoring stack is installed with the crds
+    }
+  ]
 
   depends_on = [
     data.http.kubernetes_health
@@ -141,18 +146,44 @@ resource "helm_release" "flux2" {
   cleanup_on_fail  = true
   lint             = true
 
-  set {
-    name  = "imageReflectionController.create"
-    value = "false"
-  }
-  set {
-    name  = "imageAutomationController.create"
-    value = "false"
-  }
-  set {
-    name  = "policies.create"
-    value = "false"
-  }
+  set = [
+    { name  = "imageReflectionController.create"
+      value = "false"
+    },
+    {
+      name  = "imageAutomationController.create"
+      value = "false"
+    },
+    {
+      name  = "policies.create"
+      value = "false"
+    },
+    {
+      name  = "helmController.annotations.k8s\\.grafana\\.com/scrape"
+      value = "true"
+      type  = "string"
+    },
+    {
+      name  = "kustomizeController.annotations.k8s\\.grafana\\.com/scrape"
+      value = "true"
+      type  = "string"
+    },
+    {
+      name  = "notificationController.annotations.k8s\\.grafana\\.com/scrape"
+      value = "true"
+      type  = "string"
+    },
+    {
+      name  = "sourceController.annotations.k8s\\.grafana\\.com/scrape"
+      value = "true"
+      type  = "string"
+    },
+    {
+      name  = "crds.annotations.k8s\\.grafana\\.com/scrape"
+      value = "true"
+      type  = "string"
+    }
+  ]
 
   depends_on = [
     helm_release.cilium
@@ -180,22 +211,23 @@ resource "helm_release" "flux2_sync" {
   cleanup_on_fail = true
   lint            = true
 
-  set {
+  set = [{
     name  = "gitRepository.spec.url"
     value = "https://github.com/amreshh/proxmox.git"
-  }
-  set {
-    name  = "gitRepository.spec.ref.branch"
-    value = "dev"
-  }
-  set {
-    name  = "gitRepository.spec.secretRef.name"
-    value = kubernetes_secret.github_token.metadata[0].name
-  }
-  set {
-    name  = "kustomization.spec.path"
-    value = "flux"
-  }
+    },
+    {
+      name  = "gitRepository.spec.ref.branch"
+      value = "dev"
+    },
+    {
+      name  = "gitRepository.spec.secretRef.name"
+      value = kubernetes_secret.github_token.metadata[0].name
+    },
+    {
+      name  = "kustomization.spec.path"
+      value = "flux"
+    }
+  ]
 
   depends_on = [
     helm_release.flux2

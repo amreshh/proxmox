@@ -6,4 +6,5 @@ resources:
   - grafana.yaml
   - routes.yaml
   - pfsense-dashboards.yaml
+  - kubernetes-dashboards.yaml
   

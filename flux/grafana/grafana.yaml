@@ -28,6 +28,9 @@ spec:
     sidecar:
       dashboards:
         enabled: true
+        folderAnnotation: grafana_folder
+        provider:
+          foldersFromFilesStructure: true
     datasources:
       datasources.yaml:
         apiVersion: 1
@@ -42,4 +45,9 @@ spec:
               httpHeaderName1: X-Scope-OrgID
             secureJsonData:
               httpHeaderValue1: 1
+          - name: Mimir
+            access: proxy
+            type: prometheus
+            isDefault: true
+            url: http://mimir-nginx.mimir.svc.cluster.local/prometheus
   

@@ -32,3 +32,5 @@ spec:
         - name: loki-ruler
         - name: mimir-ruler
         - name: mimir-tsdb
+      certificate:
+        requestAutoCert: false

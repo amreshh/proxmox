@@ -211,9 +211,10 @@ resource "helm_release" "flux2_sync" {
   cleanup_on_fail = true
   lint            = true
 
-  set = [{
-    name  = "gitRepository.spec.url"
-    value = "https://github.com/amreshh/proxmox.git"
+  set = [
+    {
+      name  = "gitRepository.spec.url"
+      value = "https://github.com/amreshh/proxmox.git"
     },
     {
       name  = "gitRepository.spec.ref.branch"

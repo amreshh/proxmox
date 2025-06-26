@@ -18,7 +18,7 @@ variable "github_token" {
 
 variable "kubernetes_version" {
   type        = string
-  default     = "1.33.1"
+  default     = "1.33.2"
   description = "Kubernetes version to provision"
 }
 
@@ -37,7 +37,7 @@ variable "kubernetes_extra_manifests" {
 
 variable "cilium_version" {
   type        = string
-  default     = "1.17.4"
+  default     = "1.17.5"
   description = "Cilium version to provision"
 }
 
@@ -47,8 +47,8 @@ variable "flux_version" {
     sync_version = string
   })
   default = {
-    version      = "2.15.0"
-    sync_version = "1.12.0"
+    version      = "2.16.1"
+    sync_version = "1.13.1"
   }
 }
 

@@ -11,3 +11,4 @@ resources:
   - routes.yaml
   - cilium-network-policies.yaml
   - priorityclasses.yaml
+  - metrics-server.yaml

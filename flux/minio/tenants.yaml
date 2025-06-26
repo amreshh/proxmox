@@ -28,7 +28,7 @@ spec:
           storageClassName: delete
       poolsMetadata:
         annotations:
-          k8s.grafana.com/scrape: true
+          k8s.grafana.com/scrape: "true"
       buckets:
         - name: loki-admin
         - name: loki-chunks
@@ -39,4 +39,3 @@ spec:
         requestAutoCert: false
       metrics:
         enabled: true
-

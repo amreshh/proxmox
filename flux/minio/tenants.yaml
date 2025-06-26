@@ -26,6 +26,9 @@ spec:
           volumesPerServer: 1
           size: 10Gi
           storageClassName: delete
+      poolsMetadata:
+        annotations:
+          k8s.grafana.com/scrape: true
       buckets:
         - name: loki-admin
         - name: loki-chunks
@@ -34,3 +37,6 @@ spec:
         - name: mimir-tsdb
       certificate:
         requestAutoCert: false
+      metrics:
+        enabled: true
+

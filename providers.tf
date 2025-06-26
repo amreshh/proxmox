@@ -12,7 +12,7 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "2.17.0" #"3.0.0-pre1"
+      version = "3.0.2" #"3.0.0-pre1"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
@@ -30,7 +30,7 @@ terraform {
 }
 
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     host                   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
     cluster_ca_certificate = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.ca_certificate)
     client_certificate     = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_certificate)

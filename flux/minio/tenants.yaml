@@ -1,34 +1,41 @@
-apiVersion: minio.min.io/v2
-kind: Tenant
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
 metadata:
-  name: minio
+  name: minio-tenant
   namespace: minio
 spec:
-  users:
-    - name: loki
-  configuration:
-    name: storage-configuration
-  requestAutoCert: false
-  pools:
-    - servers: 4
-      name: pool-0
-      volumesPerServer: 1
-      volumeClaimTemplate:
-        metadata:
-          name: data
-        spec:
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 2Gi
-      containerSecurityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        runAsNonRoot: true
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop:
-            - ALL
-        seccompProfile:
-          type: RuntimeDefault
+  interval: 10m
+  chart:
+    spec:
+      chart: tenant
+      version: "7.1.1"
+      sourceRef:
+        kind: HelmRepository
+        name: minio-operator
+        namespace: flux-system
+      interval: 10m
+  values:
+    tenant:
+      name: minio
+      configSecret:
+        name: env-config
+        existingSecret: true
+      pools:
+        - name: grafana
+          servers: 1
+          volumesPerServer: 1
+          size: 10Gi
+          storageClassName: delete
+      poolsMetadata:
+        annotations:
+          k8s.grafana.com/scrape: "true"
+      buckets:
+        - name: loki-admin
+        - name: loki-chunks
+        - name: loki-ruler
+        - name: mimir-ruler
+        - name: mimir-tsdb
+      certificate:
+        requestAutoCert: false
+      metrics:
+        enabled: true

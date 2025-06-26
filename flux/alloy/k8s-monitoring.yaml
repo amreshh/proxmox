@@ -18,7 +18,7 @@ spec:
     cluster:
       name: talos
     alloy-metrics:
-      enabled: false
+      enabled: true
     alloy-singleton:
       enabled: true
     alloy-logs:
@@ -29,9 +29,17 @@ spec:
       - name: loki
         type: loki
         url: http://loki-gateway.loki.svc.cluster.local/loki/api/v1/push
+      - name: mimir
+        type: prometheus
+        url: http://mimir-nginx.mimir.svc.cluster.local/api/v1/push
+    annotationAutodiscovery:
+      enabled: true
     clusterEvents:
       enabled: true
       collector: alloy-singleton
+    clusterMetrics:
+      enabled: true
+      collector: alloy-metrics
     nodeLogs:
       enabled: false
     podLogs:

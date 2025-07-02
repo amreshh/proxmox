@@ -38,7 +38,7 @@ spec:
       enabled: true
       collector: alloy-singleton
     clusterMetrics:
-      enabled: true
+      enabled: false
       collector: alloy-metrics
     nodeLogs:
       enabled: false

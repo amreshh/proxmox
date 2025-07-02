@@ -17,4 +17,5 @@ spec:
   values:
     service:
       annotations:
-        - k8s.grafana.com/scrape: true
+        k8s.grafana.com/scrape: "true"
+        test: "hello"

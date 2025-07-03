@@ -8,7 +8,7 @@ spec:
     - name: default-gateway
       namespace: gateway
   hostnames:
-    - grafana.kubernetes.home
+    - grafana2.kubernetes.home
   rules:
     - matches:
         - path:

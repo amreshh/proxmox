@@ -24,7 +24,8 @@ spec:
       sidecar:
         dashboards:
           searchNamespace: monitoring
-      priorityClassName: low-priority
+          provider:
+            foldersFromFilesStructure: true
       persistence:
         enabled: true
         size: 5Gi

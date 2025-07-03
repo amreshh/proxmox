@@ -21,7 +21,7 @@ spec:
         name: env-config
         existingSecret: true
       pools:
-        - name: grafana
+        - name: loki
           servers: 1
           volumesPerServer: 1
           size: 10Gi
@@ -33,8 +33,6 @@ spec:
         - name: loki-admin
         - name: loki-chunks
         - name: loki-ruler
-        - name: mimir-ruler
-        - name: mimir-tsdb
       certificate:
         requestAutoCert: false
       metrics:

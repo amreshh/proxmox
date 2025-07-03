@@ -2,5 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - namespace.yaml
-  # - helm-repos.yaml
-  # - kube-state-metrics.yaml
+  - helm-repos.yaml
+  - kube-prometheus-stack.yaml
+  - routes.yaml
+  

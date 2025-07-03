@@ -18,4 +18,3 @@ spec:
     service:
       annotations:
         k8s.grafana.com/scrape: "true"
-        test: "hello"

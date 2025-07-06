@@ -26,10 +26,11 @@ spec:
           volumesPerServer: 1
           size: 10Gi
           storageClassName: delete
-        - name: opencloud
-          servers: 1
-          size: 100Gi
-          storageClassName: retain
+        # - name: opencloud
+        #   servers: 1
+        #   volumesPerServer: 1
+        #   size: 100Gi
+        #   storageClassName: retain
       poolsMetadata:
         annotations:
           k8s.grafana.com/scrape: "true"

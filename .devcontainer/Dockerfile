@@ -1,6 +1,6 @@
 FROM registry.opensuse.org/opensuse/leap:15.6
 
-ENV OPENTOFU_VERSION="1.10.1"
+ENV OPENTOFU_VERSION="1.10.2"
 ENV TALOS_VERSION="v1.10.2"
 
 ADD ./opentofu.repo /etc/zypp/repos.d/opentofu.repo

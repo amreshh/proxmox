@@ -2,6 +2,13 @@ locals {
   nodes = merge(var.controlplanes, var.workers)
   common_machine_config = {
     machine = {
+      features = {
+        hostDNS = {
+          enabled              = true
+          resolveMemberNames   = true
+          forwardKubeDNSToHost = true
+        }
+      }
       certSANs = [
         for ip in local.nodes : ip.ip_addr
       ]

@@ -1,10 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pfsense-dashboard
+  name: pfsense-dashboards
   namespace: monitoring
   labels:
     grafana_dashboard: "1"
+  annotations:
+    grafana_folder: pfsense
 data:
   pfsense.dnsbl.json: |-
     {

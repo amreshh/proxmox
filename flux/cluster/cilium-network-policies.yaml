@@ -34,7 +34,9 @@ spec:
             dns:
               - matchPattern: "*"
     - toCIDRSet:
-        - cidr: 192.168.1.1/32
+        - cidrGroupSelector:
+            matchLabels:
+              role: talos-dns
       toPorts:
         - ports:
             - port: "53"

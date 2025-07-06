@@ -1,5 +1,5 @@
 terraform {
-  required_version = "~>1.9"
+  required_version = "~>1.10"
 
   required_providers {
     proxmox = {
@@ -12,7 +12,7 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "3.0.2" #"3.0.0-pre1"
+      version = "3.0.2"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
@@ -20,7 +20,7 @@ terraform {
     }
     flux = {
       source  = "fluxcd/flux"
-      version = "1.6.2"
+      version = "1.6.3"
     }
     http = {
       source  = "hashicorp/http"

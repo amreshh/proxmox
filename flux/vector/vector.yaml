@@ -12,11 +12,7 @@ spec:
   chart:
     spec:
       chart: vector
-<<<<<<< HEAD
       version: "0.44.0"
-=======
-      version: "0.43.0"
->>>>>>> 8c949e2 (vector back in)
       sourceRef:
         kind: HelmRepository
         name: vector

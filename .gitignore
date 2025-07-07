@@ -9,9 +9,3 @@
 k8s
 certs
 secrets.yaml
-<<<<<<< HEAD
-=======
-
-# ignore opencloud for now
-opencloud-helm
->>>>>>> b04a788 (opencloud bucket)

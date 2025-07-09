@@ -43,6 +43,8 @@ spec:
             accessKey: accessKeyId
             secretKey: secretAccessKey
             bucket: bucketname
+            usePathStyle: true
+            ssl: false
     internalDatabase:
       enabled: false
     externalDatabase:

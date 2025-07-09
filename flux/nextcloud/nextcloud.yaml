@@ -45,11 +45,8 @@ spec:
             accessKey: accessKeyId
             secretKey: secretAccessKey
             bucket: bucketname
-<<<<<<< HEAD
             usePathStyle: true
             ssl: false
-=======
->>>>>>> 9d4b797 (nextcloud back in)
     internalDatabase:
       enabled: false
     externalDatabase:

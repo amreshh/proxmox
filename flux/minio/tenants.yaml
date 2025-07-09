@@ -21,15 +21,10 @@ spec:
         name: env-config
         existingSecret: true
       pools:
-        - name: loki
+        - name: minio
           servers: 1
           volumesPerServer: 1
-          size: 10Gi
-          storageClassName: delete
-        - name: nextcloud
-          servers: 1
-          volumesPerServer: 1
-          size: 1Gi
+          size: 100Gi
           storageClassName: retain
       poolsMetadata:
         annotations:

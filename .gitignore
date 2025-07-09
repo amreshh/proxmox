@@ -9,6 +9,3 @@
 k8s
 certs
 secrets.yaml
-
-# ignore opencloud for now
-opencloud-helm

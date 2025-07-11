@@ -41,6 +41,7 @@ spec:
           enabled: true
           existingSecret: nextcloud-minio
           ssl: false
+          port: 80
           usePathStyle: true
           secretKeys:
             host: endpoint

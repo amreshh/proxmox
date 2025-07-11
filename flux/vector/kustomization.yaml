@@ -3,6 +3,4 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - helm-repos.yaml
-  - loki.yaml
-  - routes.yaml
-  
+  - vector.yaml

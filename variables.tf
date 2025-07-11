@@ -5,9 +5,9 @@ variable "talos" {
     image   = string
   })
   default = {
-    version = "1.10.4"
-    iso     = "local:iso/talos_1.10.4.iso"
-    image   = "factory.talos.dev/metal-installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:v1.10.4"
+    version = "1.10.5"
+    iso     = "local:iso/talos_1.10.5.iso"
+    image   = "factory.talos.dev/metal-installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:v1.10.5"
   }
 }
 
@@ -37,7 +37,7 @@ variable "kubernetes_extra_manifests" {
 
 variable "cilium_version" {
   type        = string
-  default     = "1.17.5"
+  default     = "1.18.0-rc.0"
   description = "Cilium version to provision"
 }
 
@@ -47,8 +47,8 @@ variable "flux_version" {
     sync_version = string
   })
   default = {
-    version      = "2.16.1"
-    sync_version = "1.13.1"
+    version      = "2.16.2"
+    sync_version = "1.13.2"
   }
 }
 

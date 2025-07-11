@@ -40,14 +40,13 @@ spec:
         s3:
           enabled: true
           existingSecret: nextcloud-minio
+          ssl: false
+          usePathStyle: true
           secretKeys:
             host: endpoint
             accessKey: accessKeyId
             secretKey: secretAccessKey
             bucket: bucketname
-            usePathStyle: true
-            ssl: false
-            port: 80
     internalDatabase:
       enabled: true #false
     # externalDatabase:

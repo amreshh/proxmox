@@ -19,10 +19,10 @@ spec:
         namespace: flux-system
       interval: 10m
   values:
-    readinessProbe:
-      initialDelaySeconds: 900
-    livenessProbe:
-      initialDelaySeconds: 900
+    # readinessProbe:
+    #   initialDelaySeconds: 900
+    # livenessProbe:
+    #   initialDelaySeconds: 900
     persistence:
       enabled: true
       storageClass: retain

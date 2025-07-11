@@ -28,6 +28,8 @@ spec:
       storageClass: retain
       size: 10Gi
     nextcloud:
+      podSecurityContext:
+        fsGroupChangePolicy: "OnRootMismatch"
       host: nextcloud.kubernetes.home
       existingSecret:
         enabled: true

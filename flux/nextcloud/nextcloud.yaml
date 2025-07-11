@@ -19,10 +19,10 @@ spec:
         namespace: flux-system
       interval: 10m
   values:
-    readinessProbe:
-      initialDelaySeconds: 900
-    livenessProbe:
-      initialDelaySeconds: 900
+    # readinessProbe:
+    #   initialDelaySeconds: 900
+    # livenessProbe:
+    #   initialDelaySeconds: 900
     persistence:
       enabled: true
       storageClass: retain
@@ -48,26 +48,26 @@ spec:
             usePathStyle: true
             ssl: false
     internalDatabase:
-      enabled: false
-    externalDatabase:
-      enabled: true
-      type: mysql
-      existingSecret:
-        enabled: true
-        secretName: nextcloud-mariadb
-        usernameKey: username
-        passwordKey: password
-        hostKey: host
-        databaseKey: database
-    mariadb:
-      enabled: true
-      primary:
-        persistence:
-          enabled: true
-          storageClass: retain
-          size: 10Gi
-      auth:
-        existingSecret: nextcloud-mariadb
+      enabled: true #false
+    # externalDatabase:
+    #   enabled: true
+    #   type: mysql
+    #   existingSecret:
+    #     enabled: true
+    #     secretName: nextcloud-mariadb
+    #     usernameKey: username
+    #     passwordKey: password
+    #     hostKey: host
+    #     databaseKey: database
+    # mariadb:
+    #   enabled: true
+    #   primary:
+    #     persistence:
+    #       enabled: true
+    #       storageClass: retain
+    #       size: 10Gi
+    #   auth:
+    #     existingSecret: nextcloud-mariadb
     phpClientHttpsFix:
       enabled: true
       protocol: https

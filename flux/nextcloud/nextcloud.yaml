@@ -47,6 +47,7 @@ spec:
             bucket: bucketname
             usePathStyle: true
             ssl: false
+            port: 80
     internalDatabase:
       enabled: true #false
     # externalDatabase:

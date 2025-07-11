@@ -20,9 +20,9 @@ spec:
       interval: 10m
   values:
     readinessProbe:
-      initialDelaySeconds: 180
+      initialDelaySeconds: 900
     livenessProbe:
-      initialDelaySeconds: 180
+      initialDelaySeconds: 900
     persistence:
       enabled: true
       storageClass: retain

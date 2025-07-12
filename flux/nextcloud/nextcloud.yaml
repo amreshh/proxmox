@@ -44,6 +44,7 @@ spec:
           port: 80
           usePathStyle: true
           legacyAuth: true
+          autoCreate: true
           secretKeys:
             host: endpoint
             accessKey: accessKeyId

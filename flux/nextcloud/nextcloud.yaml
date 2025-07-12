@@ -43,7 +43,7 @@ spec:
           ssl: false
           port: 80
           usePathStyle: true
-          legacyAuth: true
+          legacyAuth: false
           autoCreate: true
           secretKeys:
             host: endpoint

@@ -26,9 +26,6 @@ spec:
           volumesPerServer: 1
           size: 100Gi
           storageClassName: retain
-      poolsMetadata:
-        # annotations:
-        #   k8s.grafana.com/scrape: "true"
       buckets:
         - name: loki-admin
         - name: loki-chunks

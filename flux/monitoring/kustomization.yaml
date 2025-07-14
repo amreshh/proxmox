@@ -6,3 +6,4 @@ resources:
   - kube-prometheus-stack.yaml
   - routes.yaml
   - pfsense-dashboards.yaml
+  - cilium-dashboards.yaml

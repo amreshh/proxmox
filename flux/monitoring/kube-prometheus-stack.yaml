@@ -111,7 +111,7 @@ spec:
               - source_labels: [__meta_kubernetes_pod_container_port_number]
                 action: keep
                 regex: \d+
-          - job_name: 'kubernetes-services'
+          - job_name: "kubernetes-services"
             metrics_path: /metrics
             params:
               module: [http_2xx]

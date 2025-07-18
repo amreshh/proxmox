@@ -1,7 +1,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: postgres
+  name: immich-db
   namespace: immich
 spec:
   instances: 1
@@ -11,6 +11,16 @@ spec:
         createdb: true
         superuser: true
         login: true
+  bootstrap:
+    initdb:
+      database: immich
+      owner: immich
+      secret:
+        name: postgres-app 
+      postInitSQL:
+        - CREATE EXTENSION IF NOT EXISTS "vectors";
+        - CREATE EXTENSION IF NOT EXISTS "cube" CASCADE;
+        - CREATE EXTENSION IF NOT EXISTS "earthdistance" CASCADE;
   storage:
     storageClass: retain
     size: 1Gi

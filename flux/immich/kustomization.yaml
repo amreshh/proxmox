@@ -6,4 +6,4 @@ resources:
   - database.yaml
   - storage.yaml
   - immich.yaml
-  # - routes.yaml
+  - routes.yaml

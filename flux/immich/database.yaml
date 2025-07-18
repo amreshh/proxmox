@@ -8,7 +8,6 @@ spec:
   managed:
     roles:
       - name: immich
-        createdb: true
         superuser: true
         login: true
   postgresql:

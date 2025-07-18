@@ -2,7 +2,9 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: postgres
+  namespace: cloudnative-pg
 spec:
   instances: 1
   storage:
+    storageClass: retain
     size: 1Gi

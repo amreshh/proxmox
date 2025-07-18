@@ -4,6 +4,6 @@ resources:
   - namespace.yaml
   - helm-repos.yaml
   - database.yaml
-  - pvc.yaml
+  - storage.yaml
   - immich.yaml
   # - routes.yaml

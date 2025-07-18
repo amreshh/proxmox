@@ -33,4 +33,5 @@ spec:
       metrics:
         enabled: true
       persistence:
-        existingClaim: immich-photos
+        library:
+          existingClaim: immich-photos

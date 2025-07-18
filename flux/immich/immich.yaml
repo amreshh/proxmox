@@ -35,5 +35,5 @@ spec:
       persistence:
         library:
           existingClaim: immich-photos
-      redis:
-        enabled: true
+    redis:
+      enabled: true

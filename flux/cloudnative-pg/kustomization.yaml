@@ -4,4 +4,3 @@ resources:
   - namespace.yaml
   - helm-repos.yaml
   - cloudnative-pg.yaml
-  # - cluster.yaml

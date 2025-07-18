@@ -5,6 +5,10 @@ metadata:
   namespace: cloudnative-pg
 spec:
   instances: 1
+  managed:
+    - name: immich
+      superuser: true
+      login: true
   storage:
     storageClass: retain
     size: 1Gi

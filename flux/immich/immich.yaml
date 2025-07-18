@@ -29,3 +29,8 @@ spec:
           name: immich-db
           key: username
       DB_HOSTNAME:  "immich-db"
+    immich:
+      metrics:
+        enabled: true
+        persistence:
+          existingClaim: immich-photos

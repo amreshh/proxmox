@@ -28,7 +28,7 @@ spec:
         secretKeyRef:
           name: immich-db
           key: username
-      DB_HOSTNAME:  "immich-db"
+      DB_HOSTNAME:  "immich-db-rw.immich.svc.cluster.local"
     immich:
       metrics:
         enabled: true

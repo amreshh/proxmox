@@ -1,0 +1,28 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: immich-network-policy
+  namespace: immich
+spec:
+  endpointSelector: {}
+  egress:
+    - toFQDNs:
+        - matchName: huggingface.co
+      toPorts:
+        - ports:
+            - port: "443"
+    - toEndpoints:
+        - {}
+    - toEntities:
+        - cluster
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+          rules:
+            dns:
+              - matchPattern: "*"

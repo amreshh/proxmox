@@ -8,6 +8,7 @@ spec:
   egress:
     - toFQDNs:
         - matchName: huggingface.co
+        - matchName: cas-bridge.xethub.hf.co
       toPorts:
         - ports:
             - port: "443"

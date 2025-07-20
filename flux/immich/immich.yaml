@@ -39,6 +39,10 @@ spec:
         newVersionCheck:
           enabled: false
         ffmpeg:
-          acceptedVideoCodecs: ["h264", "hevc", "vp9", "avi"]
+          acceptedVideoCodecs:
+            - h264
+            - hevc
+            - vp9
+            - avi
     redis:
       enabled: true

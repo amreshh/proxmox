@@ -35,14 +35,14 @@ spec:
       persistence:
         library:
           existingClaim: immich-photos
-      configuration:
-        newVersionCheck:
-          enabled: false
-        ffmpeg:
-          acceptedVideoCodecs:
-            - h264
-            - hevc
-            - vp9
-            - avi
+      # configuration:
+      #   newVersionCheck:
+      #     enabled: false
+      #   ffmpeg:
+      #     acceptedVideoCodecs:
+      #       - h264
+      #       - hevc
+      #       - vp9
+      #       - avi
     redis:
       enabled: true

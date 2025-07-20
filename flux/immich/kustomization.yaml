@@ -3,8 +3,8 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - cilium-network-policies.yaml
-  - helm-repos.yaml
-  - database.yaml
-  - storage.yaml
-  - immich.yaml
-  - routes.yaml
+  # - helm-repos.yaml
+  # - database.yaml
+  # - storage.yaml
+  # - immich.yaml
+  # - routes.yaml

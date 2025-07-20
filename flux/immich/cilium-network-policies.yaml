@@ -4,7 +4,10 @@ metadata:
   name: immich-network-policy
   namespace: immich
 spec:
-  endpointSelector: {}
+  description: "Allow imich machine learning to access huggingface.co and cas-bridge.xethub.hf.co"
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: machine-learning
   egress:
     - toFQDNs:
         - matchName: huggingface.co
@@ -16,18 +19,18 @@ spec:
       toPorts:
         - ports:
             - port: "443"
-    - toEndpoints:
-        - {}
-    - toEntities:
-        - cluster
-    - toEndpoints:
-        - matchLabels:
-            io.kubernetes.pod.namespace: kube-system
-            k8s-app: kube-dns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: UDP
-          rules:
-            dns:
-              - matchPattern: "*"
+    # - toEndpoints:
+    #     - {}
+    # - toEntities:
+    #     - cluster
+    # - toEndpoints:
+    #     - matchLabels:
+    #         io.kubernetes.pod.namespace: kube-system
+    #         k8s-app: kube-dns
+    #   toPorts:
+    #     - ports:
+    #         - port: "53"
+    #           protocol: UDP
+    #       rules:
+    #         dns:
+    #           - matchPattern: "*"

@@ -34,7 +34,7 @@ spec:
         enabled: true
       persistence:
         library:
-          existingClaim: immich-photos
+          existingClaim: data0-immich-immich-0
       configuration:
         newVersionCheck:
           enabled: false

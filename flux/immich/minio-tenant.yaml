@@ -18,7 +18,7 @@ spec:
     tenant:
       name: immich
       configSecret:
-        name: env-config
+        name: minio-env-config
         existingSecret: true
       pools:
         - name: immich

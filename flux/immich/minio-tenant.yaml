@@ -16,7 +16,7 @@ spec:
       interval: 10m
   values:
     tenant:
-      name: immich
+      name: immich-minio
       configSecret:
         name: minio-env-config
         existingSecret: true

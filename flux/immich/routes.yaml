@@ -35,5 +35,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: minio-console
+        - name: immich-minio-console
           port: 9090

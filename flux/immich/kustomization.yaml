@@ -6,6 +6,6 @@ resources:
   - helm-repos.yaml
   - database.yaml
   - minio-tenant.yaml
-  - storage.yaml
+  # - storage.yaml
   - immich.yaml
   - routes.yaml

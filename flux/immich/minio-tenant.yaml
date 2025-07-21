@@ -27,7 +27,11 @@ spec:
           size: 100Gi
           storageClassName: retain
       buckets:
-        - name: photos
+        - name: encoded-video
+        - name: library
+        - name: profile
+        - name: thumbs
+        - name: upload
       subPath: ""
       certificate:
         requestAutoCert: false

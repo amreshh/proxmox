@@ -28,6 +28,7 @@ spec:
           storageClassName: retain
       buckets:
         - name: photos
+      subPath: ""
       certificate:
         requestAutoCert: false
       metrics:

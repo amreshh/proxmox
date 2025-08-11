@@ -8,7 +8,7 @@
   "labels": [
     "renovatebot"
   ],
-  "baseBranches": [
+  "baseBranchPatterns": [
     "dev"
   ],
   "flux": {

@@ -1,0 +1,4 @@
+# unignore certain files in file picker
+!*md
+!*yaml
+!*env

@@ -248,13 +248,13 @@ resource "helm_release" "flux2_sync" {
 
 resource "local_sensitive_file" "kubeconfig_file" {
   content         = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
-  filename        = "/root/.kube/config"
+  filename        = "~/.kube/config"
   file_permission = "0711"
 }
 
 resource "local_sensitive_file" "talosconfig_file" {
   content         = data.talos_client_configuration.talosconfig.talos_config
-  filename        = "/root/.talos/config"
+  filename        = "~/.talos/config"
   file_permission = "0600"
 }
 

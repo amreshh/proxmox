@@ -5,7 +5,7 @@ metadata:
 provisioner: nfs.csi.k8s.io
 parameters:
   server: proxmox76.home
-  share: /tank/retain
+  share: /data/retain
 reclaimPolicy: Retain
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
@@ -24,7 +24,7 @@ metadata:
 provisioner: nfs.csi.k8s.io
 parameters:
   server: proxmox76.home
-  share: /tank/delete
+  share: /data/delete
 reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true

@@ -10,6 +10,6 @@ resources:
   - gateway.yaml
   - storageclasses.yaml
   - routes.yaml
-  - cilium-network-policies.yaml
+  - cilium-cluster-network-policies.yaml
   - priorityclasses.yaml
   - metrics-server.yaml

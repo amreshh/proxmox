@@ -3,7 +3,4 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - helm-repos.yaml
-  - kube-prometheus-stack.yaml
-  - routes.yaml
-  - pfsense-dashboards.yaml
-  - cilium-dashboards.yaml
+  - cloudnative-pg.yaml

@@ -12,17 +12,17 @@ spec:
   chart:
     spec:
       chart: nextcloud
-      version: "6.6.10"
+      version: "7.0.2"
       sourceRef:
         kind: HelmRepository
         name: nextcloud
         namespace: flux-system
       interval: 10m
   values:
-    # readinessProbe:
-    #   initialDelaySeconds: 900
-    # livenessProbe:
-    #   initialDelaySeconds: 900
+    readinessProbe:
+      initialDelaySeconds: 900
+    livenessProbe:
+      initialDelaySeconds: 900
     persistence:
       enabled: true
       storageClass: retain
@@ -40,34 +40,35 @@ spec:
         s3:
           enabled: true
           existingSecret: nextcloud-minio
+          ssl: false
+          port: 80
+          usePathStyle: true
           secretKeys:
             host: endpoint
             accessKey: accessKeyId
             secretKey: secretAccessKey
             bucket: bucketname
-            usePathStyle: true
-            ssl: false
     internalDatabase:
-      enabled: false
-    externalDatabase:
-      enabled: true
-      type: mysql
-      existingSecret:
-        enabled: true
-        secretName: nextcloud-mariadb
-        usernameKey: username
-        passwordKey: password
-        hostKey: host
-        databaseKey: database
-    mariadb:
-      enabled: true
-      primary:
-        persistence:
-          enabled: true
-          storageClass: retain
-          size: 10Gi
-      auth:
-        existingSecret: nextcloud-mariadb
+      enabled: true #false
+    # externalDatabase:
+    #   enabled: true
+    #   type: mysql
+    #   existingSecret:
+    #     enabled: true
+    #     secretName: nextcloud-mariadb
+    #     usernameKey: username
+    #     passwordKey: password
+    #     hostKey: host
+    #     databaseKey: database
+    # mariadb:
+    #   enabled: true
+    #   primary:
+    #     persistence:
+    #       enabled: true
+    #       storageClass: retain
+    #       size: 10Gi
+    #   auth:
+    #     existingSecret: nextcloud-mariadb
     phpClientHttpsFix:
       enabled: true
       protocol: https

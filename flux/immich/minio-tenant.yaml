@@ -1,8 +1,8 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: minio-tenant
-  namespace: minio
+  name: immich-minio
+  namespace: immich
 spec:
   interval: 10m
   chart:
@@ -16,21 +16,23 @@ spec:
       interval: 10m
   values:
     tenant:
-      name: minio
+      name: immich-minio
       configSecret:
-        name: env-config
+        name: minio-env-config
         existingSecret: true
       pools:
-        - name: minio
+        - name: immich
           servers: 1
           volumesPerServer: 1
           size: 100Gi
           storageClassName: retain
       buckets:
-        - name: loki-admin
-        - name: loki-chunks
-        - name: loki-ruler
-        - name: nextcloud
+        - name: encoded-video
+        - name: library
+        - name: profile
+        - name: thumbs
+        - name: upload
+      subPath: ""
       certificate:
         requestAutoCert: false
       metrics:

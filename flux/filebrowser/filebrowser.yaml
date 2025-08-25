@@ -30,7 +30,7 @@ metadata:
 spec:
   selector:
     app: filebrowser
-ports:
-  - protocol: TCP
-    port: 80
-    targetPort: http
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: http

@@ -4,5 +4,4 @@ resources:
   - namespace.yaml
   - helm-repos.yaml
   - minio.yaml
-  - tenants.yaml
-  - routes.yaml
+

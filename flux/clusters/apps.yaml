@@ -14,4 +14,3 @@ spec:
   path: ./apps
   prune: true
   wait: true
-

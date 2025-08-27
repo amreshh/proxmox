@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: loki
+  name: loki-tenant
   namespace: loki
 spec:
   interval: 10m

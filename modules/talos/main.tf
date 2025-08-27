@@ -237,7 +237,7 @@ resource "helm_release" "flux2_sync" {
     },
     {
       name  = "kustomization.spec.path"
-      value = "flux/clusters/talos"
+      value = "flux/clusters"
     }
   ]
 

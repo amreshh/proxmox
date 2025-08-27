@@ -34,7 +34,7 @@ spec:
         enabled: true
       persistence:
         library:
-          existingClaim: data0-immich-minio-immich-0
+          existingClaim: immich-data
       configuration:
         newVersionCheck:
           enabled: false

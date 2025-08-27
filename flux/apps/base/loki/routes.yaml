@@ -26,12 +26,12 @@ spec:
     - name: default-gateway
       namespace: gateway
   hostnames:
-    - loki.minio.kubernetes.home
+    - loki-minio.kubernetes.home
   rules:
     - matches:
         - path:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: loki-console
+        - name: loki-minio-console
           port: 9090

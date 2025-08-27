@@ -16,7 +16,7 @@ spec:
       interval: 10m
   values:
     tenant:
-      name: loki
+      name: loki-minio
       configSecret:
         name: env-config
         existingSecret: true

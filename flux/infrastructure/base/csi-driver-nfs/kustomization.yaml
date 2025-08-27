@@ -3,4 +3,3 @@ kind: Kustomization
 resources:
   - helm-repos.yaml
   - csi-driver-nfs.yaml
-  - storageclasses.yaml

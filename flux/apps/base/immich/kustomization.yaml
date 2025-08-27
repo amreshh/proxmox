@@ -5,6 +5,5 @@ resources:
   - cilium-network-policies.yaml
   - helm-repos.yaml
   - database.yaml
-  - minio-tenant.yaml
   - immich.yaml
   - routes.yaml

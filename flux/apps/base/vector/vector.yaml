@@ -22,6 +22,8 @@ spec:
     role: Agent
     serviceHeadless:
       enabled: false
+    service:
+      enabled: false
     resources:
       requests:
         cpu: 500m

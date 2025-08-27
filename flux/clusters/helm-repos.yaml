@@ -1,17 +1,17 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps
+  name: helm-repos
   namespace: flux-system
 spec:
-  interval: 15m
+  interval: 1h
+  retryInterval: 1m
   timeout: 15m
   dependsOn:
-    - name: operators
+    - name: cilium
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps
+  path: ./infrastructure/helm-repos
   prune: true
   wait: true
-

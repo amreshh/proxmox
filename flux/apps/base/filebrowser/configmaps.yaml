@@ -10,4 +10,5 @@ data:
         - path: "/data"
           name: data
           config:
-            defaultEnabled: true
+            defaultEnabled: false
+            createUserDir: true

@@ -21,10 +21,10 @@ spec:
           ports:
             - name: http
               containerPort: 80
-          volumeMounts:
-            - mountPath: "/data"
-              name: filebrowser-data
-    volumes:
-      - name: filebrowser-data
-        persistentvolumeclaim:
-          claimName: filebrowser-data
+    #       volumeMounts:
+    #         - mountPath: "/data"
+    #           name: filebrowser-data
+    # volumes:
+    #   - name: filebrowser-data
+    #     persistentvolumeclaim:
+    #       claimName: filebrowser-data

@@ -21,10 +21,21 @@ spec:
           ports:
             - name: http
               containerPort: 80
+          env:
+            - name: FILEBROWSER_ADMIN_PASSWORD
+              valueFrom:
+                secretRef:
+                  name: filebrowser-auth
           volumeMounts:
             - name: filebrowser-data
               mountPath: "/data"
+            - name: filebrowse-config
+              mountPath: "/home/filebrowser/config.yaml"
+              readOnly: true
       volumes:
         - name: filebrowser-data
           persistentVolumeClaim:
             claimName: filebrowser-data
+        - name: config
+          configMap:
+            name: filebrowser-config

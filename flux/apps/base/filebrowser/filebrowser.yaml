@@ -28,17 +28,3 @@ spec:
       - name: filebrowser-data
         persistentvolumeclaim:
           claimName: filebrowser-data
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: filebrowser-service
-  namespace: filebrowser
-spec:
-  selector:
-    app: filebrowser
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: http

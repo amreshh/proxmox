@@ -4,4 +4,5 @@ resources:
   - namespace.yaml
   - pvc.yaml
   - filebrowser.yaml
+  - services.yaml
   - routes.yaml

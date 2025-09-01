@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - pvc.yaml
-  - configmaps.yaml
-  - filebrowser.yaml
-  - services.yaml
-  - routes.yaml
+  # - configmaps.yaml
+  # - filebrowser.yaml
+  # - services.yaml
+  # - routes.yaml

@@ -6,6 +6,7 @@ metadata:
 data:
   config.yaml: |-
     server:
+      database: "/data/database.db"
       sources:
         - path: "/data"
           name: data

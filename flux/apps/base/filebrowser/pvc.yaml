@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: filebrowser-data
-  namespace: filebrwoser
+  namespace: filebrowser
 spec:
   accessModes:
     - ReadWriteOnce

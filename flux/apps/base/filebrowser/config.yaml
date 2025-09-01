@@ -1,7 +1,7 @@
 server:
   database: "/data/database.db"
   sources:
-    - path: "/data/filebrowser"
+    - path: "/data"
       name: data
       config:
         defaultEnabled: false

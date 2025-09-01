@@ -246,15 +246,17 @@ resource "helm_release" "flux2_sync" {
   ]
 }
 
+# TODO: see if we can make this more flexible
 resource "local_sensitive_file" "kubeconfig_file" {
   content         = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
-  filename        = "/root/.kube/config"
+  filename        = "/home/amresh/.kube/config"
   file_permission = "0711"
 }
 
+# TODO: see if we can make this more flexible
 resource "local_sensitive_file" "talosconfig_file" {
   content         = data.talos_client_configuration.talosconfig.talos_config
-  filename        = "/root/.talos/config"
+  filename        = "/home/amresh/.talos/config"
   file_permission = "0600"
 }
 

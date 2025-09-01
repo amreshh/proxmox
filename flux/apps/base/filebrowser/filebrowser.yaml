@@ -27,7 +27,7 @@ spec:
           volumeMounts:
             - name: filebrowser-data
               mountPath: "/data"
-            - name: filebrowser-config
+            - name: config
               mountPath: "/home/filebrowser/config.yaml"
               readOnly: true
       volumes:

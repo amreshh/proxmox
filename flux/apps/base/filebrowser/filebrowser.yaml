@@ -21,11 +21,9 @@ spec:
           ports:
             - name: http
               containerPort: 80
-          env:
-            - name: FILEBROWSER_ADMIN_PASSWORD
-              valueFrom:
-                secretRef:
-                  name: filebrowser-auth
+          envFrom:
+            - secretRef:
+                name: filebrowser-auth
           volumeMounts:
             - name: filebrowser-data
               mountPath: "/data"

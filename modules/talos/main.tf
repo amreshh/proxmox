@@ -126,20 +126,24 @@ resource "helm_release" "cilium" {
     # },
     {
       name  = "hubble.metrics.serviceMonitor.enabled"
-      value = "false" # need to set this to true after monitoring stack is installed with the crds
+      value = "true" # need to set this to true after monitoring stack is installed with the crds
     }
   ]
 
-  # set_list = [
-  #   {
-  #     name = "hubble.metrics.enabled"
-  #     value = [
-  #       "flow:destinationContext=workload|dns|ip",
-  #       "flow:sourceContext=workload|dns|ip"
-  #       # "http:labelsContext=source_namespace\\,source_workload\\,source_pod\\,source_app\\,destination_namespace\\,destination_workload\\,destination_pod\\,destination_app\\,traffic_direction"
-  #     ]
-  #   }
-  # ]
+  set_list = [
+    {
+      name = "hubble.metrics.enabled"
+      value = [
+        "dns",
+        "drop",
+        "tcp",
+        "flow:sourceContext=workload|dns|ip;destinationContext=workload|dns|ip",
+        # "flow:destinationContext=workload|dns|ip",
+        # "flow:sourceContext=workload|dns|ip"
+        # "http:labelsContext=source_namespace\\,source_workload\\,source_pod\\,source_app\\,destination_namespace\\,destination_workload\\,destination_pod\\,destination_app\\,traffic_direction"
+      ]
+    }
+  ]
 
   depends_on = [
     data.http.kubernetes_health

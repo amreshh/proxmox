@@ -14,4 +14,4 @@ spec:
     name: flux-system
   path: ./flux/operators
   prune: true
-  wait: false #true
+  wait: true

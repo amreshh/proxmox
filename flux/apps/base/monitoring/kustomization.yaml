@@ -8,4 +8,4 @@ resources:
   - routes.yaml
   - pfsense-dashboards.yaml
   - cilium-dashboards.yaml
-
+  - hubble-dashboards.yaml

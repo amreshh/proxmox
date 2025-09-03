@@ -1,3 +1,4 @@
+# TODO: Split metrics per node
 apiVersion: v1
 kind: ConfigMap
 metadata:

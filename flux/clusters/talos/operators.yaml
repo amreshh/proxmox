@@ -7,8 +7,8 @@ spec:
   interval: 1h
   retryInterval: 1m
   timeout: 1m #15m
-  dependsOn:
-    - name: infrastructure
+  # dependsOn:
+  #   - name: infrastructure
   sourceRef:
     kind: GitRepository
     name: flux-system

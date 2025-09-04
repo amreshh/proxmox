@@ -32,6 +32,9 @@ spec:
               url: http://lgtm-distributed-loki-gateway.lgtm.svc.cluster.local/
     loki:
       enabled: true
+      analytics:
+        reporting_enabled: false
+        usage_stats_url: ""
       schemaConfig:
         configs:
           - from: "2024-04-01"

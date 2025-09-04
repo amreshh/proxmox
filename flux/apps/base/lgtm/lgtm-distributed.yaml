@@ -15,7 +15,18 @@ spec:
       interval: 10m
   values:
     grafana:
-      enabled: false
+      enabled: true
+      datasources:
+        - name: Loki
+          access: proxy
+          type: loki
+          isDefault: false
+          jsonData:
+            httHeaderName1: X-Scope-OrgID
+          secureJsonData:
+            httpHeaderValue1: 1
+          orgId: 1
+          url: http://lgtm-distributed-loki-gateway.lgtm.svc.cluster.local/
     loki:
       enabled: true
       schemaConfig:

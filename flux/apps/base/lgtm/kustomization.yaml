@@ -4,6 +4,7 @@ namespace: lgtm
 resources:
   - namespace.yaml
   - helm-repos.yaml
+  - minio-tenant.yaml
   - lgtm-distributed.yaml
 
 patches:

@@ -6,6 +6,7 @@ resources:
   - helm-repos.yaml
   - minio-tenant.yaml
   - lgtm-distributed.yaml
+  - routes.yaml
 
 patches:
   - target:

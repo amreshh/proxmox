@@ -1,0 +1,35 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: loki-gateway
+spec:
+  parentRefs:
+    - name: default-gateway
+      namespace: gateway
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: loki
+          port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: loki-minio-console
+spec:
+  parentRefs:
+    - name: default-gateway
+      namespace: gateway
+  hostnames:
+    - lgtm-minio.kubernetes.home
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: lgtm-minio-console
+          port: 9090

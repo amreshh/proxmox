@@ -47,7 +47,7 @@ spec:
         loki:
           type: loki
           inputs: [kubernetes]
-          endpoint: http://loki-gateway.loki.svc.cluster.local
+          endpoint: http://lgtm-distributes-loki-gateway.lgtm.svc.cluster.local
           encoding:
             codec: json
           labels:
@@ -75,4 +75,3 @@ spec:
               {{ print "{{ kubernetes.pod_owner }}" }}
             pod_uid: |-
               {{ print "{{ kubernetes.pod_uid }}" }}
-

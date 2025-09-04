@@ -3,12 +3,12 @@ kind: Kustomization
 namespace: monitoring
 resources:
   - namespace.yaml
-  - helm-repos.yaml
-  - kube-prometheus-stack.yaml
-  - routes.yaml
-  - pfsense-dashboards.yaml
-  - cilium-dashboards.yaml
-  - hubble-dashboards.yaml
+  # - helm-repos.yaml
+  # - kube-prometheus-stack.yaml
+  # - routes.yaml
+  # - pfsense-dashboards.yaml
+  # - cilium-dashboards.yaml
+  # - hubble-dashboards.yaml
 
 patches:
   - target:

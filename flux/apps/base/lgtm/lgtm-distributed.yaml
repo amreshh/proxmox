@@ -61,8 +61,8 @@ spec:
           s3ForcePathStyle: true
       storageConfig:
         tsdb_shipper:
-          active_index_directory: /data/tsdb-index
-          cache_location: /data/tsdb-cache
+          active_index_directory: /var/loki/index
+          cache_location: /var/loki/cache
           object_store: s3
       pattern_ingester:
         enabled: true

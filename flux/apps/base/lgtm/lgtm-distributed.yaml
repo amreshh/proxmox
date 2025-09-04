@@ -16,6 +16,9 @@ spec:
   values:
     grafana:
       enabled: true
+      grafana.ini:
+        analytics:
+          check_for_updates: false
       datasources:
         datasources.yaml:
           apiVersion: 1

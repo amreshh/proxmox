@@ -38,6 +38,9 @@ spec:
       analytics:
         reporting_enabled: false
         usage_stats_url: ""
+      compactor:
+        extraArgs:
+          - -reporting.enabled=0
       schemaConfig:
         configs:
           - from: "2024-04-01"

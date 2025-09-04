@@ -6,7 +6,7 @@ metadata:
 spec:
   interval: 1h
   retryInterval: 1m
-  timeout: 15m
+  timeout: 1m #15m
   dependsOn:
     - name: operators
   sourceRef:
@@ -14,4 +14,4 @@ spec:
     name: flux-system
   path: ./flux/apps
   prune: true
-  wait: true
+  wait: false #true

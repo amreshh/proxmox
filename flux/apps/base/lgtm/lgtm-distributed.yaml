@@ -15,7 +15,7 @@ spec:
       interval: 10m
   values:
     grafana:
-      enabled: true
+      enabled: false
     loki:
       enabled: true
       schemaConfig:
@@ -52,8 +52,8 @@ spec:
       ruler:
         enable_api: true
     mimir:
-      enabled: true
+      enabled: false
     tempo:
-      enabled: true
+      enabled: false
     grafana-oncall:
       enabled: false

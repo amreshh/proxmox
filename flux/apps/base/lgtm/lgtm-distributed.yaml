@@ -18,6 +18,12 @@ spec:
       enabled: true
     loki:
       enabled: true
+      storage:
+        type: s3
+        bucketNames:
+          chunks: loki-chunks
+          ruler: loki-ruler
+          admin: loki-admin
     mimir:
       enabled: true
     tempo:

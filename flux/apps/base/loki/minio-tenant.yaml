@@ -12,7 +12,6 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: minio-operator
-        namespace: flux-system
       interval: 10m
   values:
     tenant:
@@ -37,3 +36,4 @@ spec:
         requestAutoCert: false
       metrics:
         enabled: true
+

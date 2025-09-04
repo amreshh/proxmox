@@ -9,3 +9,12 @@ resources:
   - pvc.yaml
   - immich.yaml
   - routes.yaml
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: immich
+    patch: |-
+      - op: add
+        path: "/spec/chart/spec/sourceRef/namespace"
+        value: immich

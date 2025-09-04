@@ -5,3 +5,12 @@ resources:
   - namespace.yaml
   - helm-repos.yaml
   - lgtm-distributed.yaml
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: lgtm-distributed
+    patch: |-
+      - op: add
+        path: "/spec/chart/spec/sourceRef/namespace"
+        value: lgtm

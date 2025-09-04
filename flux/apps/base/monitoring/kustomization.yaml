@@ -9,3 +9,12 @@ resources:
   - pfsense-dashboards.yaml
   - cilium-dashboards.yaml
   - hubble-dashboards.yaml
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: kube-prometheus-stack
+    patch: |-
+      - op: add
+        path: "/spec/chart/spec/sourceRef/namespace"
+        value: monitoring

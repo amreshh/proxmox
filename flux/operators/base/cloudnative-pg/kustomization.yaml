@@ -5,3 +5,12 @@ resources:
   - namespace.yaml
   - helm-repos.yaml
   - cloudnative-pg.yaml
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: cloudnative-pg
+    patch: |-
+      - op: add
+        path: "/spec/chart/spec/sourceRef/namespace"
+        value: cloudnative-pg

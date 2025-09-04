@@ -5,3 +5,11 @@ resources:
   - helm-repos.yaml
   - metrics-server.yaml
 
+patches:
+  - target:
+      kind: HelmRelease
+      name: metrics-server
+    patch: |-
+      - op: add
+        path: "/spec/chart/spec/sourceRef/namespace"
+        value: kube-system

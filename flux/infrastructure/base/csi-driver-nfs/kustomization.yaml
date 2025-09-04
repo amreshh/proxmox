@@ -4,3 +4,12 @@ namespace: kube-system
 resources:
   - helm-repos.yaml
   - csi-driver-nfs.yaml
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: csi-driver-nfs
+    patch: |-
+      - op: add
+        path: "/spec/chart/spec/sourceRef/namespace"
+        value: kube-system

@@ -2,7 +2,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: immich
-  namespace: immich
 spec:
   interval: 10m
   install:
@@ -16,7 +15,6 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: immich
-        namespace: flux-system
       interval: 10m
   values:
     env:
@@ -28,7 +26,7 @@ spec:
         secretKeyRef:
           name: immich-db
           key: username
-      DB_HOSTNAME:  "immich-db-rw.immich.svc.cluster.local"
+      DB_HOSTNAME: "immich-db-rw.immich.svc.cluster.local"
     immich:
       metrics:
         enabled: true

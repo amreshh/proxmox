@@ -2,7 +2,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: kube-prometheus-stack
-  namespace: monitoring
 spec:
   interval: 10m
   chart:
@@ -12,7 +11,6 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
-        namespace: flux-system
       interval: 10m
   values:
     alertmanager:
@@ -60,18 +58,25 @@ spec:
               - source_labels: [__meta_kubernetes_pod_label_k8s_app]
                 action: keep
                 regex: cilium
-              - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+              - source_labels:
+                  [__meta_kubernetes_service_annotation_prometheus_io_scrape]
                 action: keep
                 regex: true
-              - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
+              - source_labels:
+                  [__meta_kubernetes_service_annotation_prometheus_io_scheme]
                 action: replace
                 target_label: __scheme__
                 regex: (https?)
-              - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+              - source_labels:
+                  [__meta_kubernetes_service_annotation_prometheus_io_path]
                 action: replace
                 target_label: __metrics_path__
                 regex: (.+)
-              - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+              - source_labels:
+                  [
+                    __address__,
+                    __meta_kubernetes_service_annotation_prometheus_io_port,
+                  ]
                 action: replace
                 target_label: __address__
                 regex: (.+)(?::\d+);(\d+)
@@ -88,14 +93,20 @@ spec:
             kubernetes_sd_configs:
               - role: pod
             relabel_configs:
-              - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+              - source_labels:
+                  [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
                 action: keep
                 regex: true
-              - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+              - source_labels:
+                  [__meta_kubernetes_pod_annotation_prometheus_io_path]
                 action: replace
                 target_label: __metrics_path__
                 regex: (.+)
-              - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+              - source_labels:
+                  [
+                    __address__,
+                    __meta_kubernetes_pod_annotation_prometheus_io_port,
+                  ]
                 action: replace
                 regex: (.+):(?:\d+);(\d+)
                 replacement: ${1}:${2}
@@ -118,10 +129,15 @@ spec:
             kubernetes_sd_configs:
               - role: service
             relabel_configs:
-              - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
+              - source_labels:
+                  [__meta_kubernetes_service_annotation_prometheus_io_probe]
                 action: keep
                 regex: true
-              - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+              - source_labels:
+                  [
+                    __address__,
+                    __meta_kubernetes_pod_annotation_prometheus_io_port,
+                  ]
                 action: replace
                 regex: ([^:]+)(?::\d+)?;(\d+)
                 replacement: ${1}:${2}
@@ -149,3 +165,4 @@ spec:
           #       regex: (.+)
           #       target_label: __metrics_path__
           #       replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
+

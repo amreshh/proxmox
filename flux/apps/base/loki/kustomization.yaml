@@ -7,3 +7,19 @@ resources:
   # - minio-tenant.yaml
   # - loki.yaml
   # - routes.yaml
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: loki
+    patch: |-
+      - op: add
+        path: "/spec/chart/spec/sourceRef/namespace"
+        value: loki
+  - target:
+      kind: HelmRelease
+      name: loki-tenant
+    patch: |-
+      - op: add
+        path: "/spec/chart/spec/sourceRef/namespace"
+        value: minio

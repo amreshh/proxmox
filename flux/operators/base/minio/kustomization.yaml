@@ -5,3 +5,12 @@ resources:
   - namespace.yaml
   - helm-repos.yaml
   - minio.yaml
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: minio-operator
+    patch: |-
+      - op: add
+        path: "/spec/chart/spec/sourceRef/namespace"
+        value: minio

@@ -6,12 +6,12 @@ metadata:
 spec:
   interval: 1h
   retryInterval: 1m
-  timeout: 1m #15m
-  # dependsOn:
-  #   - name: infrastructure
+  timeout: 15m
+  dependsOn:
+    - name: infrastructure
   sourceRef:
     kind: GitRepository
     name: flux-system
   path: ./flux/operators
   prune: true
-  wait: false #true
+  wait: true

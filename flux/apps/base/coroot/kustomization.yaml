@@ -3,3 +3,12 @@ kind: Kustomization
 namespace: coroot
 resources:
   - coroot.yaml
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: coroot
+    patch: |-
+      - op: add
+        path: "/spec/chart/spec/sourceRef/namespace"
+        value: coroot

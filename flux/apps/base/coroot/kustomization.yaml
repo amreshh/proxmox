@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: coroot
 resources:
   - coroot.yaml
+  - routes.yaml
 
 patches:
   - target:

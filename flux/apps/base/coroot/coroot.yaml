@@ -20,3 +20,5 @@ spec:
     clickhouse:
       shards: 2
       replicas: 2
+      storge:
+        size: 10Gi

@@ -5,6 +5,7 @@ resources:
   - namespace.yaml
   - helm-repos.yaml
   - minio-tenant.yaml
+  - beyla.yaml
   - lgtm-distributed.yaml
   - routes.yaml
 
@@ -16,6 +17,13 @@ patches:
       - op: add
         path: "/spec/chart/spec/sourceRef/namespace"
         value: lgtm
+  - target:
+      kind: HelmRelease
+      name: beyla
+    patch: |-
+      - op: add
+        path: "/spec/chart/spec/sourceRef/namespace"
+        value: ltm
   - target:
       kind: HelmRelease
       name: lgtm-tenant

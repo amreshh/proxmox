@@ -40,3 +40,6 @@ configMapGenerator:
   - name: pfsense-dashboards
     files:
       - pfsense-dashboards.json
+# TODO: test by disabling suffix if new changes are still deployed
+generatorOptions:
+  disableNameSuffixHash: true

@@ -19,6 +19,10 @@ spec:
       grafana.ini:
         analytics:
           check_for_updates: false
+      admin:
+        existingSecret: grafana-admin
+        userKey: admin-user
+        passwordKey: admin-password
       datasources:
         datasources.yaml:
           apiVersion: 1

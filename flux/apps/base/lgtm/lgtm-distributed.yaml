@@ -37,6 +37,8 @@ spec:
                 httpHeaderValue1: 1
               orgId: 1
               url: http://lgtm-distributed-loki-gateway.lgtm.svc.cluster.local/
+      dashboardsConfigMaps:
+        - cilium-dashboards
     loki:
       enabled: true
       analytics:

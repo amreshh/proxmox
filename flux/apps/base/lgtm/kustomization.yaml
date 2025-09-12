@@ -8,6 +8,7 @@ resources:
   - beyla.yaml
   - lgtm-distributed.yaml
   - routes.yaml
+  - cilium-dashboards.yaml
 
 patches:
   - target:

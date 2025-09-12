@@ -37,8 +37,20 @@ spec:
                 httpHeaderValue1: 1
               orgId: 1
               url: http://lgtm-distributed-loki-gateway.lgtm.svc.cluster.local/
+      dashboardProviders:
+        dashboardproviders.yaml:
+          apiVersion: 1
+          providers:
+            - name: "cilium"
+              orgId: 1
+              folder: ""
+              type: file
+              disableDeletion: false
+              editable: false
+              options:
+                path: /var/lib/grafana/dashboards/cilium
       dashboardsConfigMaps:
-        - cilium-dashboards
+        cilium: "cilium-dashboards"
     loki:
       enabled: true
       analytics:

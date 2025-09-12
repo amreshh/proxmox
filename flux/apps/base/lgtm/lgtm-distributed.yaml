@@ -49,8 +49,17 @@ spec:
               editable: false
               options:
                 path: /var/lib/grafana/dashboards/cilium
+            - name: "pfsense"
+              orgId: 1
+              folder: "pfsense"
+              type: file
+              disableDeletion: false
+              editable: false
+              options:
+                path: /var/lib/grafana/dashboards/pfsense
       dashboardsConfigMaps:
         cilium: "cilium-dashboards"
+        pfsense: "pfsense-dashboards"
     loki:
       enabled: true
       analytics:

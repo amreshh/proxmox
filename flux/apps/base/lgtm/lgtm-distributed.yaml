@@ -43,7 +43,7 @@ spec:
           providers:
             - name: "cilium"
               orgId: 1
-              folder: ""
+              folder: "cilium"
               type: file
               disableDeletion: false
               editable: false

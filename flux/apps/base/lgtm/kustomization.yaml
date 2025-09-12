@@ -8,7 +8,6 @@ resources:
   - beyla.yaml
   - lgtm-distributed.yaml
   - routes.yaml
-  - cilium-dashboards.yaml
 
 patches:
   - target:
@@ -32,3 +31,8 @@ patches:
       - op: add
         path: "/spec/chart/spec/sourceRef/namespace"
         value: minio
+
+configMapGenerator:
+  - name: cilium-dashboards
+    files:
+      - cilium-dashboards.json

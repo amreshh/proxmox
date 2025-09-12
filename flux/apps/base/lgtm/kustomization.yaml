@@ -23,7 +23,7 @@ patches:
     patch: |-
       - op: add
         path: "/spec/chart/spec/sourceRef/namespace"
-        value: ltm
+        value: lgtm
   - target:
       kind: HelmRelease
       name: lgtm-tenant

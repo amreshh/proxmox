@@ -1,4 +1,4 @@
-FROM registry.opensuse.org/opensuse/leap:15.6
+FROM registry.opensuse.org/opensuse/leap:42.3
 
 ENV OPENTOFU_VERSION="1.10.2"
 ENV TALOS_VERSION="v1.10.2"

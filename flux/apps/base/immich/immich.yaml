@@ -29,7 +29,7 @@ spec:
       DB_HOSTNAME: "immich-db-rw.immich.svc.cluster.local"
     immich:
       metrics:
-        enabled: true
+        enabled: false # TODO: disabled metrics for now, since it relies on servicemonitor crds which are now not installed (was part of kube-prometheus-stack)
       persistence:
         library:
           existingClaim: immich-data
@@ -38,5 +38,6 @@ spec:
           enabled: false
         ffmpeg:
           acceptedVideoCodecs: [h264, hevc, vp9, av1]
-    redis:
+    # TODO:
+    valkey:
       enabled: true

@@ -16,7 +16,6 @@ spec:
     tenant:
       name: lgtm-minio
       credsSecret:
-        # configSecret:
         name: env-config-minio
         existingSecret: true
       pools:

@@ -13,6 +13,14 @@ spec:
         kind: HelmRepository
         name: grafana
       interval: 10m
+  valuesFrom:
+    - kind: Secret
+      name: env-config-minio
+      valueKey: accesskey
+      targetPath: loki.storage.s3.accessKeyId
+    - kind: Secret
+      name: env-config-minio
+      targetPath: loki.storage.s3.secretAccessKey
   values:
     grafana:
       enabled: true
@@ -84,9 +92,9 @@ spec:
           ruler: loki-ruler
           admin: loki-admin
         s3:
-          accessKeyId: ${accessKeyId}
-          secretAccessKey: ${secretAccessKey}
-          endpoint: ${endpoint}
+          # accessKeyId: ${accessKeyId}
+          # secretAccessKey: ${secretAccessKey}
+          endpoint: http://lgtm-minio-hl.lgtm.svc.cluster.local:9000 #${endpoint}
           insecure: true
           s3ForcePathStyle: true
       storageConfig:

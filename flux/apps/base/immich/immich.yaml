@@ -38,8 +38,5 @@ spec:
           enabled: false
         ffmpeg:
           acceptedVideoCodecs: [h264, hevc, vp9, av1]
-    # TODO: enable valkey, bitnami redis doesn't work anymore
-    # valkey:
-    #   enabled: true
-    redis:
-      enabled: false
+    valkey:
+      enabled: true

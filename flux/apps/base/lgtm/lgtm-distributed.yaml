@@ -15,11 +15,12 @@ spec:
       interval: 10m
   valuesFrom:
     - kind: Secret
-      name: env-config-minio
-      valueKey: accesskey
+      name: lgtm-minio
+      valuesKey: accessKey
       targetPath: loki.storage.s3.accessKeyId
     - kind: Secret
-      name: env-config-minio
+      name: lgtm-minio
+      valuesKey: secretKey
       targetPath: loki.storage.s3.secretAccessKey
   values:
     grafana:

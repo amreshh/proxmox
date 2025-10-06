@@ -35,10 +35,11 @@ patches:
 configMapGenerator:
   - name: cilium-dashboards
     files:
-      - cilium-dashboards.json
-      - hubble-dashboards.json
+      - dashboards/cilium-dashboards.json
+      - dashboards/hubble-dashboards.json
   - name: pfsense-dashboards
     files:
-      - pfsense-dashboards.json
+      - dashboards/pfsense-dnsbl.json
+      - dashboards/pfsense-firewall.json
 configurations:
   - kustomizeconfig.yaml

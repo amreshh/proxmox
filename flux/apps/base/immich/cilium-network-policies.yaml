@@ -2,7 +2,6 @@ apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: immich-network-policy
-  namespace: immich
 spec:
   description: "Allow imich machine learning to access huggingface.co and cas-bridge.xethub.hf.co"
   endpointSelector:

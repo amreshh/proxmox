@@ -120,26 +120,26 @@ resource "helm_release" "cilium" {
       name  = "hubble.metrics.enableOpenMetrics"
       value = "true"
     },
-    # {
-    #   name = "hubble.metrics.enabled"
-    #   # value = "{dns,drop,tcp,flow,port-distribution,icmp,httpV2:exemplars=true;labelsContext=source_ip\\,source_namespace\\,source_workload\\,destination_ip\\,destination_namespace\\,destination_workload\\,traffic_direction\\,sourceContext}"
-    # },
     {
       name  = "hubble.metrics.serviceMonitor.enabled"
       value = "false" # need to set this to true after monitoring stack is installed with the crds
     }
   ]
 
-  # set_list = [
-  #   {
-  #     name = "hubble.metrics.enabled"
-  #     value = [
-  #       "flow:destinationContext=workload|dns|ip",
-  #       "flow:sourceContext=workload|dns|ip"
-  #       # "http:labelsContext=source_namespace\\,source_workload\\,source_pod\\,source_app\\,destination_namespace\\,destination_workload\\,destination_pod\\,destination_app\\,traffic_direction"
-  #     ]
-  #   }
-  # ]
+  set_list = [
+    {
+      name = "hubble.metrics.enabled"
+      value = [
+        "dns",
+        "drop",
+        "tcp",
+        "httpV2",
+        "icmp",
+        "port-distribution",
+        "flow:sourceContext=workload|dns|ip;destinationContext=workload|dns|ip",
+      ]
+    }
+  ]
 
   depends_on = [
     data.http.kubernetes_health
@@ -251,6 +251,10 @@ resource "local_sensitive_file" "kubeconfig_file" {
   content         = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
   filename        = "/home/amresh/.kube/config"
   file_permission = "0711"
+
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 # TODO: see if we can make this more flexible
@@ -258,5 +262,9 @@ resource "local_sensitive_file" "talosconfig_file" {
   content         = data.talos_client_configuration.talosconfig.talos_config
   filename        = "/home/amresh/.talos/config"
   file_permission = "0600"
+
+  lifecycle {
+    ignore_changes = all
+  }
 }
 

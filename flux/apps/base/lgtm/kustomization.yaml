@@ -1,0 +1,45 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: lgtm
+resources:
+  - namespace.yaml
+  - helm-repos.yaml
+  - minio-tenant.yaml
+  - beyla.yaml
+  - lgtm-distributed.yaml
+  - routes.yaml
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: lgtm-distributed
+    patch: |-
+      - op: add
+        path: "/spec/chart/spec/sourceRef/namespace"
+        value: lgtm
+  - target:
+      kind: HelmRelease
+      name: beyla
+    patch: |-
+      - op: add
+        path: "/spec/chart/spec/sourceRef/namespace"
+        value: lgtm
+  - target:
+      kind: HelmRelease
+      name: lgtm-tenant
+    patch: |-
+      - op: add
+        path: "/spec/chart/spec/sourceRef/namespace"
+        value: minio
+
+configMapGenerator:
+  - name: cilium-dashboards
+    files:
+      - dashboards/cilium-dashboards.json
+      - dashboards/hubble-dashboards.json
+  - name: pfsense-dashboards
+    files:
+      - dashboards/pfsense-dnsbl.json
+      - dashboards/pfsense-firewall.json
+configurations:
+  - kustomizeconfig.yaml

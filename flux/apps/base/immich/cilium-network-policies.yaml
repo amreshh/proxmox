@@ -18,3 +18,13 @@ spec:
       toPorts:
         - ports:
             - port: "443"
+    - toFQDNs:
+        - matchName: cas-server.xethub.hf.co
+      toPorts:
+        - ports:
+            - port: "443"
+    - toFQDNs:
+        - matchName: transfer.xethub.hf.co
+      toPorts:
+        - ports:
+            - port: "443"

@@ -4,7 +4,6 @@ namespace: lgtm
 resources:
   - namespace.yaml
   - helm-repos.yaml
-  - minio-tenant.yaml
   - beyla.yaml
   - lgtm-distributed.yaml
   - routes.yaml
@@ -24,13 +23,6 @@ patches:
       - op: add
         path: "/spec/chart/spec/sourceRef/namespace"
         value: lgtm
-  - target:
-      kind: HelmRelease
-      name: lgtm-tenant
-    patch: |-
-      - op: add
-        path: "/spec/chart/spec/sourceRef/namespace"
-        value: minio
 
 configMapGenerator:
   - name: cilium-dashboards

@@ -3,8 +3,8 @@ kind: Kustomization
 namespace: rustfs
 resources:
   - namespace.yaml
-  - helm-repos.yaml
-  - rustfs.yaml
+  # - helm-repos.yaml
+  # - rustfs.yaml
 
 patches:
   - target:

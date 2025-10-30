@@ -1,16 +1,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: minio
+namespace: rustfs
 resources:
   - namespace.yaml
   - helm-repos.yaml
-  - minio.yaml
+  - rustfs.yaml
 
 patches:
   - target:
       kind: HelmRelease
-      name: minio-operator
+      name: rustfs
     patch: |-
       - op: add
         path: "/spec/chart/spec/sourceRef/namespace"
-        value: minio
+        value: rustfs

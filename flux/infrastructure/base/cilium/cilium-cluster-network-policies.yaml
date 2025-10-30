@@ -76,3 +76,9 @@ spec:
         - ports:
             - port: "443"
               protocol: TCP
+    - toFQDNs:
+        - matchName: "production.cloudflare.docker.com"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

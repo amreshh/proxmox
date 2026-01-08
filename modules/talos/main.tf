@@ -201,7 +201,7 @@ resource "helm_release" "flux2" {
   ]
 }
 
-resource "kubernetes_secret" "github_token" {
+resource "kubernetes_secret_v1" "github_token" {
   metadata {
     name      = "github-token"
     namespace = helm_release.flux2.namespace
@@ -210,6 +210,7 @@ resource "kubernetes_secret" "github_token" {
     username = "fluxcd"
     password = var.github_token
   }
+  type = "kubernetes.io/basic-auth"
 }
 
 resource "helm_release" "flux2_sync" {
@@ -233,7 +234,7 @@ resource "helm_release" "flux2_sync" {
     },
     {
       name  = "gitRepository.spec.secretRef.name"
-      value = kubernetes_secret.github_token.metadata[0].name
+      value = kubernetes_secret_v1.github_token.metadata[0].name
     },
     {
       name  = "kustomization.spec.path"

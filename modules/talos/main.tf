@@ -141,9 +141,9 @@ resource "helm_release" "cilium" {
     }
   ]
 
-  depends_on = [
-    data.http.kubernetes_health
-  ]
+  # depends_on = [
+  #   data.http.kubernetes_health
+  # ]
 }
 
 resource "helm_release" "flux2" {

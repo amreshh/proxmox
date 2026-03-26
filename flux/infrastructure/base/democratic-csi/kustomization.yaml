@@ -3,13 +3,21 @@ kind: Kustomization
 namespace: kube-system
 resources:
   - helm-repos.yaml
-  - csi-driver-nfs.yaml
+  - cilium-network-policy.yaml
+  - democratic-csi.yaml
 
 patches:
   - target:
       kind: HelmRelease
-      name: csi-driver-nfs
+      name: democratic-csi
     patch: |-
       - op: add
         path: "/spec/chart/spec/sourceRef/namespace"
+        value: kube-system
+  - target:
+      kind: CiliumNetworkPolicy
+      name: allow-democratic-csi
+    patch: |-
+      - op: add
+        path: "/metadata/namespace"
         value: kube-system

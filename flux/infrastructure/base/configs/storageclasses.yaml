@@ -1,35 +1,51 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: retain
-provisioner: nfs.csi.k8s.io
-parameters:
-  server: proxmox76.home
-  share: /data/retain
+  name: zfs-media
+provisioner: org.democratic-csi.nfs
 reclaimPolicy: Retain
-volumeBindingMode: WaitForFirstConsumer
-allowVolumeExpansion: true
+parameters:
+  fsType: nfs
+  "zfs:recordsize": "1M"
+  # "zfs:compression": "zstd-3"
 mountOptions:
   - nfsvers=4.2
   - noatime
-  - async
-  - nodiratime
+  - hard
+  - rsize=1048576
+  - wsize=1048576
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: delete
-  annotations:
-    storageclass.kubernetes.io/is-default-class: "true"
-provisioner: nfs.csi.k8s.io
+  name: zfs-db
+provisioner: org.democratic-csi.nfs
+reclaimPolicy: Retain
 parameters:
-  server: proxmox76.home
-  share: /data/delete
-reclaimPolicy: Delete
-volumeBindingMode: WaitForFirstConsumer
-allowVolumeExpansion: true
+  fsType: nfs
+  "zfs:recordsize": "16k"
+  # "zfs:compression": "lz4"
 mountOptions:
   - nfsvers=4.2
   - noatime
-  - async
-  - nodiratime
+  - hard
+  - rsize=16384
+  - wsize=16384
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: zfs-observability
+provisioner: org.democratic-csi.nfs
+reclaimPolicy: Delete
+parameters:
+  fsType: nfs
+  "zfs:recordsize": "256k"
+  # "zfs:compression": "zstd-3"
+  "zfs:logbias": "throughput"
+mountOptions:
+  - nfsvers=4.2
+  - noatime
+  - hard
+  - rsize=262144
+  - wsize=262144

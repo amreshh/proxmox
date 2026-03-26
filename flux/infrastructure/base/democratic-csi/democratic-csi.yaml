@@ -12,3 +12,43 @@ spec:
         kind: HelmRepository
         name: democratic-csi
       interval: 10m
+  # TODO: maybe use the existingConfigSecret
+  valuesFrom:
+    - kind: Secret
+      name: democratic-csi-connection
+      valuesKey: host
+      targetPath: driver.config.sshConnection.host
+    - kind: Secret
+      name: democratic-csi-connection
+      valuesKey: username
+      targetPath: driver.config.sshConnection.username
+    - kind: Secret
+      name: democratic-csi-connection
+      valuesKey: port
+      targetPath: driver.config.sshConnection.port
+    - kind: Secret
+      name: democratic-csi-connection
+      valuesKey: privateKey
+      targetPath: driver.config.sshConnection.privateKey
+    - kind: Secret
+      name: democratic-csi-connection
+      valuesKey: shareHost
+      targetPath: driver.config.nfs.shareHost
+  values:
+    csiDriver:
+      name: org.democratic-csi.nfs
+    driver:
+      config:
+        driver: zfs-generic-nfs
+        nfs:
+          shareStrategy: setDatasetProperties
+          shareStrategySetDatasetProperties:
+            properties:
+              sharenfs: "-alldirs,-maproot=root,-network=192.168.1.0/24"
+        zfs:
+          datasetParentName: zdata/k8s-vols
+          detachedSnapshotsDatasetParentName: zdata/k8s-snaps # https://github.com/democratic-csi/democratic-csi/blob/3974268272a84e9c22c47cae2fca847a8d422bad/examples/zfs-generic-nfs.yaml#L37
+          cli:
+            sudoEnabled: true
+            paths:
+              sudo: /usr/local/bin/doas

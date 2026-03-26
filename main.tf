@@ -1,9 +1,9 @@
-module "proxmox" {
-  source        = "./modules/proxmox"
-  controlplanes = var.controlplanes
-  workers       = var.workers
-  talos         = var.talos
-}
+# module "proxmox" {
+#   source        = "./modules/proxmox"
+#   controlplanes = var.controlplanes
+#   workers       = var.workers
+#   talos         = var.talos
+# }
 
 module "talos" {
   source                     = "./modules/talos"
@@ -16,7 +16,7 @@ module "talos" {
   controlplanes              = var.controlplanes
   workers                    = var.workers
 
-  depends_on = [
-    module.proxmox
-  ]
+  # depends_on = [
+  #   module.proxmox
+  # ]
 }

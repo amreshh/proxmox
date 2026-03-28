@@ -13,8 +13,22 @@ spec:
       toPorts:
         - ports:
             - port: "443"
+              protocol: TCP
     - toFQDNs:
         - matchName: cas-bridge.xethub.hf.co
       toPorts:
         - ports:
             - port: "443"
+              protocol: TCP
+    - toFQDNs:
+        - matchName: cas-server.xethub.hf.co
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    - toFQDNs:
+        - matchName: transfer.xethub.hf.co
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

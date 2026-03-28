@@ -1,7 +1,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: minio-operator
+  name: victoria-metrics
 spec:
   interval: 15m
-  url: https://operator.min.io
+  url: https://victoriametrics.github.io/helm-charts/

@@ -11,12 +11,12 @@ spec:
   chart:
     spec:
       chart: victoria-metrics-k8s-stack
-      version: "0.33.0"
+      version: "0.72.5"
       sourceRef:
         kind: HelmRepository
         name: victoria-metrics
       interval: 10m
   values:
-    server:
-      persistentVolume:
+    vmsingle:
+      storage:
         storageClassName: zfs-observability

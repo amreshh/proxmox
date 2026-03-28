@@ -16,7 +16,7 @@ spec:
         kind: HelmRepository
         name: victoria-metrics
       interval: 10m
-  # values:
-  #   global:
-  #     cluster:
-  #       dnsDomain:
+  values:
+    server:
+      persistentVolume:
+        storageClassName: zfs-observability

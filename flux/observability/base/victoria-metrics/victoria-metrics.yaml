@@ -39,11 +39,13 @@ spec:
                   storage: 100Gi
     alertmanager:
       enabled: false
+    vmalert:
+      enabled: false
     grafana:
       enabled: true
       persistence:
-        type: pvc
         enabled: true
+        type: pvc
         size: 5Gi
         storageClassName: zfs-observability
       admin:

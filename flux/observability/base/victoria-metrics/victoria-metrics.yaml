@@ -18,5 +18,8 @@ spec:
       interval: 10m
   values:
     vmsingle:
-      storage:
-        storageClassName: zfs-observability
+      enabled: true
+      server:
+        persistentVolume:
+          enabled: true
+          storageClassName: zfs-observability

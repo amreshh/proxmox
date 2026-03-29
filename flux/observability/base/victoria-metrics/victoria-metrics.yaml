@@ -17,9 +17,9 @@ spec:
         name: victoria-metrics
       interval: 10m
   values:
-    vmsingle:
-      enabled: true
-      server:
-        persistentVolume:
-          enabled: true
-          storageClassName: zfs-observability
+    spec:
+      storage:
+        storageClassName: zfs-observability
+        resources:
+          requests:
+            storage: 50Gi

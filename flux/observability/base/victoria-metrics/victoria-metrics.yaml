@@ -28,3 +28,5 @@ spec:
               storage: 50Gi
     alertmanager:
       enabled: false
+    grafana:
+      enabled: true

@@ -30,3 +30,8 @@ spec:
       enabled: false
     grafana:
       enabled: true
+      persistence:
+        type: pvc
+        enabled: true
+        size: 5Gi
+        storageClassName: zfs-observability

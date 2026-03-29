@@ -7,7 +7,7 @@ reclaimPolicy: Retain
 parameters:
   fsType: nfs
   "zfs:recordsize": "1M"
-  # "zfs:compression": "zstd-3"
+  "zfs:compression": "zstd-3"
 mountOptions:
   - nfsvers=4.2
   - noatime
@@ -24,7 +24,7 @@ reclaimPolicy: Retain
 parameters:
   fsType: nfs
   "zfs:recordsize": "16k"
-  # "zfs:compression": "lz4"
+  "zfs:compression": "zstd-3"
 mountOptions:
   - nfsvers=4.2
   - noatime
@@ -41,7 +41,7 @@ reclaimPolicy: Delete
 parameters:
   fsType: nfs
   "zfs:recordsize": "256k"
-  # "zfs:compression": "zstd-3"
+  "zfs:compression": "zstd-3"
   "zfs:logbias": "throughput"
 mountOptions:
   - nfsvers=4.2

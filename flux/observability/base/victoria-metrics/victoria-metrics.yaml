@@ -18,6 +18,11 @@ spec:
       interval: 10m
   values:
     fullnameOverride: vm-stack
+    victoria-metrics-operator:
+      crds:
+        cleanup:
+          image:
+            tag: v1.35.2
     vmsingle:
       enabled: true
       spec:

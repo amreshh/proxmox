@@ -46,3 +46,7 @@ spec:
         enabled: true
         size: 5Gi
         storageClassName: zfs-observability
+      admin:
+        existingSecret: grafana-admin
+        userKey: user
+        password: password

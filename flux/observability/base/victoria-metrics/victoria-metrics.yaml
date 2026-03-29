@@ -26,3 +26,5 @@ spec:
           resources:
             requests:
               storage: 50Gi
+    alertmanager:
+      enabled: false

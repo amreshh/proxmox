@@ -50,5 +50,3 @@ spec:
         storageClassName: zfs-observability
       admin:
         existingSecret: grafana-admin
-        userKey: user
-        password: password

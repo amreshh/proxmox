@@ -7,4 +7,4 @@ resources:
   - cilium-cidr-groups.yaml
   - gateway.yaml
   - routes.yaml
-  - cilium-cluster-network-policies.yaml
+  # - cilium-cluster-network-policies.yaml

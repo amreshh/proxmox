@@ -1,0 +1,10 @@
+apiVersion: cilium.io/v2
+kind: CiliumCIDRGroup
+metadata:
+  name: talos-dns
+  labels:
+    role: talos-dns
+    reserved: talos
+spec:
+  externalCIDRs:
+    - 169.254.116.108/32

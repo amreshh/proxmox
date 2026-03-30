@@ -23,11 +23,16 @@ spec:
           envFrom:
             - secretRef:
                 name: filebrowser-auth
+          env:
+            - name: FILEBROWSER_DATABASE
+              value: "/data/database.db"
+            - name: FILEBROWSER_CONFIG
+              value: "/etc/filebrowser/config.yaml"
           volumeMounts:
             - name: filebrowser-data
               mountPath: "/data"
             - name: config
-              mountPath: "/home/filebrowser/config.yaml"
+              mountPath: "/etc/filebrowser/config.yaml"
               subPath: "config.yaml"
               readOnly: true
       volumes:

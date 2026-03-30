@@ -123,6 +123,19 @@ resource "helm_release" "cilium" {
     {
       name  = "hubble.metrics.serviceMonitor.enabled"
       value = "false" # need to set this to true after monitoring stack is installed with the crds
+    },
+    # https://github.com/siderolabs/talos/issues/8836
+    {
+      name  = "bpf.hostLegacyRouting"
+      value = "true"
+    },
+    {
+      name  = "bpf.masquerade"
+      value = "true"
+    },
+    {
+      name  = "bpf.tproxy"
+      value = "true"
     }
   ]
 

@@ -56,7 +56,6 @@ variable "controlplanes" {
   type = map(object({
     cluster_name = string
     name         = string
-    proxmox_node = string
     vm_id        = number
     memory       = number
     cores        = number
@@ -68,12 +67,11 @@ variable "controlplanes" {
     controlplane1 = {
       cluster_name = "talos"
       name         = "k8s-controlplane-1"
-      proxmox_node = "proxmox76"
       vm_id        = 101
       memory       = 8192 # MiB
       cores        = 2
       disk_size    = 10 # GiB
-      mac_addr     = "00:00:00:00:00:01"
+      mac_addr     = "02:00:00:00:00:01"
       ip_addr      = "192.168.1.6"
     }
   }
@@ -83,7 +81,6 @@ variable "workers" {
   type = map(object({
     cluster_name = string
     name         = string
-    proxmox_node = string
     vm_id        = number
     memory       = number
     cores        = number
@@ -95,23 +92,21 @@ variable "workers" {
     worker1 = {
       cluster_name = "talos"
       name         = "k8s-worker-1"
-      proxmox_node = "proxmox76"
       vm_id        = 102
       memory       = 16384 # MiB
       cores        = 4
       disk_size    = 100 # GiB
-      mac_addr     = "00:00:00:00:00:02"
+      mac_addr     = "02:00:00:00:00:02"
       ip_addr      = "192.168.1.7"
     }
     worker2 = {
       cluster_name = "talos"
       name         = "k8s-worker-2"
-      proxmox_node = "proxmox76"
       vm_id        = 103
       memory       = 16384 # MiB
       cores        = 4
       disk_size    = 100 # GiB
-      mac_addr     = "00:00:00:00:00:03"
+      mac_addr     = "02:00:00:00:00:03"
       ip_addr      = "192.168.1.8"
     }
   }

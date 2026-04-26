@@ -5,9 +5,9 @@ variable "talos" {
     image   = string
   })
   default = {
-    version = "1.12.6"
-    iso     = "local:iso/talos_1.12.6.iso"
-    image   = "factory.talos.dev/metal-installer/9ed5fecdacb36b5c5427b87d409f1065cfb2df69b0f71c58b868d9d466d8dab3:v1.12.6"
+    version = "1.12.7"
+    iso     = "local:iso/talos_1.12.7.iso"
+    image   = "factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.12.7"
   }
 }
 
@@ -37,7 +37,7 @@ variable "kubernetes_extra_manifests" {
 
 variable "cilium_version" {
   type        = string
-  default     = "1.19.2"
+  default     = "1.19.3"
   description = "Cilium version to provision"
 }
 
@@ -47,8 +47,8 @@ variable "flux_version" {
     sync_version = string
   })
   default = {
-    version      = "2.18.2"
-    sync_version = "1.14.4"
+    version      = "2.18.3"
+    sync_version = "1.14.5"
   }
 }
 
@@ -72,7 +72,7 @@ variable "controlplanes" {
       cores        = 2
       disk_size    = 10 # GiB
       mac_addr     = "02:00:00:00:00:01"
-      ip_addr      = "192.168.1.6"
+      ip_addr      = "192.168.10.20"
     }
   }
 }
@@ -97,7 +97,7 @@ variable "workers" {
       cores        = 4
       disk_size    = 100 # GiB
       mac_addr     = "02:00:00:00:00:02"
-      ip_addr      = "192.168.1.7"
+      ip_addr      = "192.168.10.21"
     }
     worker2 = {
       cluster_name = "talos"
@@ -107,7 +107,7 @@ variable "workers" {
       cores        = 4
       disk_size    = 100 # GiB
       mac_addr     = "02:00:00:00:00:03"
-      ip_addr      = "192.168.1.8"
+      ip_addr      = "192.168.10.22"
     }
   }
 }

@@ -14,7 +14,7 @@ locals {
       ]
       install = {
         image = var.talos.image
-        disk  = "/dev/vda"
+        disk  = "/dev/nvme0n1"
       }
     }
     cluster = {

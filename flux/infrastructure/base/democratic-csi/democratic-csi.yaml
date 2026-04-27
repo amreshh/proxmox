@@ -53,4 +53,6 @@ spec:
           cli:
             sudoEnabled: false
             paths:
-              sudo: /usr/local/bin/doas
+              zfs: /sbin/zfs
+              zpool: /sbin/zpool
+              # sudo: /usr/local/bin/doas

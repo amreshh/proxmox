@@ -50,6 +50,9 @@ spec:
         zfs:
           datasetParentName: zdata/k8s/volumes
           detachedSnapshotsDatasetParentName: zdata/k8s/snapshots # https://github.com/democratic-csi/democratic-csi/blob/3974268272a84e9c22c47cae2fca847a8d422bad/examples/zfs-generic-nfs.yaml#L37
+          datasetPermissionsMode: "0770"
+          datasetPermissionsUser: 65534
+          datasetPermissionsGroup: 65534
           cli:
             sudoEnabled: true
             paths:

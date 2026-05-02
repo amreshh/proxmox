@@ -19,7 +19,7 @@ spec:
           image: docker.io/gtstef/filebrowser:latest
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
           envFrom:
             - secretRef:
                 name: filebrowser-auth

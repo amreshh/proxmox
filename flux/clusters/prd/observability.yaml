@@ -12,6 +12,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./flux/observability
+  path: ./flux/observability/prd
   prune: true
   wait: true

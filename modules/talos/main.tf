@@ -238,7 +238,7 @@ resource "helm_release" "flux2_sync" {
     },
     {
       name  = "kustomization.spec.path"
-      value = "flux/clusters"
+      value = "flux/clusters/${terraform.workspace}"
     }
   ]
 

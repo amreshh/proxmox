@@ -22,13 +22,19 @@ metadata:
 provisioner: org.democratic-csi.nfs
 reclaimPolicy: Retain
 parameters:
-  fsType: nfs
-  "recordsize": "16k"
-  "compression": "zstd-3"
-  "datasetPermissionsMode": "0700"
-  "datasetPermissionsUser": "26"
-  "datasetPermissionsGroup": "26"
-  "shareOptions": "rw,no_root_squash,no_subtree_check"
+  zfs-dataset-properties/recordsize: "16K"
+  # config: |
+  #   zfs:
+  #     datasetProperties:
+  #       "recordsize": "16K"
+# parameters:
+#   fsType: nfs
+#   "recordsize": "16k"
+#   "compression": "zstd-3"
+#   "datasetPermissionsMode": "0700"
+#   "datasetPermissionsUser": "26"
+#   "datasetPermissionsGroup": "26"
+#   "shareOptions": "rw,no_root_squash,no_subtree_check"
 mountOptions:
   - nfsvers=4.2
   - noatime

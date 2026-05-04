@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: kube-system
 resources:
   - helm-repos.yaml
-  # - cilium-network-policy.yaml
+  - cilium-network-policy.yaml
   - democratic-csi.yaml
 
 patches:

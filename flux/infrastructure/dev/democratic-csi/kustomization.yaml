@@ -1,6 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: kube-system
 resources:
   - ../../base/democratic-csi
 
@@ -12,3 +11,13 @@ patches:
       - op: replace
         path: "/spec/values/driver/config/nfs/shareStrategySetDatasetProperties/properties/sharenfs"
         value: "-mapall=65534:65534 -network 192.168.122.10/24"
+  - target:
+      kind: CiliumNetworkPolicy
+      name: allow-democratic-csi
+    patch: |-
+      - op: replace
+        path: "/spec/egress/0/toCIDR/0"
+        value: "192.168.122.10/32"
+      - op: replace
+        path: "/spec/egress/1/toFQDNs/0/matchName"
+        value: "freebsd"

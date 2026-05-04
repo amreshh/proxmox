@@ -23,8 +23,12 @@ provisioner: org.democratic-csi.nfs
 reclaimPolicy: Retain
 parameters:
   fsType: nfs
-  "zfs:recordsize": "16k"
-  "zfs:compression": "zstd-3"
+  "recordsize": "16k"
+  "compression": "zstd-3"
+  "datasetPermissionsMode": "0700"
+  "datasetPermissionsUser": "26"
+  "datasetPermissionsGroup": "26"
+  "shareOptions": "rw,no_root_squash,no_subtree_check"
 mountOptions:
   - nfsvers=4.2
   - noatime
@@ -49,3 +53,6 @@ mountOptions:
   - hard
   - rsize=262144
   - wsize=262144
+
+
+#https://github.com/democratic-csi/democratic-csi/issues/519

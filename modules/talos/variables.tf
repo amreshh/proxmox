@@ -3,6 +3,7 @@ variable "talos" {
     version = string
     iso     = string
     image   = string
+    vm_disk = string
   })
 }
 

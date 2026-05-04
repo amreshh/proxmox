@@ -1,12 +1,9 @@
-# TODO: check this, ai generated
 apiVersion: cilium.io/v2
 kind: CiliumClusterwideNetworkPolicy
 metadata:
   name: default-policy
 spec:
-  # Targets all Pods AND all Talos Nodes
   endpointSelector: {}
-  nodeSelector: {}
   ingress:
     - fromEntities:
         - world
@@ -21,13 +18,10 @@ spec:
     - fromEntities:
         - cluster
   egress:
-    # 1. Allow Pod-to-Pod and Host-to-Pod traffic
     - toEndpoints:
         - {}
     - toEntities:
         - cluster
-
-    # 2. Allow DNS to kube-dns (Internal)
     - toEndpoints:
         - matchLabels:
             io.kubernetes.pod.namespace: kube-system
@@ -35,31 +29,16 @@ spec:
       toPorts:
         - ports:
             - port: "53"
-              protocol: ANY
+              protocol: UDP
           rules:
             dns:
               - matchPattern: "*"
-
-    # 3. Allow DNS to Talos/Gateway (The Fix for your timeouts)
-    - toCIDRSet:
-        - cidrGroupSelector:
-            matchLabels:
-              role: talos-dns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: ANY # Changed to ANY for reliability
-
-    # 4. Whitelist FQDNs for System/App updates
     - toFQDNs:
         - matchName: "github.com"
         - matchPattern: "*.github.io"
         - matchPattern: "*.githubusercontent.com"
         - matchName: "helm.vector.dev"
-        # Added Docker Registry so the Host can pull your Filebrowser image
-        - matchPattern: "*.docker.io"
         - matchName: "registry-1.docker.io"
-        - matchName: "auth.docker.io"
       toPorts:
         - ports:
             - port: "443"

@@ -7,6 +7,13 @@ spec:
   imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.5-v0.3.0
   postgresUID: 65534
   postgresGID: 65534
+  template:
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: "Always"
   managed:
     roles:
       - name: immich

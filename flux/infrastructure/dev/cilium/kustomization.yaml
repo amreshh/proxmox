@@ -30,3 +30,11 @@ patches:
       - op: add
         path: "/spec/listeners/0/hostname"
         value: "*.dev.kubernetes.home"
+  - target:
+      kind: HTTPRoute
+      name: hubble
+    patch: |-
+      - op: add
+        path: "/spec/hostnames"
+        value:
+          - hubble.dev.kubernetes.home

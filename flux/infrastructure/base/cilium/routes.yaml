@@ -7,8 +7,6 @@ spec:
   parentRefs:
     - name: default-gateway
       namespace: gateway
-  hostnames:
-    - hubble.kubernetes.home
   rules:
     - matches:
         - path:
@@ -17,3 +15,4 @@ spec:
       backendRefs:
         - name: hubble-ui
           port: 80
+

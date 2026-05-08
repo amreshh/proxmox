@@ -2,3 +2,31 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base/cilium
+
+patches:
+  - target:
+      kind: CiliumCIDRGroup
+      name: talos-dns
+    patch: |-
+      - op: add
+        path: "/spec"
+        value:
+          externalCIDRs:
+            - 169.254.116.108/32
+            - 192.168.122.1/32
+  - target:
+      kind: CiliumLoadBalancerIPPool
+      name: default-lb-ip-pool
+    patch: |-
+      - op: add
+        path: "/spec"
+        value:
+          blocks:
+            - cidr: 192.168.122.30/32
+  - target:
+      kind: Gateway
+      name: default-gateway
+    patch: |-
+      - op: add
+        path: "/spec/listeners/0/hostname"
+        value: "*.dev.kubernetes.home"

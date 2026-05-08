@@ -6,8 +6,6 @@ spec:
   parentRefs:
     - name: default-gateway
       namespace: gateway
-  hostnames:
-    - filebrowser.kubernetes.home
   rules:
     - matches:
         - path:

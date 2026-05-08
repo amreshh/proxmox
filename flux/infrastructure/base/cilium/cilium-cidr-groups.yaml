@@ -5,7 +5,3 @@ metadata:
   labels:
     role: talos-dns
     reserved: talos
-spec:
-  externalCIDRs:
-    - 169.254.116.108/32
-    - 192.168.10.1/32

@@ -8,9 +8,11 @@ patches:
       kind: HelmRelease
       name: democratic-csi
     patch: |-
-      - op: replace
-        path: "/spec/values/driver/config/nfs/shareStrategySetDatasetProperties/properties/sharenfs"
-        value: "-mapall=65534:65534 -network 192.168.122.10/24"
+      - op: add
+        path: "/spec/values/driver/config/nfs/shareStrategySetDatasetProperties"
+        value:
+          properties:
+            sharenfs: "-network 192.168.122.10/24"
   - target:
       kind: CiliumNetworkPolicy
       name: allow-democratic-csi

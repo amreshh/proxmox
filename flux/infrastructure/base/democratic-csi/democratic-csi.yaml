@@ -44,9 +44,6 @@ spec:
           mountCommand: /bin/mount
           unmountCommand: /bin/umount
           shareStrategy: setDatasetProperties
-          shareStrategySetDatasetProperties:
-            properties:
-              sharenfs: "-network 192.168.10.0/24"
         zfs:
           datasetParentName: zdata/k8s/volumes
           detachedSnapshotsDatasetParentName: zdata/k8s/snapshots # https://github.com/democratic-csi/democratic-csi/blob/3974268272a84e9c22c47cae2fca847a8d422bad/examples/zfs-generic-nfs.yaml#L37

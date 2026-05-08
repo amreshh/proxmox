@@ -26,5 +26,5 @@ spec:
         - CREATE EXTENSION IF NOT EXISTS "cube" CASCADE;
         - CREATE EXTENSION IF NOT EXISTS "earthdistance" CASCADE;
   storage:
-    storageClass: zfs-db
+    storageClass: retain
     size: 1Gi

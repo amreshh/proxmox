@@ -28,7 +28,7 @@ spec:
       enabled: true
       spec:
         storage:
-          storageClassName: zfs-observability
+          storageClassName: delete
           resources:
             requests:
               storage: 50Gi
@@ -39,7 +39,7 @@ spec:
         storage:
           volumeClaimTemplate:
             spec:
-              storageClassName: zfs-observability
+              storageClassName: delete
               resources:
                 requests:
                   storage: 100Gi
@@ -53,6 +53,6 @@ spec:
         enabled: true
         type: pvc
         size: 5Gi
-        storageClassName: zfs-observability
+        storageClassName: delete
       admin:
         existingSecret: grafana-admin

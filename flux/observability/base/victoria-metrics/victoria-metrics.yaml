@@ -49,6 +49,15 @@ spec:
       enabled: false
     grafana:
       enabled: true
+      initChownData:
+        enabled: false
+      podSecurityContext:
+        fsGroup: 65534
+        runAsGroup: 65534
+        runAsUser: 65534
+      containerSecurityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
       persistence:
         enabled: true
         type: pvc

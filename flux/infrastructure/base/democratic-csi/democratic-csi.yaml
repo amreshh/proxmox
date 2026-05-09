@@ -41,8 +41,8 @@ spec:
       config:
         driver: zfs-generic-nfs
         nfs:
-          mountCommand: /bin/mount
-          unmountCommand: /bin/umount
+          # mountCommand: /bin/mount
+          # unmountCommand: /bin/umount
           shareStrategy: setDatasetProperties
         zfs:
           datasetParentName: zdata/k8s/volumes

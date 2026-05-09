@@ -4,7 +4,9 @@ metadata:
   name: immich-db
 spec:
   instances: 1
-  imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.5-v0.3.0
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:18.3-1.1.1
+  postgresUID: 65534
+  postgresGID: 65534
   managed:
     roles:
       - name: immich
@@ -12,17 +14,16 @@ spec:
         login: true
   postgresql:
     shared_preload_libraries:
-      - "vectors.so"
+      - "vchord.so"
   bootstrap:
     initdb:
       database: immich
       owner: immich
       secret:
         name: immich-db
-      postInitSQL:
-        - CREATE EXTENSION IF NOT EXISTS "vectors";
-        - CREATE EXTENSION IF NOT EXISTS "cube" CASCADE;
-        - CREATE EXTENSION IF NOT EXISTS "earthdistance" CASCADE;
+      postInitApplicationSQL:
+        - CREATE EXTENSION vchord CASCADE;
+        - CREATE EXTENSION earthdistance CASCADE;
   storage:
-    storageClass: zfs-db
+    storageClass: retain
     size: 1Gi

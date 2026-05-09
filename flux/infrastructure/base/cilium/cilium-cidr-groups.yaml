@@ -1,0 +1,7 @@
+apiVersion: cilium.io/v2
+kind: CiliumCIDRGroup
+metadata:
+  name: talos-dns
+  labels:
+    role: talos-dns
+    reserved: talos

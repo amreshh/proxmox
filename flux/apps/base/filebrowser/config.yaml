@@ -1,5 +1,5 @@
 server:
-  database: "/data/database.db"
+  port: 8080
   sources:
     - path: "/data"
       name: data

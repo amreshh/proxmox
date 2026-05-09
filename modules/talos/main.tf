@@ -123,7 +123,7 @@ resource "helm_release" "cilium" {
     {
       name  = "hubble.metrics.serviceMonitor.enabled"
       value = "false" # need to set this to true after monitoring stack is installed with the crds
-    }
+    },
   ]
 
   set_list = [
@@ -238,7 +238,7 @@ resource "helm_release" "flux2_sync" {
     },
     {
       name  = "kustomization.spec.path"
-      value = "flux/clusters"
+      value = "flux/clusters/${terraform.workspace}"
     }
   ]
 

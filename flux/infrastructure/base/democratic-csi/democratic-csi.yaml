@@ -41,15 +41,13 @@ spec:
       config:
         driver: zfs-generic-nfs
         nfs:
-          mountCommand: /bin/mount
-          unmountCommand: /bin/umount
           shareStrategy: setDatasetProperties
-          shareStrategySetDatasetProperties:
-            properties:
-              sharenfs: "-maproot=root -network 192.168.1.0/24"
         zfs:
-          datasetParentName: zdata/k8s-vols
-          detachedSnapshotsDatasetParentName: zdata/k8s-snaps # https://github.com/democratic-csi/democratic-csi/blob/3974268272a84e9c22c47cae2fca847a8d422bad/examples/zfs-generic-nfs.yaml#L37
+          datasetParentName: zdata/k8s/volumes
+          detachedSnapshotsDatasetParentName: zdata/k8s/snapshots # https://github.com/democratic-csi/democratic-csi/blob/3974268272a84e9c22c47cae2fca847a8d422bad/examples/zfs-generic-nfs.yaml#L37
+          datasetPermissionsMode: "0770"
+          datasetPermissionsUser: 65534
+          datasetPermissionsGroup: 65534
           cli:
             sudoEnabled: true
             paths:

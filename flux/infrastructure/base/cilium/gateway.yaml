@@ -9,7 +9,6 @@ spec:
     - protocol: HTTPS
       port: 443
       name: default-gateway-https
-      hostname: "*.kubernetes.home"
       tls:
         certificateRefs:
           - kind: Secret

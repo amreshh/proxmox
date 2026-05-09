@@ -11,12 +11,48 @@ spec:
   chart:
     spec:
       chart: victoria-metrics-k8s-stack
-      version: "0.72.5"
+      version: "0.77.0"
       sourceRef:
         kind: HelmRepository
         name: victoria-metrics
       interval: 10m
   values:
+    fullnameOverride: vm-stack
+    victoria-metrics-operator:
+      crds:
+        cleanup:
+          enabled: true
+          image:
+            tag: "v1.35.2" # TODO: update to k8s when image is available
     vmsingle:
-      storage:
-        storageClassName: zfs-observability
+      enabled: true
+      spec:
+        storage:
+          storageClassName: delete
+          resources:
+            requests:
+              storage: 50Gi
+    vlogs:
+      enabled: true
+      spec:
+        retentionPeriod: "30d"
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: delete
+              resources:
+                requests:
+                  storage: 100Gi
+    alertmanager:
+      enabled: false
+    vmalert:
+      enabled: false
+    grafana:
+      enabled: true
+      persistence:
+        enabled: true
+        type: pvc
+        size: 5Gi
+        storageClassName: delete
+      admin:
+        existingSecret: grafana-admin

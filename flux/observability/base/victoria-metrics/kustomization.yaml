@@ -5,6 +5,7 @@ resources:
   - namespace.yaml
   - helm-repos.yaml
   - victoria-metrics.yaml
+  - routes.yaml
 
 patches:
   - target:

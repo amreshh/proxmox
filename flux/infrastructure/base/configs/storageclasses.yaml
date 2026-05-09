@@ -69,11 +69,13 @@ metadata:
 provisioner: org.democratic-csi.nfs
 reclaimPolicy: Delete
 mountOptions:
-  # - nfsvers=4.2
-  - nfsvers=3
+  - nfsvers=4.2
+  # - nfsvers=3
   - noatime
   - hard
-  - nolock
+  # - nolock
+  - sec=sys
+  - noresvport
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass

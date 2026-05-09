@@ -3,15 +3,10 @@ kind: Cluster
 metadata:
   name: immich-db
 spec:
-  podSecurityContext:
-    runAsUser: 65534
-    runAsGroup: 65534
-    fsGroup: 65534
-    runAsNonRoot: true
   instances: 1
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:18.3-1.1.1
-  postgresUID: 65534
-  postgresGID: 65534
+  postgresUID: 26
+  postgresGID: 26
   managed:
     roles:
       - name: immich

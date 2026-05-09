@@ -1,65 +1,3 @@
-# apiVersion: storage.k8s.io/v1
-# kind: StorageClass
-# metadata:
-#   name: zfs-media
-# provisioner: org.democratic-csi.nfs
-# reclaimPolicy: Retain
-# parameters:
-#   fsType: nfs
-#   "zfs:recordsize": "1M"
-#   "zfs:compression": "zstd-3"
-# mountOptions:
-#   - nfsvers=4.2
-#   - noatime
-#   - hard
-#   - rsize=1048576
-#   - wsize=1048576
-# ---
-# apiVersion: storage.k8s.io/v1
-# kind: StorageClass
-# metadata:
-#   name: zfs-db
-# provisioner: org.democratic-csi.nfs
-# reclaimPolicy: Retain
-# # TDOD: This parameter does not get set on zfs dataset. Keep checking for a new release
-# parameters:
-#   config: |
-#     zfs:
-#       datasetProperties:
-#         recordsize: "8K"
-# # parameters:
-# #   fsType: nfs
-# #   "recordsize": "16k"
-# #   "compression": "zstd-3"
-# #   "datasetPermissionsMode": "0700"
-# #   "datasetPermissionsUser": "26"
-# #   "datasetPermissionsGroup": "26"
-# #   "shareOptions": "rw,no_root_squash,no_subtree_check"
-# mountOptions:
-#   - nfsvers=4.2
-#   - noatime
-#   - hard
-#   - rsize=16384
-#   - wsize=16384
-# ---
-# apiVersion: storage.k8s.io/v1
-# kind: StorageClass
-# metadata:
-#   name: zfs-observability
-# provisioner: org.democratic-csi.nfs
-# reclaimPolicy: Delete
-# parameters:
-#   fsType: nfs
-#   "zfs:recordsize": "256k"
-#   "zfs:compression": "zstd-3"
-#   "zfs:logbias": "throughput"
-# mountOptions:
-#   - nfsvers=4.2
-#   - noatime
-#   - hard
-#   - rsize=262144
-#   - wsize=262144
----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -69,13 +7,10 @@ metadata:
 provisioner: org.democratic-csi.nfs
 reclaimPolicy: Delete
 mountOptions:
-  - nfsvers=4.2
-  # - nfsvers=3
+  - nfsvers=3
   - noatime
   - hard
-  # - nolock
-  - sec=sys
-  - noresvport
+  - nolock
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -84,8 +19,7 @@ metadata:
 provisioner: org.democratic-csi.nfs
 reclaimPolicy: Retain
 mountOptions:
-  - nfsvers=4.2
+  - nfsvers=3
   - noatime
   - hard
-
-#https://github.com/democratic-csi/democratic-csi/issues/519
+  - nolock

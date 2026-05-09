@@ -5,8 +5,8 @@ metadata:
 spec:
   instances: 1
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:18.3-1.1.1
-  postgresUID: 26
-  postgresGID: 26
+  postgresUID: 65534
+  postgresGID: 65534
   managed:
     roles:
       - name: immich

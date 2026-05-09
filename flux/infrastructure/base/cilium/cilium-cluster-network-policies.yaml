@@ -39,6 +39,7 @@ spec:
         - matchPattern: "*.githubusercontent.com"
         - matchName: "helm.vector.dev"
         - matchName: "registry-1.docker.io"
+        - matchName: "ghcr.io"
       toPorts:
         - ports:
             - port: "443"

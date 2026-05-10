@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: immich
 resources:
   - namespace.yaml
-  # - cilium-network-policies.yaml
+  - cilium-network-policies.yaml
   - helm-repos.yaml
   - database.yaml
   - pvc.yaml

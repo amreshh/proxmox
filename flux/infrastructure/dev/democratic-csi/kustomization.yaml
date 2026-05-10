@@ -12,7 +12,7 @@ patches:
         path: "/spec/values/driver/config/nfs/shareStrategySetDatasetProperties"
         value:
           properties:
-            sharenfs: "-network 192.168.122.10/24 -mapall=65534:65534 -sec sys"
+            sharenfs: "-network 192.168.122.10/24 -mapall=65534:65534"
   - target:
       kind: CiliumNetworkPolicy
       name: allow-democratic-csi

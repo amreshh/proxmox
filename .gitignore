@@ -12,3 +12,4 @@ secrets.yaml
 
 !prd.tfvars
 !dev.tfvars
+!flux/*/dev/**/*/secrets.yaml

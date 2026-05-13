@@ -9,6 +9,7 @@ module "talos" {
   source                     = "./modules/talos"
   talos                      = var.talos
   github_token               = var.github_token
+  age_key                    = var.age_key
   kubernetes_version         = var.kubernetes_version
   kubernetes_extra_manifests = var.kubernetes_extra_manifests
   cilium_version             = var.cilium_version

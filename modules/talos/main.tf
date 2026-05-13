@@ -239,12 +239,31 @@ resource "helm_release" "flux2_sync" {
     {
       name  = "kustomization.spec.path"
       value = "flux/clusters/${terraform.workspace}"
+    },
+    {
+      name  = "kustomization.spec.decryption.provider"
+      value = "sops"
+    },
+    {
+      name  = "kustomization.spec.decryption.secretRef.name"
+      value = kubernetes_secret_v1.age_key.metadata[0].name
     }
   ]
 
   depends_on = [
     helm_release.flux2
   ]
+}
+
+resource "kubernetes_secret_v1" "age_key" {
+  metadata {
+    name      = "age-key"
+    namespace = helm_release.flux2.namespace
+  }
+  data = {
+    "age.agekey" = var.age_key
+  }
+  type = "Opaque"
 }
 
 # TODO: see if we can make this more flexible

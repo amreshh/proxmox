@@ -6,10 +6,6 @@
 *.tfstate.backup
 *.terraform
 *.tfvars
-k8s
-certs
-secrets.yaml
 
 !prd.tfvars
 !dev.tfvars
-!flux/*/dev/**/*/secrets.yaml

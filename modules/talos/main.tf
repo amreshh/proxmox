@@ -239,14 +239,6 @@ resource "helm_release" "flux2_sync" {
     {
       name  = "kustomization.spec.path"
       value = "flux/clusters/${terraform.workspace}"
-    },
-    {
-      name  = "kustomization.spec.decryption.provider"
-      value = "sops"
-    },
-    {
-      name  = "kustomization.spec.decryption.secretRef.name"
-      value = kubernetes_secret_v1.age_key.metadata[0].name
     }
   ]
 

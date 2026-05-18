@@ -1,9 +1,11 @@
 variable "talos" {
   type = object({
-    version = string
-    iso     = string
-    image   = string
-    vm_disk = string
+    version      = string
+    iso          = string
+    image        = string
+    vm_disk      = string
+    cluster_name = string
+    time_servers = list(string)
   })
 }
 
@@ -43,26 +45,24 @@ variable "flux_version" {
 
 variable "controlplanes" {
   type = map(object({
-    cluster_name = string
-    name         = string
-    vm_id        = number
-    memory       = number
-    cores        = number
-    disk_size    = number
-    mac_addr     = string
-    ip_addr      = string
+    name      = string
+    vm_id     = number
+    memory    = number
+    cores     = number
+    disk_size = number
+    mac_addr  = string
+    ip_addr   = string
   }))
 }
 
 variable "workers" {
   type = map(object({
-    cluster_name = string
-    name         = string
-    vm_id        = number
-    memory       = number
-    cores        = number
-    disk_size    = number
-    mac_addr     = string
-    ip_addr      = string
+    name      = string
+    vm_id     = number
+    memory    = number
+    cores     = number
+    disk_size = number
+    mac_addr  = string
+    ip_addr   = string
   }))
 }

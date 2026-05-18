@@ -230,7 +230,7 @@ resource "helm_release" "flux2_sync" {
     },
     {
       name  = "gitRepository.spec.ref.branch"
-      value = "dev"
+      value = terraform.workspace == "prd" ? "main" : "dev"
     },
     {
       name  = "gitRepository.spec.secretRef.name"
@@ -258,25 +258,15 @@ resource "kubernetes_secret_v1" "age_key" {
   type = "Opaque"
 }
 
-# TODO: see if we can make this more flexible
 resource "local_sensitive_file" "kubeconfig_file" {
   content         = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
-  filename        = "/home/amresh/.kube/config"
-  file_permission = "0711"
-
-  lifecycle {
-    ignore_changes = all
-  }
+  filename        = pathexpand("~/.kube/${terraform.workspace}_config")
+  file_permission = "0600"
 }
 
-# TODO: see if we can make this more flexible
 resource "local_sensitive_file" "talosconfig_file" {
   content         = data.talos_client_configuration.talosconfig.talos_config
-  filename        = "/home/amresh/.talos/config"
+  filename        = pathexpand("~/.talos/${terraform.workspace}_config")
   file_permission = "0600"
-
-  lifecycle {
-    ignore_changes = all
-  }
 }
 

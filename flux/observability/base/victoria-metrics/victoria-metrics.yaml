@@ -11,7 +11,7 @@ spec:
   chart:
     spec:
       chart: victoria-metrics-k8s-stack
-      version: "0.77.0"
+      version: "0.78.0"
       sourceRef:
         kind: HelmRepository
         name: victoria-metrics
@@ -49,6 +49,15 @@ spec:
       enabled: false
     grafana:
       enabled: true
+      initChownData:
+        enabled: false
+      podSecurityContext:
+        fsGroup: 65534
+        runAsGroup: 65534
+        runAsUser: 65534
+      containerSecurityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
       persistence:
         enabled: true
         type: pvc

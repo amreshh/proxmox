@@ -3,7 +3,8 @@ kind: CiliumNetworkPolicy
 metadata:
   name: immich-network-policy
 spec:
-  description: "Allow imich machine learning to access huggingface.co and cas-bridge.xethub.hf.co"
+  description: "Allow imich machine learning to access huggingface.co and
+    cas-bridge.xethub.hf.co"
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: machine-learning
@@ -28,6 +29,12 @@ spec:
               protocol: TCP
     - toFQDNs:
         - matchName: transfer.xethub.hf.co
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    - toFQDNs:
+        - matchName: modelscope.cn
       toPorts:
         - ports:
             - port: "443"

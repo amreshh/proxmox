@@ -16,15 +16,3 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-    - protocol: HTTP
-      port: 80
-      name: default-gateway-http
-      allowedRoutes:
-        namespaces:
-          from: All
-    # - protocol: HTTP
-    #   port: 3100
-    #   name: loki-service
-    #   allowedRoutes:
-    #     namespaces:
-    #       from: All

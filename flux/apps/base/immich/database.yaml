@@ -25,5 +25,5 @@ spec:
         - CREATE EXTENSION vchord CASCADE;
         - CREATE EXTENSION earthdistance CASCADE;
   storage:
-    storageClass: retain
+    storageClass: database
     size: 1Gi

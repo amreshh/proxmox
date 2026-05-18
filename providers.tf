@@ -20,15 +20,15 @@ terraform {
     }
     flux = {
       source  = "fluxcd/flux"
-      version = "1.8.6"
+      version = "1.8.7"
     }
     http = {
       source  = "hashicorp/http"
-      version = "3.5.0"
+      version = "3.6.0"
     }
     local = {
       source  = "hashicorp/local"
-      version = "2.8.0"
+      version = "2.9.0"
     }
   }
 }

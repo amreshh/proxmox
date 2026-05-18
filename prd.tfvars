@@ -1,9 +1,10 @@
-
 talos = {
-  version = "1.13.0"
-  iso     = "local:iso/talos_1.13.0.iso"
-  image   = "factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.13.0"
-  vm_disk = "/dev/nvme0n1"
+  version      = "1.13.2"
+  iso          = "local:iso/talos_1.13.2.iso"
+  image        = "factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.13.2"
+  vm_disk      = "/dev/nvme0n1"
+  cluster_name = "prd"
+  time_servers = ["192.168.10.1"]
 }
 
 kubernetes_version = "1.36.0"
@@ -25,37 +26,33 @@ flux_version = {
 
 controlplanes = {
   controlplane1 = {
-    cluster_name = "talos"
-    name         = "k8s-controlplane-1"
-    vm_id        = 101
-    memory       = 8192 # MiB
-    cores        = 2
-    disk_size    = 100 # GiB
-    mac_addr     = "02:00:00:00:00:01"
-    ip_addr      = "192.168.10.20"
+    name      = "k8s-controlplane-1"
+    vm_id     = 101
+    memory    = 8192 # MiB
+    cores     = 2
+    disk_size = 100 # GiB
+    mac_addr  = "02:00:00:00:00:01"
+    ip_addr   = "192.168.10.20"
   }
 }
 
 workers = {
   worker1 = {
-    cluster_name = "talos"
-    name         = "k8s-worker-1"
-    vm_id        = 102
-    memory       = 16384 # MiB
-    cores        = 4
-    disk_size    = 200 # GiB
-    mac_addr     = "02:00:00:00:00:02"
-    ip_addr      = "192.168.10.21"
+    name      = "k8s-worker-1"
+    vm_id     = 102
+    memory    = 16384 # MiB
+    cores     = 4
+    disk_size = 100 # GiB
+    mac_addr  = "02:00:00:00:00:02"
+    ip_addr   = "192.168.10.21"
   }
   worker2 = {
-    cluster_name = "talos"
-    name         = "k8s-worker-2"
-    vm_id        = 103
-    memory       = 16384 # MiB
-    cores        = 4
-    disk_size    = 200 # GiB
-    mac_addr     = "02:00:00:00:00:03"
-    ip_addr      = "192.168.10.22"
+    name      = "k8s-worker-2"
+    vm_id     = 103
+    memory    = 16384 # MiB
+    cores     = 4
+    disk_size = 100 # GiB
+    mac_addr  = "02:00:00:00:00:03"
+    ip_addr   = "192.168.10.22"
   }
-
 }

@@ -2,6 +2,9 @@ locals {
   nodes = merge(var.controlplanes, var.workers)
   common_machine_config = {
     machine = {
+      time = {
+        servers = var.talos.time_servers
+      }
       features = {
         hostDNS = {
           enabled              = true
@@ -19,6 +22,7 @@ locals {
     }
     cluster = {
       allowSchedulingOnControlPlanes = false
+      clusterName                    = var.talos.cluster_name
       network = {
         cni = {
           name = "none"

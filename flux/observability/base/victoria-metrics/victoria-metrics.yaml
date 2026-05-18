@@ -59,3 +59,5 @@ spec:
         storageClassName: delete
       admin:
         existingSecret: grafana-admin
+      plugins:
+        - victoriametrics-logs-datasource

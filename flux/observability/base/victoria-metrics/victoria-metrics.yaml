@@ -18,12 +18,12 @@ spec:
       interval: 10m
   values:
     fullnameOverride: vm-stack
-    victoria-metrics-operator:
-      crds:
-        cleanup:
-          enabled: true
-          image:
-            tag: "v1.35.2" # TODO: update to k8s when image is available
+    # victoria-metrics-operator:
+    #   crds:
+    #     cleanup:
+    #       enabled: true
+    #       image:
+    #         tag: "v1.35.2" # TODO: update to k8s when image is available
     vmsingle:
       enabled: true
       spec:

@@ -11,19 +11,13 @@ spec:
   chart:
     spec:
       chart: victoria-metrics-k8s-stack
-      version: "0.78.0"
+      version: "0.79.0"
       sourceRef:
         kind: HelmRepository
         name: victoria-metrics
       interval: 10m
   values:
     fullnameOverride: vm-stack
-    # victoria-metrics-operator:
-    #   crds:
-    #     cleanup:
-    #       enabled: true
-    #       image:
-    #         tag: "v1.35.2" # TODO: update to k8s when image is available
     vmsingle:
       enabled: true
       spec:

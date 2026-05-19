@@ -3,9 +3,9 @@ kind: Kustomization
 namespace: victoria-metrics
 resources:
   - namespace.yaml
+  - network-policies.yaml
   - helm-repos.yaml
   - victoria-metrics.yaml
-  - victoria-logs.yaml
   - routes.yaml
 
 patches:

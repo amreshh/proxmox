@@ -1,0 +1,20 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: grafana
+spec:
+  endpointSelector: {}
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: grafana
+      toPorts:
+        - ports:
+            - port: "443"
+  egress:
+    - toFQDNs:
+        - matchName: grafana.com
+        - matchName: storage.googleapis.com
+      toPorts:
+        - ports:
+            - port: "443"

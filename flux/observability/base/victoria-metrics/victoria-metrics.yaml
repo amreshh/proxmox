@@ -21,6 +21,10 @@ spec:
     vmsingle:
       enabled: true
       spec:
+        # securityContext:
+        #   fsGroup: 65534
+        #   runAsUser: 65534
+        #   runAsNonRoot: true
         storage:
           storageClassName: delete
           resources:
@@ -30,6 +34,10 @@ spec:
       enabled: true
       spec:
         retentionPeriod: "30d"
+        # securityContext:
+        #   fsGroup: 65534
+        #   runAsUser: 65534
+        #   runAsNonRoot: true
         storage:
           volumeClaimTemplate:
             spec:
@@ -61,3 +69,12 @@ spec:
         existingSecret: grafana-admin
       plugins:
         - victoriametrics-logs-datasource
+      datasources:
+        datasources.yaml:
+          apiVersion: 1
+          datasources:
+            - name: VictoriaLogs
+              type: victoriametrics-logs-datasource
+              access: proxy
+              url: http://victorialogs:9428
+              isDefault: false

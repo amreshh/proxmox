@@ -18,33 +18,19 @@ spec:
       interval: 10m
   values:
     fullnameOverride: vm-stack
+    victoria-metrics-operator:
+      enabled: false
+      crds:
+        cleanup:
+          enabled: false
     vmsingle:
       enabled: true
       spec:
-        # securityContext:
-        #   fsGroup: 65534
-        #   runAsUser: 65534
-        #   runAsNonRoot: true
         storage:
           storageClassName: delete
           resources:
             requests:
               storage: 50Gi
-    vlogs:
-      enabled: true
-      spec:
-        retentionPeriod: "30d"
-        # securityContext:
-        #   fsGroup: 65534
-        #   runAsUser: 65534
-        #   runAsNonRoot: true
-        storage:
-          volumeClaimTemplate:
-            spec:
-              storageClassName: delete
-              resources:
-                requests:
-                  storage: 100Gi
     alertmanager:
       enabled: false
     vmalert:

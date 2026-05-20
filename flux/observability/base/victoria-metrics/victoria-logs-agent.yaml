@@ -5,5 +5,5 @@ metadata:
 spec:
   k8sCollector:
     enabled: true
-    remoteWrite:
-      - url: "http://vlsingle-victoria-logs.default.svc.cluster.local:9428/internal/insert"
+  remoteWrite:
+    - url: http://vlsingle-victoria-logs.victoria-metrics.svc.cluster.local:9428/internal/insert

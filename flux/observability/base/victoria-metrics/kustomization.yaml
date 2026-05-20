@@ -5,6 +5,7 @@ resources:
   - namespace.yaml
   - network-policies.yaml
   - victoria-metrics.yaml
+  - victoria-logs-agent.yaml
   - victoria-logs.yaml
   - routes.yaml
 

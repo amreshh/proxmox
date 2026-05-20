@@ -28,7 +28,7 @@ metadata:
 provisioner: org.democratic-csi.nfs
 reclaimPolicy: Retain
 mountOptions:
-  - nfsvers=3
+  - nfsvers=4.2
   - noatime
   - hard
 

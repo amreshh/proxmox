@@ -1,0 +1,9 @@
+apiVersion: operator.victoriametrics.com/v1
+kind: VLSingle
+metadata:
+  name: victoria-logs
+spec:
+  image:
+    repository: docker.io/victoriametrics/victoria-logs
+    tag: v1.50.0
+    pullPolicy: IfNotPresent

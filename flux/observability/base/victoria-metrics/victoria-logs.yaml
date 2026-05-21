@@ -1,0 +1,6 @@
+apiVersion: operator.victoriametrics.com/v1
+kind: VLSingle
+metadata:
+  name: victoria-logs
+spec:
+  retentionPeriod: "30"

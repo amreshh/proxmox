@@ -1,0 +1,88 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: victoria-metrics-k8s-stack
+spec:
+  interval: 10m
+  install:
+    timeout: 20m
+  upgrade:
+    timeout: 20m
+  chart:
+    spec:
+      chart: victoria-metrics-k8s-stack
+      version: "0.79.1"
+      sourceRef:
+        kind: HelmRepository
+        name: victoria-metrics
+      interval: 10m
+  values:
+    fullnameOverride: vm-stack
+    victoria-metrics-operator:
+      enabled: false
+      crds:
+        cleanup:
+          enabled: false
+    vmsingle:
+      enabled: true
+      spec:
+        storage:
+          storageClassName: delete
+          resources:
+            requests:
+              storage: 50Gi
+    alertmanager:
+      enabled: false
+    vmalert:
+      enabled: false
+    kubeScheduler:
+      enabled: true
+      vmScrape:
+        spec:
+          endpoints:
+            - port: http-metrics
+              scheme: https
+              bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              tlsConfig:
+                caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                insecureSkipVerify: true
+    kubeControllerManager:
+      enabled: true
+      vmScrape:
+        spec:
+          endpoints:
+            - port: http-metrics
+              scheme: https
+              bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              tlsConfig:
+                caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                insecureSkipVerify: true
+    grafana:
+      enabled: true
+      initChownData:
+        enabled: false
+      podSecurityContext:
+        fsGroup: 65534
+        runAsGroup: 65534
+        runAsUser: 65534
+      containerSecurityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+      persistence:
+        enabled: true
+        type: pvc
+        size: 5Gi
+        storageClassName: delete
+      admin:
+        existingSecret: grafana-admin
+      plugins:
+        - victoriametrics-logs-datasource
+      datasources:
+        datasources.yaml:
+          apiVersion: 1
+          datasources:
+            - name: VictoriaLogs
+              type: victoriametrics-logs-datasource
+              access: proxy
+              url: http://vlsingle-victoria-logs.victoria-metrics.svc.cluster.local:9428
+              isDefault: false

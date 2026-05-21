@@ -12,5 +12,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: victoria-metrics-grafana
+        - name: victoria-metrics-k8s-stack-grafana
           port: 80

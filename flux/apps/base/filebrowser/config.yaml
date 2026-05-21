@@ -6,3 +6,7 @@ server:
       config:
         defaultEnabled: false
         createUserDir: true
+userDefaults:
+  fileLoading:
+    uploadChunkSizeMb: 0
+    downloadChunkSizeMb: 0

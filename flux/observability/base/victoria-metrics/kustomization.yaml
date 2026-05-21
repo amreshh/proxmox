@@ -4,7 +4,7 @@ namespace: victoria-metrics
 resources:
   - namespace.yaml
   - network-policies.yaml
-  - victoria-metrics.yaml
+  - victoria-metrics-k8s-stack.yaml
   - victoria-logs-agent.yaml
   - victoria-logs.yaml
   - routes.yaml
@@ -12,7 +12,7 @@ resources:
 patches:
   - target:
       kind: HelmRelease
-      name: victoria-metrics
+      name: victoria-metrics-k8s-stack
     patch: |-
       - op: add
         path: "/spec/chart/spec/sourceRef/namespace"

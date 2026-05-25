@@ -1,5 +1,5 @@
 terraform {
-  required_version = "~>1.10"
+  required_version = "~>1.11"
 
   required_providers {
     proxmox = {
@@ -12,11 +12,15 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "3.1.2"
+      version = "3.1.1"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = "3.1.0"
+    }
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = "1.19.0"
     }
     flux = {
       source  = "fluxcd/flux"
@@ -47,6 +51,14 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.ca_certificate)
   client_certificate     = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_certificate)
   client_key             = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_key)
+}
+
+provider "kubectl" {
+  host                   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
+  cluster_ca_certificate = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.ca_certificate)
+  client_certificate     = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_certificate)
+  client_key             = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_key)
+  load_config_file       = false
 }
 
 provider "flux" {

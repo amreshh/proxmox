@@ -5,6 +5,7 @@ talos = {
   vm_disk      = "/dev/vda"
   cluster_name = "dev"
   time_servers = ["192.168.20.1"]
+  dns_servers  = ["192.168.122.1/32"]
 }
 
 kubernetes_version = "1.36.0"

@@ -1,0 +1,18 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-egress-repos
+spec:
+  description: "Allow source controller to access repos"
+  endpointSelector:
+    matchLabels:
+      app: source-controller
+  egress:
+    - toFQDNs:
+        - matchName: democratic-csi.github.io
+        - matchName: kubernetes-sigs.github.io
+        - matchName: release-assets.githubusercontent.com
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

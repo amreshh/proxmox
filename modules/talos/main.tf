@@ -141,21 +141,26 @@ resource "helm_release" "cilium" {
     }
   ]
 
-  # depends_on = [
-  #   data.http.kubernetes_health
-  # ]
+  depends_on = [
+    data.talos_cluster_health.talos_cluster_health
+  ]
+}
+
+resource "kubernetes_namespace_v1" "flux_system" {
+  metadata {
+    name = "flux-system"
+  }
 }
 
 resource "helm_release" "flux2" {
-  repository       = "https://fluxcd-community.github.io/helm-charts"
-  chart            = "flux2"
-  version          = var.flux_version.version
-  name             = "flux2"
-  namespace        = "flux-system"
-  create_namespace = true
-  atomic           = true
-  cleanup_on_fail  = true
-  lint             = true
+  repository      = "https://fluxcd-community.github.io/helm-charts"
+  chart           = "flux2"
+  version         = var.flux_version.version
+  name            = "flux2"
+  namespace       = kubernetes_namespace_v1.flux_system.metadata[0].name
+  atomic          = true
+  cleanup_on_fail = true
+  lint            = true
 
   set = [
     { name  = "imageReflectionController.create"
@@ -204,7 +209,7 @@ resource "helm_release" "flux2" {
 resource "kubernetes_secret_v1" "github_token" {
   metadata {
     name      = "github-token"
-    namespace = helm_release.flux2.namespace
+    namespace = kubernetes_namespace_v1.flux_system.metadata[0].name
   }
   data = {
     username = "fluxcd"
@@ -218,7 +223,7 @@ resource "helm_release" "flux2_sync" {
   chart           = "flux2-sync"
   version         = var.flux_version.sync_version
   name            = "flux-system"
-  namespace       = helm_release.flux2.namespace
+  namespace       = kubernetes_namespace_v1.flux_system.metadata[0].name
   atomic          = true
   cleanup_on_fail = true
   lint            = true
@@ -250,12 +255,200 @@ resource "helm_release" "flux2_sync" {
 resource "kubernetes_secret_v1" "age_key" {
   metadata {
     name      = "age-key"
-    namespace = helm_release.flux2.namespace
+    namespace = kubernetes_namespace_v1.flux_system.metadata[0].name
   }
   data = {
     "age.agekey" = var.age_key
   }
   type = "Opaque"
+}
+
+resource "kubectl_manifest" "clusterwide_network_policy_allow_kube_api" {
+  yaml_body = yamlencode({
+    apiVersion = "cilium.io/v2"
+    kind       = "CiliumClusterwideNetworkPolicy"
+    metadata = {
+      name      = "allow-kube-api"
+      namespace = kubernetes_namespace_v1.flux_system.metadata[0].name
+    }
+    spec = {
+      description = "allow kube-system and flux-system namespaces access to kube-apiserver"
+      endpointSelector = {
+        matchExpressions = [
+          {
+            key      = "k8s:io.kubernetes.pod.namespace"
+            operator = "In"
+            values   = ["kube-system", "flux-system"]
+          }
+        ]
+      }
+      egress = [
+        {
+          toEntities = ["kube-apiserver"]
+          toPorts = [
+            {
+              ports = [
+                {
+                  port     = "6443"
+                  protocol = "TCP"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  })
+}
+
+resource "kubectl_manifest" "clusterwide_network_policy_allow_dns" {
+  yaml_body = yamlencode({
+    apiVersion = "cilium.io/v2"
+    kind       = "CiliumClusterwideNetworkPolicy"
+    metadata = {
+      name = "allow-dns"
+    }
+    spec = {
+      description      = "allow dns for all pods"
+      endpointSelector = {}
+      egress = [
+        {
+          toEndpoints = [
+            {
+              matchLabels = {
+                "k8s-app" = "kube-dns"
+              }
+            }
+          ]
+          toPorts = [
+            {
+              ports = [
+                {
+                  port     = "53"
+                  protocol = "UDP"
+                }
+              ]
+              rules = {
+                dns = [
+                  {
+                    matchPattern = "*"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  })
+}
+
+resource "kubectl_manifest" "network_policy_allow_talos_forward_dns" {
+  yaml_body = yamlencode({
+    apiVersion = "cilium.io/v2"
+    kind       = "CiliumNetworkPolicy"
+    metadata = {
+      name      = "allow-talos-forward-dns"
+      namespace = "kube-system"
+    }
+    spec = {
+      description = "allow dns forwarding to talos host"
+      endpointSelector = {
+        matchLabels = {
+          "k8s-app" = "kube-dns"
+        }
+      }
+      egress = [
+        {
+          toCIDR = var.talos.dns_servers
+          toPorts = [
+            {
+              ports = [
+                {
+                  port     = "53"
+                  protocol = "UDP"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  })
+}
+
+resource "kubectl_manifest" "network_policy_allow_gitops_repo" {
+  yaml_body = yamlencode({
+    apiVersion = "cilium.io/v2"
+    kind       = "CiliumNetworkPolicy"
+    metadata = {
+      name      = "allow-egress-gitops-repo"
+      namespace = kubernetes_namespace_v1.flux_system.metadata[0].name
+    }
+    spec = {
+      description = "allow egress to gitops repo"
+      endpointSelector = {
+        matchLabels = {
+          app = "source-controller"
+        }
+      }
+      egress = [
+        {
+          toFQDNs = [
+            { matchName = "github.com" }
+          ]
+          toPorts = [
+            {
+              ports = [
+                {
+                  port = "443"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  })
+}
+
+resource "kubectl_manifest" "network_policy_allow_flux_internal_svc" {
+  yaml_body = yamlencode({
+    apiVersion = "cilium.io/v2"
+    kind       = "CiliumNetworkPolicy"
+    metadata = {
+      name      = "allow-flux-internal-svc"
+      namespace = kubernetes_namespace_v1.flux_system.metadata[0].name
+    }
+    spec = {
+      description      = "allow flux pods to access flux-system services"
+      endpointSelector = {}
+      egress = [
+        {
+          toServices = [
+            {
+              k8sService = {
+                serviceName = "source-controller"
+                namespace   = kubernetes_namespace_v1.flux_system.metadata[0].name
+              }
+            },
+            {
+              k8sService = {
+                serviceName = "webhook-receiver"
+                namespace   = kubernetes_namespace_v1.flux_system.metadata[0].name
+              }
+            },
+            {
+              k8sService = {
+                serviceName = "notification-controller"
+                namespace   = kubernetes_namespace_v1.flux_system.metadata[0].name
+              }
+            }
+          ]
+        }
+      ]
+    }
+  })
 }
 
 resource "local_sensitive_file" "kubeconfig_file" {

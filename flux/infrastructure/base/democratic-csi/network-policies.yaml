@@ -1,10 +1,12 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: allow-democratic-csi
+  name: allow-democratic-csi-nfs
 spec:
   description: "Allow the csi driver to access the nfs share and zfs pool"
-  endpointSelector: {} #TODO: Fix this
+  endpointSelector:
+    matchLabels:
+      app: democractic-csi
   egress:
     - toCIDR:
         - 192.168.1.4/32

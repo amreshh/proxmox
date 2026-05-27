@@ -1,7 +1,7 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: allow-egress-repos
+  name: allow-egress-source-controller-to-repos
 spec:
   description: "Allow source controller to access repos"
   endpointSelector:

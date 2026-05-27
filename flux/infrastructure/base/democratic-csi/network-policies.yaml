@@ -1,9 +1,9 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: allow-democratic-csi-nfs
+  name: allow-egress-democratic-csi-to-nfs-server
 spec:
-  description: "Allow the csi driver to access the nfs share and zfs pool"
+  description: "Allow the csi driver to access and manage the nfs share and zfs pool"
   endpointSelector:
     matchLabels:
       app: democractic-csi

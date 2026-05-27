@@ -268,7 +268,7 @@ resource "kubectl_manifest" "clusterwide_network_policy_allow_kube_api" {
     apiVersion = "cilium.io/v2"
     kind       = "CiliumClusterwideNetworkPolicy"
     metadata = {
-      name      = "allow-kube-api"
+      name      = "allow-egress-to-kube-api"
       namespace = kubernetes_namespace_v1.flux_system.metadata[0].name
     }
     spec = {
@@ -306,7 +306,7 @@ resource "kubectl_manifest" "clusterwide_network_policy_allow_dns" {
     apiVersion = "cilium.io/v2"
     kind       = "CiliumClusterwideNetworkPolicy"
     metadata = {
-      name = "allow-dns"
+      name = "allow-egress-to-kube-dns"
     }
     spec = {
       description      = "allow dns for all pods"
@@ -348,11 +348,11 @@ resource "kubectl_manifest" "network_policy_allow_talos_forward_dns" {
     apiVersion = "cilium.io/v2"
     kind       = "CiliumNetworkPolicy"
     metadata = {
-      name      = "allow-talos-forward-dns"
+      name      = "allow-egress-to-upstream-dns"
       namespace = "kube-system"
     }
     spec = {
-      description = "allow dns forwarding to talos host"
+      description = "allow dns forwarding to upstream nameserver"
       endpointSelector = {
         matchLabels = {
           "k8s-app" = "kube-dns"
@@ -382,7 +382,7 @@ resource "kubectl_manifest" "network_policy_allow_gitops_repo" {
     apiVersion = "cilium.io/v2"
     kind       = "CiliumNetworkPolicy"
     metadata = {
-      name      = "allow-egress-gitops-repo"
+      name      = "allow-egress-to-gitops-repo"
       namespace = kubernetes_namespace_v1.flux_system.metadata[0].name
     }
     spec = {
@@ -417,7 +417,7 @@ resource "kubectl_manifest" "network_policy_allow_flux_internal_svc" {
     apiVersion = "cilium.io/v2"
     kind       = "CiliumNetworkPolicy"
     metadata = {
-      name      = "allow-flux-internal-svc"
+      name      = "allow-egress-to-flux-services"
       namespace = kubernetes_namespace_v1.flux_system.metadata[0].name
     }
     spec = {

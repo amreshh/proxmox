@@ -3,10 +3,10 @@ kind: CiliumNetworkPolicy
 metadata:
   name: allow-egress-democratic-csi-to-nfs-server
 spec:
-  description: "Allow the csi driver to access and manage the nfs share and zfs pool"
+  description: allow the csi driver to access and manage the nfs share and zfs pool
   endpointSelector:
     matchLabels:
-      app: democractic-csi
+      "app.kubernetes.io/name": democratic-csi
   egress:
     - toCIDR:
         - 192.168.1.4/32

@@ -1,0 +1,39 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-egress-hubble-relay-to-peers
+  namespace: kube-system
+spec:
+  description: allow Hubble Relay to access the hubble-peer service
+  endpointSelector:
+    matchLabels:
+      k8s-app: hubble-relay
+  egress:
+    - toEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+            - port: "4244"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-egress-hubble-ui-to-relay
+  namespace: kube-system
+spec:
+  description: allow Hubble UI to access Hubble Relay backend
+  endpointSelector:
+    matchLabels:
+      k8s-app: hubble-ui
+  egress:
+  - toEndpoints:
+    - matchLabels:
+        k8s-app: hubble-relay
+    toPorts:
+    - ports:
+      - port: "4245"
+        protocol: TCP

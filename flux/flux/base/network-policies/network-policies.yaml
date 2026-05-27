@@ -3,7 +3,7 @@ kind: CiliumNetworkPolicy
 metadata:
   name: allow-egress-source-controller-to-repos
 spec:
-  description: "Allow source controller to access repos"
+  description: "allow source controller to access repos"
   endpointSelector:
     matchLabels:
       app: source-controller

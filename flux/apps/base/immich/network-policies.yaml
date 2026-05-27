@@ -3,8 +3,7 @@ kind: CiliumNetworkPolicy
 metadata:
   name: allow-egress-todo
 spec:
-  description: "Allow imich machine learning to access huggingface.co and
-    cas-bridge.xethub.hf.co"
+  description: allow imich machine learning to access huggingface.co and cas-bridge.xethub.hf.co
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: machine-learning

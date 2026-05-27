@@ -3,7 +3,7 @@ kind: CiliumNetworkPolicy
 metadata:
   name: allow-egress-metrics-server-to-kubelet
 spec:
-  description: "Allow the metrics-server to scrape kubelet"
+  description: allow the metrics-server to scrape kubelet
   endpointSelector:
     matchLabels:
       "app.kubernetes.io/name": metrics-server

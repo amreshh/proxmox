@@ -7,3 +7,4 @@ resources:
   - cilium-gatewayclass.yaml
   - gateway.yaml
   - routes.yaml
+  - network-policies.yaml

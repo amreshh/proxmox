@@ -48,13 +48,18 @@ resource "helm_release" "cilium" {
   cleanup_on_fail = true
   lint            = true
 
-  set = [{
-    name  = "ipam.mode"
-    value = "kubernetes"
+  set = [
+    {
+      name  = "ipam.mode"
+      value = "kubernetes"
     },
     {
       name  = "kubeProxyReplacement"
       value = "true"
+    },
+    {
+      name  = "policyEnforcementMode"
+      value = "always"
     },
     {
       name  = "k8sServiceHost"
@@ -263,38 +268,27 @@ resource "kubernetes_secret_v1" "age_key" {
   type = "Opaque"
 }
 
-resource "kubectl_manifest" "clusterwide_network_policy_allow_kube_api" {
+resource "kubectl_manifest" "clusterwide_network_policy_allow_health_checks" {
   yaml_body = yamlencode({
     apiVersion = "cilium.io/v2"
     kind       = "CiliumClusterwideNetworkPolicy"
     metadata = {
-      name      = "allow-egress-to-kube-api"
-      namespace = kubernetes_namespace_v1.flux_system.metadata[0].name
+      name = "allow-cilium-health-checks"
     }
     spec = {
-      description = "allow kube-system and flux-system namespaces access to kube-apiserver"
       endpointSelector = {
-        matchExpressions = [
-          {
-            key      = "k8s:io.kubernetes.pod.namespace"
-            operator = "In"
-            values   = ["kube-system", "flux-system"]
-          }
-        ]
+        matchLabels = {
+          "reserved:health" = ""
+        }
       }
+      ingress = [
+        {
+          fromEntities = ["remote-node"]
+        }
+      ]
       egress = [
         {
-          toEntities = ["kube-apiserver"]
-          toPorts = [
-            {
-              ports = [
-                {
-                  port     = "6443"
-                  protocol = "TCP"
-                }
-              ]
-            }
-          ]
+          toEntities = ["remote-node"]
         }
       ]
     }
@@ -306,17 +300,72 @@ resource "kubectl_manifest" "clusterwide_network_policy_allow_dns" {
     apiVersion = "cilium.io/v2"
     kind       = "CiliumClusterwideNetworkPolicy"
     metadata = {
+      name = "allow-dns"
+    }
+    spec = {
+      description = "allow coredns to receive dns ingress requests and egress to talos upstream dns"
+      endpointSelector = {
+        matchLabels = {
+          "k8s:io.kubernetes.pod.namespace" = "kube-system"
+          "k8s:k8s-app"                     = "kube-dns"
+        }
+      }
+      ingress = [
+        {
+          fromEndpoints = [
+            {
+              matchLabels = {}
+            }
+          ]
+          toPorts = [
+            {
+              ports = [
+                {
+                  port     = "53"
+                  protocol = "UDP"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+      egress = [
+        {
+          toCIDR = var.talos.dns_servers
+          toPorts = [
+            {
+              ports = [
+                {
+                  port     = "53"
+                  protocol = "UDP"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  })
+}
+
+resource "kubectl_manifest" "clusterwide_network_policy_allow_egress_dns" {
+  yaml_body = yamlencode({
+    apiVersion = "cilium.io/v2"
+    kind       = "CiliumClusterwideNetworkPolicy"
+    metadata = {
       name = "allow-egress-to-kube-dns"
     }
     spec = {
-      description      = "allow dns for all pods"
+      description      = "allow dns egress for all pods"
       endpointSelector = {}
       egress = [
         {
           toEndpoints = [
             {
               matchLabels = {
-                "k8s-app" = "kube-dns"
+                "k8s:io.kubernetes.pod.namespace" = "kube-system"
+                "k8s:k8s-app"                     = "kube-dns"
+
               }
             }
           ]
@@ -343,30 +392,29 @@ resource "kubectl_manifest" "clusterwide_network_policy_allow_dns" {
   })
 }
 
-resource "kubectl_manifest" "network_policy_allow_talos_forward_dns" {
+resource "kubectl_manifest" "network_policy_allow_kube_api" {
   yaml_body = yamlencode({
     apiVersion = "cilium.io/v2"
     kind       = "CiliumNetworkPolicy"
     metadata = {
-      name      = "allow-egress-to-upstream-dns"
+      name      = "allow-egress-kube-dns-to-kube-api"
       namespace = "kube-system"
     }
     spec = {
-      description = "allow dns forwarding to upstream nameserver"
+      description = "allow kube-dns egress to kube-apiserver"
       endpointSelector = {
-        matchLabels = {
-          "k8s-app" = "kube-dns"
-        }
+        "k8s:io.kubernetes.pod.namespace" = "kube-system"
+        "k8s:k8s-app"                     = "kube-dns"
       }
       egress = [
         {
-          toCIDR = var.talos.dns_servers
+          toEntities = ["kube-apiserver"]
           toPorts = [
             {
               ports = [
                 {
-                  port     = "53"
-                  protocol = "UDP"
+                  port     = "6443"
+                  protocol = "TCP"
                 }
               ]
             }
@@ -389,7 +437,8 @@ resource "kubectl_manifest" "network_policy_allow_gitops_repo" {
       description = "allow egress to gitops repo"
       endpointSelector = {
         matchLabels = {
-          app = "source-controller"
+          "k8s:io.kubernetes.pod.namespace" = kubernetes_namespace_v1.flux_system.metadata[0].name
+          "k8s:app"                         = "source-controller"
         }
       }
       egress = [
@@ -417,32 +466,55 @@ resource "kubectl_manifest" "network_policy_allow_flux_internal_svc" {
     apiVersion = "cilium.io/v2"
     kind       = "CiliumNetworkPolicy"
     metadata = {
-      name      = "allow-egress-to-flux-services"
+      name      = "allow-flux-internal"
       namespace = kubernetes_namespace_v1.flux_system.metadata[0].name
     }
     spec = {
-      description      = "allow flux pods to access flux-system services"
+      description      = "allow flux pods to access each other"
       endpointSelector = {}
+      ingress = [
+        {
+          fromEndpoints = [
+            {
+              matchLabels = {
+                "k8s:io.kubernetes.pod.namespace" = kubernetes_namespace_v1.flux_system.metadata[0].name
+              }
+              matchExpressions = [
+                {
+                  key      = "k8s:app"
+                  operator = "In"
+                  values = [
+                    "source-controller",
+                    "kustomize-controller",
+                    "notification-controller",
+                    "helm-controller"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
       egress = [
         {
-          toServices = [
+          toEndpoints = [
             {
-              k8sService = {
-                serviceName = "source-controller"
-                namespace   = kubernetes_namespace_v1.flux_system.metadata[0].name
+              matchLabels = {
+                "k8s:io.kubernetes.pod.namespace" = kubernetes_namespace_v1.flux_system.metadata[0].name
               }
-            },
-            {
-              k8sService = {
-                serviceName = "webhook-receiver"
-                namespace   = kubernetes_namespace_v1.flux_system.metadata[0].name
-              }
-            },
-            {
-              k8sService = {
-                serviceName = "notification-controller"
-                namespace   = kubernetes_namespace_v1.flux_system.metadata[0].name
-              }
+              matchExpressions = [
+                {
+                  key      = "k8s:app"
+                  operator = "In"
+                  values = [
+                    "source-controller",
+                    "kustomize-controller",
+                    "notification-controller",
+                    "helm-controller"
+                  ]
+                }
+              ]
+
             }
           ]
         }

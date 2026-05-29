@@ -1,17 +1,28 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: allow-egress-metrics-server-to-kubelet
+  name: allow-metrics-server
 spec:
-  description: allow the metrics-server to scrape kubelet
+  description: allow metrics-server to nodes and kube-apiserver
   endpointSelector:
     matchLabels:
-      "app.kubernetes.io/name": metrics-server
-  egress:
-    - toEntities:
-        - host
+      "k8s:app.kubernetes.io/name": metrics-server
+      "k8s:io.kubernetes.pod.namespace": kube-system
+  ingress:
+    - fromEntities:
         - remote-node
       toPorts:
         - ports:
             - port: "10250"
+              protocol: TCP
+  egress:
+    - toEntities:
+        - host
+        - remote-node
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "10250"
+              protocol: TCP
+            - port: "6443"
               protocol: TCP

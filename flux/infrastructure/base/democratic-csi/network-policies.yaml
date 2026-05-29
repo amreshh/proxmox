@@ -1,12 +1,13 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: allow-egress-democratic-csi-to-nfs-server
+  name: allow-democratic-csi
 spec:
-  description: allow the csi driver to access and manage the nfs share and zfs pool
+  description: allow democratic-csi to nfs server and kube-apiserver
   endpointSelector:
     matchLabels:
-      "app.kubernetes.io/name": democratic-csi
+      "k8s:app.kubernetes.io/name": "democratic-csi"
+      "k8s:io.kubernetes.pod.namespace": "kube-system"
   egress:
     - toCIDR:
         - 192.168.1.4/32
@@ -20,3 +21,9 @@ spec:
               protocol: TCP
             - port: "111"
               protocol: ANY
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP

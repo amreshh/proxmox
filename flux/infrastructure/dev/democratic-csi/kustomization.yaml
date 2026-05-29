@@ -16,11 +16,31 @@ patches:
             sharenfs: "-network 192.168.122.10/24 -mapall=65534:65534"
   - target:
       kind: CiliumNetworkPolicy
-      name: allow-egress-democratic-csi-to-nfs-server
+      name: allow-democratic-csi
     patch: |-
-      - op: replace
-        path: "/spec/egress/0/toCIDR/0"
-        value: "192.168.122.10/32"
-      - op: replace
-        path: "/spec/egress/1/toFQDNs/0/matchName"
-        value: "freebsd"
+      - op: add
+        path: "/spec/egress/-"
+        value:
+          toCIDR:
+            - "192.168.122.10/32"
+          toPorts:
+            - ports:
+                - port: "22"
+                  protocol: TCP
+                - port: "2049"
+                  protocol: "TCP"
+                - port: "111"
+                  protocol: ANY
+      - op: add
+        path: "/spec/egress/-"
+        value:
+          toFQDNs:
+          - matchName: "freebsd"
+          toPorts:
+            - ports:
+                - port: "22"
+                  protocol: TCP
+                - port: "2049"
+                  protocol: "TCP"
+                - port: "111"
+                  protocol: ANY

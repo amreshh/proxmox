@@ -1,16 +1,16 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: grafana
+  name: allow-grafana
 spec:
-  endpointSelector: {}
+  description: allow grafana ingress from agents and egress for plugins
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: grafana
   ingress:
     - fromEndpoints:
         - matchLabels:
-            app.kubernetes.io/name: grafana
-      toPorts:
-        - ports:
-            - port: "443"
+            app.kubernetes.io/name: vmagent
   egress:
     - toFQDNs:
         - matchName: grafana.com
@@ -18,3 +18,118 @@ spec:
       toPorts:
         - ports:
             - port: "443"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-vmagent
+spec:
+  description: allow victoria-metrics agent to access other pods
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: vmagent
+  egress:
+    - toEndpoints:
+        - matchExpressions:
+            - key: io.kubernetes.pod.namespace
+              operator: In
+              values:
+                - victoria-metrics
+                - kube-system
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
+            - port: "8428"
+              protocol: TCP
+            - port: "9429"
+              protocol: TCP
+            - port: "9428"
+              protocol: TCP
+            - port: "8080"
+              protocol: TCP
+            - port: "9153"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-vmsingle
+spec:
+  description: allow vmsingle ingress
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: vmsingle
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vmagent
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-vlsingle
+spec:
+  description: allow vlsingle ingress
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: vlsingle
+  ingress:
+    - fromEndpoints:
+        - matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+                - vmagent
+                - vlagent
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-vlagent
+spec:
+  description: allow vlagent ingress
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: vlagent
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vmagent
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vlsingle
+      toPorts:
+        - ports:
+            - port: "9428"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-kube-state-metrics
+spec:
+  description: allow kube-state-metrics ingress
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: kube-state-metrics
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vmagent
+---
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: allow-kube-dns-scrape
+spec:
+  description: allow kube-dns scraping
+  endpointSelector:
+    matchLabels:
+      k8s-app: kube-dns
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vmagent

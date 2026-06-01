@@ -14,10 +14,3 @@ patches:
       - op: add
         path: "/spec/chart/spec/sourceRef/namespace"
         value: kube-system
-  - target:
-      kind: CiliumNetworkPolicy
-      name: allow-democratic-csi
-    patch: |-
-      - op: add
-        path: "/metadata/namespace"
-        value: kube-system

@@ -22,14 +22,14 @@ spec:
   description: allow hubble-ui ingress
   endpointSelector:
     matchLabels:
-      "k8s:k8s-app": "hubble-ui"
+      k8s:k8s-app: hubble-ui
   ingress:
     - fromEntities:
         - ingress
   egress:
     - toEndpoints:
         - matchLabels:
-            "k8s:k8s-app": "hubble-relay"
+            k8s:k8s-app: hubble-relay
       toPorts:
         - ports:
             - port: "4245"
@@ -44,11 +44,11 @@ spec:
   description: allow hubble-relay ingress
   endpointSelector:
     matchLabels:
-      "k8s:k8s-app": "hubble-relay"
+      k8s:k8s-app: hubble-relay
   ingress:
     - fromEndpoints:
         - matchLabels:
-            "k8s:k8s-app": "hubble-ui"
+            k8s:k8s-app: hubble-ui
   egress:
     - toEntities:
         - host

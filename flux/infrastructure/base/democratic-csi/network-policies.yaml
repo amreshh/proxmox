@@ -6,8 +6,8 @@ spec:
   description: allow democratic-csi to nfs server and kube-apiserver
   endpointSelector:
     matchLabels:
-      "k8s:app.kubernetes.io/name": "democratic-csi"
-      "k8s:io.kubernetes.pod.namespace": "kube-system"
+      k8s:app.kubernetes.io/name: democratic-csi
+      k8s:io.kubernetes.pod.namespace: kube-system
   egress:
     - toEntities:
         - kube-apiserver

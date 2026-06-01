@@ -1,0 +1,12 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-victoria-metrics-operator
+spec:
+  description: allow ingress from remote-node
+  endpointSelector:
+    matchLabels:
+      k8s:app.kubernetes.io/name: victoria-metrics-operator
+  ingress:
+    - fromEntities:
+        - remote-node

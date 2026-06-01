@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: victoria-metrics-operator
 resources:
   - namespace.yaml
+  - network-policies.yaml
   - helm-repos.yaml
   - victoria-metrics-operator.yaml
 
@@ -13,4 +14,11 @@ patches:
     patch: |-
       - op: add
         path: "/spec/chart/spec/sourceRef/namespace"
+        value: victoria-metrics-operator
+  - target:
+      kind: CiliumNetworkPolicy
+      name: allow-victoria-metrics-operator
+    patch: |-
+      - op: add
+        path: "/spec/endpointSelector/matchLabels/k8s:io.kubernetes.pod.namespace"
         value: victoria-metrics-operator

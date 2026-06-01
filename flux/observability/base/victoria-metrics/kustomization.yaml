@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: victoria-metrics
 resources:
   - namespace.yaml
-  - network-policies.yaml
+  # - network-policies.yaml
   - victoria-metrics-k8s-stack.yaml
   - victoria-logs-agent.yaml
   - victoria-logs.yaml

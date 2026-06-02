@@ -82,10 +82,6 @@ resource "helm_release" "cilium" {
       value = "false"
     },
     {
-      name  = "cgroup.autoMount.enabled"
-      value = "false"
-    },
-    {
       name  = "cgroup.hostRoot"
       value = "/sys/fs/cgroup"
     },
@@ -111,6 +107,58 @@ resource "helm_release" "cilium" {
     },
     {
       name  = "operator.prometheus.enabled"
+      value = "true"
+    },
+    {
+      name  = "routingMode"
+      value = "native"
+    },
+    {
+      name  = "ipv4NativeRoutingCIDR"
+      value = "10.244.0.0/16"
+    },
+    {
+      name  = "autoDirectNodeRoutes"
+      value = "true"
+    },
+    {
+      name  = "bpf.dataPathMode"
+      value = "netkit"
+    },
+    {
+      name  = "bpf.masquerade"
+      value = "true"
+    },
+    {
+      name  = "bpf.distributedLRU.enabled"
+      value = "true"
+    },
+    {
+      name  = "bpf.mapDynamicSizeRatio"
+      value = "0.08"
+    },
+    {
+      name  = "ipv6.enabled"
+      value = "false"
+    },
+    {
+      name  = "ipv4.enabled"
+      value = "true"
+    },
+    {
+      name  = "enableIPv4BIGTCP"
+      value = "true"
+    },
+    {
+      name  = "bpfClockProbe"
+      value = "true"
+    },
+    {
+      name  = "bandwidthManager.enabled"
+      value = "true"
+    },
+    {
+      name  = "bandwidthManager.bbr"
       value = "true"
     },
     {

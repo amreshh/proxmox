@@ -18,7 +18,7 @@ kubernetes_extra_manifests = [
   "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.5.1/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml"
 ]
 
-cilium_version = "1.19.3"
+cilium_version = "1.19.4"
 
 flux_version = {
   version      = "2.18.3"

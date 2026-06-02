@@ -40,7 +40,7 @@ resource "talos_cluster_kubeconfig" "kubeconfig" {
 
 resource "helm_release" "cilium" {
   name            = "cilium"
-  repository      = "https://helm.cilium.io/"
+  repository      = "oci://quay.io/cilium/charts"
   version         = var.cilium_version
   chart           = "cilium"
   namespace       = "kube-system"

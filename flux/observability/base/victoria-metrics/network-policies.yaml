@@ -21,6 +21,8 @@ spec:
         - ports:
             - port: "443"
               protocol: TCP
+            - port: "8428"
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -65,8 +67,12 @@ spec:
       app.kubernetes.io/name: vmsingle
   ingress:
     - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: vmagent
+        - matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+                - vmagent
+                - grafana
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy

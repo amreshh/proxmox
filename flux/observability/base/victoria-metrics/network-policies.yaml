@@ -11,6 +11,8 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: vmagent
+    - fromEntities:
+        - ingress
   egress:
     - toFQDNs:
         - matchName: grafana.com

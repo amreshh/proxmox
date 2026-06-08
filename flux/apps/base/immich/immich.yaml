@@ -35,6 +35,11 @@ spec:
             concurrency: 10
           thumbnailGeneration:
             concurrency: 5
+        machineLearning:
+          facialRecognition:
+            modelName: antelopev2
+          clip:
+            modelName: ViT-SO400M-16-SigLIP2-384__webli
     server:
       controllers:
         main:

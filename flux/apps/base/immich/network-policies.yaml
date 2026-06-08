@@ -1,40 +1,75 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: allow-egress-todo
+  name: allow-immich-db
 spec:
-  description: allow imich machine learning to access huggingface.co and cas-bridge.xethub.hf.co
+  description: allow database ingress from immich server and cnpg
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: immich-db
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: cloudnative-pg
+            io.kubernetes.pod.namespace: cloudnative-pg
+        - matchLabels:
+            app.kubernetes.io/name: server
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-immich-server
+spec:
+  description: allow egress to database, valkey and machine-learning and ingress from gateway
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: server
+  ingress:
+    - fromEntities:
+        - ingress
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/component: database
+        - matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+                - valkey
+                - machine-learning
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP
+            - port: "6379"
+              protocol: TCP
+            - port: "3003"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-valkey
+spec:
+  description: allow ingress from immich server
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: valkey
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: server
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-immich-machine-learning
+spec:
+  description: allow ingress from immich server, and egress for models
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: machine-learning
-  egress:
-    - toFQDNs:
-        - matchName: huggingface.co
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: TCP
-    - toFQDNs:
-        - matchName: cas-bridge.xethub.hf.co
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: TCP
-    - toFQDNs:
-        - matchName: cas-server.xethub.hf.co
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: TCP
-    - toFQDNs:
-        - matchName: transfer.xethub.hf.co
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: TCP
-    - toFQDNs:
-        - matchName: modelscope.cn
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: TCP
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: server

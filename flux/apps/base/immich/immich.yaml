@@ -68,5 +68,11 @@ spec:
             main:
               env:
                 HF_HUB_OFFLINE: 1
+      persistence:
+        cache:
+          size: 20Gi
+          type: persistentVolumeClaim
+          accessMode: ReadWriteOnce
+          storageClass: retain
     valkey:
       enabled: true

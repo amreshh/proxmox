@@ -67,7 +67,12 @@ spec:
           containers:
             main:
               env:
-                HF_HUB_OFFLINE: 1
+                - name: HF_HUB_OFFLINE
+                  value: 1
+                - name: MACHINE_LEARNING_PRELOAD__CLIP
+                  value: ViT-SO400M-16-SigLIP2-384__webli
+                - name: MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION
+                  value: antelopev2
       persistence:
         cache:
           size: 20Gi

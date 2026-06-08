@@ -1,0 +1,11 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-cloudnative-pg
+  namespace: cloudnative-pg
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: cloudnative-pg
+  ingress:
+    - fromEntities: ["kube-apiserver"]

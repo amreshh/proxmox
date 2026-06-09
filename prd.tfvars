@@ -1,14 +1,14 @@
 talos = {
-  version      = "1.13.2"
-  iso          = "local:iso/talos_1.13.2.iso"
-  image        = "factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.13.2"
+  version      = "1.13.4"
+  iso          = "local:iso/talos_1.13.4.iso"
+  image        = "factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.13.4"
   vm_disk      = "/dev/nvme0n1"
   cluster_name = "prd"
   time_servers = ["192.168.10.1"]
   dns_servers  = ["192.168.10.1/32"]
 }
 
-kubernetes_version = "1.36.0"
+kubernetes_version = "1.36.1"
 kubernetes_extra_manifests = [
   "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.5.1/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml",
   "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.5.1/config/crd/standard/gateway.networking.k8s.io_gateways.yaml",
@@ -21,8 +21,8 @@ kubernetes_extra_manifests = [
 cilium_version = "1.19.4"
 
 flux_version = {
-  version      = "2.18.3"
-  sync_version = "1.14.5"
+  version      = "2.18.4"
+  sync_version = "1.14.6"
 }
 
 controlplanes = {

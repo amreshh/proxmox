@@ -4,6 +4,7 @@ namespace: kube-system
 resources:
   - helm-repos.yaml
   - metrics-server.yaml
+  - network-policies.yaml
 
 patches:
   - target:

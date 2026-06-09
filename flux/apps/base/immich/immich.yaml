@@ -17,31 +17,6 @@ spec:
         name: immich
       interval: 10m
   values:
-    controllers:
-      main:
-        containers:
-          main:
-            env:
-              DB_HOSTNAME:
-                valueFrom:
-                  secretKeyRef:
-                    name: immich-db
-                    key: host
-              DB_USERNAME:
-                valueFrom:
-                  secretKeyRef:
-                    name: immich-db
-                    key: username
-              DB_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: immich-db
-                    key: password
-              DB_DATABASE_NAME:
-                valueFrom:
-                  secretKeyRef:
-                    name: immich-db
-                    key: dbname
     immich:
       metrics:
         enabled: false # TODO: disabled metrics for now, since it relies on servicemonitor crds which are now not installed (was part of kube-prometheus-stack)
@@ -60,5 +35,54 @@ spec:
             concurrency: 10
           thumbnailGeneration:
             concurrency: 5
+        machineLearning:
+          facialRecognition:
+            modelName: antelopev2
+          clip:
+            modelName: ViT-SO400M-16-SigLIP2-384__webli
+    server:
+      controllers:
+        main:
+          containers:
+            main:
+              env:
+                DB_HOSTNAME:
+                  valueFrom:
+                    secretKeyRef:
+                      name: immich-db
+                      key: host
+                DB_USERNAME:
+                  valueFrom:
+                    secretKeyRef:
+                      name: immich-db
+                      key: username
+                DB_PASSWORD:
+                  valueFrom:
+                    secretKeyRef:
+                      name: immich-db
+                      key: password
+                DB_DATABASE_NAME:
+                  valueFrom:
+                    secretKeyRef:
+                      name: immich-db
+                      key: dbname
+    machine-learning:
+      controllers:
+        main:
+          containers:
+            main:
+              env:
+                - name: HF_HUB_OFFLINE
+                  value: 1
+                - name: MACHINE_LEARNING_PRELOAD__CLIP
+                  value: ViT-SO400M-16-SigLIP2-384__webli
+                - name: MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION
+                  value: antelopev2
+      persistence:
+        cache:
+          size: 20Gi
+          type: persistentVolumeClaim
+          accessMode: ReadWriteOnce
+          storageClass: retain
     valkey:
       enabled: true

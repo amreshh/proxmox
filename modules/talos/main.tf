@@ -40,7 +40,7 @@ resource "talos_cluster_kubeconfig" "kubeconfig" {
 
 resource "helm_release" "cilium" {
   name            = "cilium"
-  repository      = "https://helm.cilium.io/"
+  repository      = "oci://quay.io/cilium/charts"
   version         = var.cilium_version
   chart           = "cilium"
   namespace       = "kube-system"
@@ -48,13 +48,18 @@ resource "helm_release" "cilium" {
   cleanup_on_fail = true
   lint            = true
 
-  set = [{
-    name  = "ipam.mode"
-    value = "kubernetes"
+  set = [
+    {
+      name  = "ipam.mode"
+      value = "kubernetes"
     },
     {
       name  = "kubeProxyReplacement"
       value = "true"
+    },
+    {
+      name  = "policyEnforcementMode"
+      value = "always"
     },
     {
       name  = "k8sServiceHost"
@@ -71,10 +76,6 @@ resource "helm_release" "cilium" {
     {
       name  = "securityContext.capabilities.cleanCiliumState"
       value = "{NET_ADMIN,SYS_ADMIN,SYS_RESOURCE}"
-    },
-    {
-      name  = "cgroup.autoMount.enabled"
-      value = "false"
     },
     {
       name  = "cgroup.autoMount.enabled"
@@ -106,6 +107,58 @@ resource "helm_release" "cilium" {
     },
     {
       name  = "operator.prometheus.enabled"
+      value = "true"
+    },
+    {
+      name  = "routingMode"
+      value = "native"
+    },
+    {
+      name  = "ipv4NativeRoutingCIDR"
+      value = "10.244.0.0/16"
+    },
+    {
+      name  = "autoDirectNodeRoutes"
+      value = "true"
+    },
+    {
+      name  = "bpf.dataPathMode"
+      value = "netkit"
+    },
+    {
+      name  = "bpf.masquerade"
+      value = "true"
+    },
+    {
+      name  = "bpf.distributedLRU.enabled"
+      value = "true"
+    },
+    {
+      name  = "bpf.mapDynamicSizeRatio"
+      value = "0.08"
+    },
+    {
+      name  = "ipv6.enabled"
+      value = "false"
+    },
+    {
+      name  = "ipv4.enabled"
+      value = "true"
+    },
+    {
+      name  = "enableIPv4BIGTCP"
+      value = "true"
+    },
+    {
+      name  = "bpfClockProbe"
+      value = "true"
+    },
+    {
+      name  = "bandwidthManager.enabled"
+      value = "true"
+    },
+    {
+      name  = "bandwidthManager.bbr"
       value = "true"
     },
     {
@@ -141,21 +194,26 @@ resource "helm_release" "cilium" {
     }
   ]
 
-  # depends_on = [
-  #   data.http.kubernetes_health
-  # ]
+  depends_on = [
+    data.talos_cluster_health.talos_cluster_health
+  ]
+}
+
+resource "kubernetes_namespace_v1" "flux_system" {
+  metadata {
+    name = "flux-system"
+  }
 }
 
 resource "helm_release" "flux2" {
-  repository       = "https://fluxcd-community.github.io/helm-charts"
-  chart            = "flux2"
-  version          = var.flux_version.version
-  name             = "flux2"
-  namespace        = "flux-system"
-  create_namespace = true
-  atomic           = true
-  cleanup_on_fail  = true
-  lint             = true
+  repository      = "https://fluxcd-community.github.io/helm-charts"
+  chart           = "flux2"
+  version         = var.flux_version.version
+  name            = "flux2"
+  namespace       = kubernetes_namespace_v1.flux_system.metadata[0].name
+  atomic          = true
+  cleanup_on_fail = true
+  lint            = true
 
   set = [
     { name  = "imageReflectionController.create"
@@ -204,7 +262,7 @@ resource "helm_release" "flux2" {
 resource "kubernetes_secret_v1" "github_token" {
   metadata {
     name      = "github-token"
-    namespace = helm_release.flux2.namespace
+    namespace = kubernetes_namespace_v1.flux_system.metadata[0].name
   }
   data = {
     username = "fluxcd"
@@ -218,7 +276,7 @@ resource "helm_release" "flux2_sync" {
   chart           = "flux2-sync"
   version         = var.flux_version.sync_version
   name            = "flux-system"
-  namespace       = helm_release.flux2.namespace
+  namespace       = kubernetes_namespace_v1.flux_system.metadata[0].name
   atomic          = true
   cleanup_on_fail = true
   lint            = true
@@ -250,12 +308,260 @@ resource "helm_release" "flux2_sync" {
 resource "kubernetes_secret_v1" "age_key" {
   metadata {
     name      = "age-key"
-    namespace = helm_release.flux2.namespace
+    namespace = kubernetes_namespace_v1.flux_system.metadata[0].name
   }
   data = {
     "age.agekey" = var.age_key
   }
   type = "Opaque"
+}
+
+resource "kubectl_manifest" "clusterwide_network_policy_allow_health_checks" {
+  yaml_body = yamlencode({
+    apiVersion = "cilium.io/v2"
+    kind       = "CiliumClusterwideNetworkPolicy"
+    metadata = {
+      name = "allow-cilium-health-checks"
+    }
+    spec = {
+      endpointSelector = {
+        matchLabels = {
+          "reserved:health" = ""
+        }
+      }
+      ingress = [
+        {
+          fromEntities = ["remote-node"]
+        }
+      ]
+      egress = [
+        {
+          toEntities = ["remote-node"]
+        }
+      ]
+    }
+  })
+}
+
+resource "kubectl_manifest" "clusterwide_network_policy_allow_dns" {
+  yaml_body = yamlencode({
+    apiVersion = "cilium.io/v2"
+    kind       = "CiliumClusterwideNetworkPolicy"
+    metadata = {
+      name = "allow-dns"
+    }
+    spec = {
+      description = "allow coredns to receive dns ingress requests and egress to talos upstream dns and kube-apiserver"
+      endpointSelector = {
+        matchLabels = {
+          "k8s:io.kubernetes.pod.namespace" = "kube-system"
+          "k8s:k8s-app"                     = "kube-dns"
+        }
+      }
+      ingress = [
+        {
+          fromEndpoints = [
+            {
+              matchLabels = {}
+            }
+          ]
+          toPorts = [
+            {
+              ports = [
+                {
+                  port     = "53"
+                  protocol = "UDP"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+      egress = [
+        {
+          toEntities = ["kube-apiserver"]
+          toPorts = [
+            {
+              ports = [
+                {
+                  port     = "6443"
+                  protocol = "TCP"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          toCIDR = var.talos.dns_servers
+          toPorts = [
+            {
+              ports = [
+                {
+                  port     = "53"
+                  protocol = "UDP"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  })
+}
+
+resource "kubectl_manifest" "clusterwide_network_policy_allow_egress_dns" {
+  yaml_body = yamlencode({
+    apiVersion = "cilium.io/v2"
+    kind       = "CiliumClusterwideNetworkPolicy"
+    metadata = {
+      name = "allow-egress-to-kube-dns"
+    }
+    spec = {
+      description      = "allow dns egress for all pods"
+      endpointSelector = {}
+      egress = [
+        {
+          toEndpoints = [
+            {
+              matchLabels = {
+                "k8s:io.kubernetes.pod.namespace" = "kube-system"
+                "k8s:k8s-app"                     = "kube-dns"
+
+              }
+            }
+          ]
+          toPorts = [
+            {
+              ports = [
+                {
+                  port     = "53"
+                  protocol = "UDP"
+                }
+              ]
+              rules = {
+                dns = [
+                  {
+                    matchPattern = "*"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  })
+}
+
+resource "kubectl_manifest" "network_policy_allow_gitops_repo" {
+  yaml_body = yamlencode({
+    apiVersion = "cilium.io/v2"
+    kind       = "CiliumNetworkPolicy"
+    metadata = {
+      name      = "allow-egress-to-gitops-repo"
+      namespace = kubernetes_namespace_v1.flux_system.metadata[0].name
+    }
+    spec = {
+      description = "allow egress to gitops repo"
+      endpointSelector = {
+        matchLabels = {
+          "k8s:io.kubernetes.pod.namespace" = kubernetes_namespace_v1.flux_system.metadata[0].name
+          "k8s:app"                         = "source-controller"
+        }
+      }
+      egress = [
+        {
+          toFQDNs = [
+            { matchName = "github.com" }
+          ]
+          toPorts = [
+            {
+              ports = [
+                {
+                  port = "443"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  })
+}
+
+resource "kubectl_manifest" "network_policy_allow_flux" {
+  yaml_body = yamlencode({
+    apiVersion = "cilium.io/v2"
+    kind       = "CiliumNetworkPolicy"
+    metadata = {
+      name      = "allow-flux-internal-kube-apiserver"
+      namespace = kubernetes_namespace_v1.flux_system.metadata[0].name
+    }
+    spec = {
+      description      = "allow flux pods to access each other and kube-apiserver"
+      endpointSelector = {}
+      ingress = [
+        {
+          fromEndpoints = [
+            {
+              matchLabels = {
+                "k8s:io.kubernetes.pod.namespace" = kubernetes_namespace_v1.flux_system.metadata[0].name
+              }
+              matchExpressions = [
+                {
+                  key      = "k8s:app"
+                  operator = "In"
+                  values = [
+                    "source-controller",
+                    "kustomize-controller",
+                    "notification-controller",
+                    "helm-controller"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+      egress = [
+        {
+          toEndpoints = [
+            {
+              matchLabels = {
+                "k8s:io.kubernetes.pod.namespace" = kubernetes_namespace_v1.flux_system.metadata[0].name
+              }
+              matchExpressions = [
+                {
+                  key      = "k8s:app"
+                  operator = "In"
+                  values = [
+                    "source-controller",
+                    "kustomize-controller",
+                    "notification-controller",
+                    "helm-controller"
+                  ]
+                }
+              ]
+
+            }
+          ]
+        },
+        {
+          toEntities = ["kube-apiserver"]
+          toPorts = [
+            {
+              ports = [
+                {
+                  port     = "6443"
+                  protocol = "TCP"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  })
 }
 
 resource "local_sensitive_file" "kubeconfig_file" {

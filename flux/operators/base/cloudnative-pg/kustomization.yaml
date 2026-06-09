@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: cloudnative-pg
 resources:
   - namespace.yaml
+  - network-policies.yaml
   - helm-repos.yaml
   - cloudnative-pg.yaml
 

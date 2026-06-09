@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: filebrowser
 resources:
   - namespace.yaml
+  - network-policies.yaml
   - pvc.yaml
   - filebrowser.yaml
   - services.yaml

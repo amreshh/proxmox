@@ -9,7 +9,7 @@ locals {
         hostDNS = {
           enabled              = true
           resolveMemberNames   = true
-          forwardKubeDNSToHost = true
+          forwardKubeDNSToHost = false # https://github.com/siderolabs/talos/issues/10002
         }
       }
       certSANs = [

@@ -2,8 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: kube-system
 resources:
+  - network-policies.yaml
   - helm-repos.yaml
-  - cilium-network-policy.yaml
   - democratic-csi.yaml
 
 patches:
@@ -13,11 +13,4 @@ patches:
     patch: |-
       - op: add
         path: "/spec/chart/spec/sourceRef/namespace"
-        value: kube-system
-  - target:
-      kind: CiliumNetworkPolicy
-      name: allow-democratic-csi
-    patch: |-
-      - op: add
-        path: "/metadata/namespace"
         value: kube-system

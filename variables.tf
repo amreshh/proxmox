@@ -6,6 +6,7 @@ variable "talos" {
     vm_disk      = string
     cluster_name = string
     time_servers = list(string)
+    dns_servers  = list(string)
   })
 }
 

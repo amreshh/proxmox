@@ -1,0 +1,19 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-cloudnative-pg
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: cloudnative-pg
+  ingress:
+    - fromEntities: ["kube-apiserver"]
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: immich-db
+            io.kubernetes.pod.namespace: immich
+      toPorts:
+        - ports:
+            - port: "8000"
+              protocol: TCP

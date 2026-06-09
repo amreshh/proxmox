@@ -35,24 +35,17 @@ data "talos_client_configuration" "talosconfig" {
   ]
 }
 
-# data "http" "kubernetes_health" {
-#   url      = "https://${var.controlplanes.controlplane1.ip_addr}:6443/healthz"
-#   method   = "GET"
-#   insecure = true
-#   # open PR: https://github.com/hashicorp/terraform-provider-http/pull/211
-#   # ca_cert_pem = base64decode(talos_machine_secrets.machine_secrets.client_configuration.ca_certificate)
-#   # client_cert_pem = base64decode(talos_machine_secrets.machine_secrets.client_configuration.client_certificate)
-#   # client_key_pem  = base64decode(talos_machine_secrets.machine_secrets.client_configuration.client_key)
-#   request_headers = {
-#     Accept = "application/json"
-#   }
-#   retry {
-#     attempts = 20
-#   }
-#   lifecycle {
-#     postcondition {
-#       condition     = contains([200, 401], self.status_code)
-#       error_message = "status code invalid"
-#     }
-#   }
-# }
+data "talos_cluster_health" "talos_cluster_health" {
+  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
+  control_plane_nodes = [
+    for k, v in var.controlplanes : v.ip_addr
+  ]
+  worker_nodes = [
+    for k, v in var.workers : v.ip_addr
+  ]
+  endpoints = [var.controlplanes.controlplane1.ip_addr]
+
+  timeouts = {
+    read = "10m"
+  }
+}

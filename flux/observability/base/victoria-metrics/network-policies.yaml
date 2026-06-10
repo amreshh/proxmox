@@ -23,6 +23,8 @@ spec:
               protocol: TCP
             - port: "8428"
               protocol: TCP
+            - port: "9428"
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -91,6 +93,7 @@ spec:
               values:
                 - vmagent
                 - vlagent
+                - grafana
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy

@@ -8,6 +8,7 @@ resources:
   - victoria-logs-agent.yaml
   - victoria-logs.yaml
   - routes.yaml
+  - scrape-configs.yaml
 
 patches:
   - target:

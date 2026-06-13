@@ -183,14 +183,20 @@ resource "helm_release" "cilium" {
     {
       name = "hubble.metrics.enabled"
       value = [
-        "dns",
-        "drop",
+        "flow:sourceContext=workload-name|reserved-identity;destinationContext=workload-name|reserved-identity",
         "tcp",
-        "httpV2",
-        "icmp",
-        "port-distribution",
-        "flow:sourceContext=workload|dns|ip;destinationContext=workload|dns|ip",
+        "drop",
+        "httpV2:sourceContext=workload-name;destinationContext=workload-name"
       ]
+      # value = [
+      #   "dns",
+      #   "drop",
+      #   "tcp",
+      #   "httpV2",
+      #   "icmp",
+      #   "port-distribution",
+      #   "flow:sourceContext=workload|dns|ip;destinationContext=workload|dns|ip",
+      # ]
     }
   ]
 

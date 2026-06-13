@@ -12,3 +12,19 @@ spec:
   endpoints:
     - port: hubble-metrics
       path: /metrics
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: immich-db
+spec:
+  selector:
+    matchLabels:
+      cnpg.io/cluster: immich-db
+  namespaceSelector:
+    matchNames:
+      - immich
+  podMetricsEndpoints:
+    - port: metrics
+      path: /metrics
+

@@ -6,7 +6,7 @@ spec:
   description: allow database ingress from immich server and cnpg
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/instance: immich-db
+      cnpg.io/cluster: immich-db
   ingress:
     - fromEndpoints:
         - matchLabels:

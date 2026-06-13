@@ -9,11 +9,19 @@ spec:
       cnpg.io/cluster: immich-db
   ingress:
     - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: cloudnative-pg
-            io.kubernetes.pod.namespace: cloudnative-pg
-        - matchLabels:
-            app.kubernetes.io/name: server
+        - matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+                - cloudnative-pg
+                - server
+                - vmagent
+        - matchExpressions:
+            - key: io.kubernetes.pod.namespace
+              operator: In
+              values:
+                - cloudnative-pg
+                - victoria-metrics
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy

@@ -18,3 +18,12 @@ patches:
       - op: add
         path: "/spec/chart/spec/sourceRef/namespace"
         value: victoria-metrics-operator
+
+configMapGenerator:
+  - name: cnpg-grafana-dashboard
+    files:
+      - cnpg-grafana-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+      disableNameSuffixHash: true

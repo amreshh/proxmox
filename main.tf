@@ -7,15 +7,15 @@
 
 module "talos" {
   source                     = "./modules/talos"
-  talos                      = var.talos
+  talos                      = local.env.talos
   github_token               = var.github_token
   age_key                    = var.age_key
-  kubernetes_version         = var.kubernetes_version
-  kubernetes_extra_manifests = var.kubernetes_extra_manifests
-  cilium_version             = var.cilium_version
-  flux_version               = var.flux_version
-  controlplanes              = var.controlplanes
-  workers                    = var.workers
+  kubernetes_version         = local.env.kubernetes_version
+  kubernetes_extra_manifests = local.env.kubernetes_extra_manifests
+  cilium_version             = local.env.cilium_version
+  flux_version               = local.env.flux_version
+  controlplanes              = local.env.controlplanes
+  workers                    = local.env.workers
 
   # depends_on = [
   #   module.proxmox

@@ -39,7 +39,7 @@ terraform {
 
 provider "helm" {
   kubernetes = {
-    host                   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
+    host                   = "https://${local.env.controlplanes.controlplane1.ip_addr}:6443"
     cluster_ca_certificate = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.ca_certificate)
     client_certificate     = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_certificate)
     client_key             = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_key)
@@ -47,14 +47,14 @@ provider "helm" {
 }
 
 provider "kubernetes" {
-  host                   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
+  host                   = "https://${local.env.controlplanes.controlplane1.ip_addr}:6443"
   cluster_ca_certificate = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.ca_certificate)
   client_certificate     = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_certificate)
   client_key             = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_key)
 }
 
 provider "kubectl" {
-  host                   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
+  host                   = "https://${local.env.controlplanes.controlplane1.ip_addr}:6443"
   cluster_ca_certificate = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.ca_certificate)
   client_certificate     = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_certificate)
   client_key             = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_key)
@@ -63,7 +63,7 @@ provider "kubectl" {
 
 provider "flux" {
   kubernetes = {
-    host                   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
+    host                   = "https://${local.env.controlplanes.controlplane1.ip_addr}:6443"
     cluster_ca_certificate = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.ca_certificate)
     client_certificate     = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_certificate)
     client_key             = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_key)

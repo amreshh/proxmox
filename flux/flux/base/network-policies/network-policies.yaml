@@ -28,10 +28,10 @@ spec:
   endpointSelector:
     matchLabels:
       app: helm-controller
-    egress:
-      - toFQDNs:
-          - matchName: raw.githubusercontent.com
-        toPorts:
-          - ports:
-              - port: "443"
-                protocol: TCP
+  egress:
+    - toFQDNs:
+        - matchName: raw.githubusercontent.com
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

@@ -7,9 +7,7 @@ data "talos_machine_configuration" "controlplanes" {
   kubernetes_version = var.kubernetes_version
   examples           = false
   docs               = false
-  config_patches = [
-    yamlencode(local.common_machine_config)
-  ]
+  config_patches     = concat(local.common_patches, local.controlplane_patches)
 }
 
 data "talos_machine_configuration" "workers" {
@@ -21,9 +19,7 @@ data "talos_machine_configuration" "workers" {
   kubernetes_version = var.kubernetes_version
   examples           = false
   docs               = false
-  config_patches = [
-    yamlencode(local.common_machine_config)
-  ]
+  config_patches     = local.common_patches
 }
 
 data "talos_client_configuration" "talosconfig" {

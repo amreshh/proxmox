@@ -1,15 +1,3 @@
-variable "talos" {
-  type = object({
-    version      = string
-    iso          = string
-    image        = string
-    vm_disk      = string
-    cluster_name = string
-    time_servers = list(string)
-    dns_servers  = list(string)
-  })
-}
-
 variable "github_token" {
   type        = string
   description = "GitHub token"
@@ -20,50 +8,4 @@ variable "age_key" {
   type        = string
   description = "Encryption key for secrets"
   sensitive   = true
-}
-
-variable "kubernetes_version" {
-  type        = string
-  description = "Kubernetes version to provision"
-}
-
-variable "kubernetes_extra_manifests" {
-  type        = list(string)
-  description = "Extra kubernetes manifest to apply"
-}
-
-variable "cilium_version" {
-  type        = string
-  description = "Cilium version to provision"
-}
-
-variable "flux_version" {
-  type = object({
-    version      = string
-    sync_version = string
-  })
-}
-
-variable "controlplanes" {
-  type = map(object({
-    name      = string
-    vm_id     = number
-    memory    = number
-    cores     = number
-    disk_size = number
-    mac_addr  = string
-    ip_addr   = string
-  }))
-}
-
-variable "workers" {
-  type = map(object({
-    name      = string
-    vm_id     = number
-    memory    = number
-    cores     = number
-    disk_size = number
-    mac_addr  = string
-    ip_addr   = string
-  }))
 }

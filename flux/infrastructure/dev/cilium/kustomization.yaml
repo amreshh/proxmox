@@ -23,7 +23,7 @@ patches:
         path: "/spec"
         value:
           blocks:
-            - cidr: 192.168.122.30/32
+            - cidr: 10.10.10.30/32
   - target:
       kind: Gateway
       name: default-gateway

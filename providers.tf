@@ -4,19 +4,19 @@ terraform {
   required_providers {
     proxmox = {
       source  = "bpg/proxmox"
-      version = "0.109.0"
+      version = "0.116.0"
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "0.11.0"
+      version = "0.12.0"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "3.2.0"
+      version = "3.3.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "3.2.0"
+      version = "3.3.0"
     }
     kubectl = {
       source  = "gavinbunney/kubectl"
@@ -24,22 +24,22 @@ terraform {
     }
     flux = {
       source  = "fluxcd/flux"
-      version = "1.8.8"
+      version = "1.9.6"
     }
     http = {
       source  = "hashicorp/http"
-      version = "3.6.0"
+      version = "3.6.2"
     }
     local = {
       source  = "hashicorp/local"
-      version = "2.9.0"
+      version = "2.9.1"
     }
   }
 }
 
 provider "helm" {
   kubernetes = {
-    host                   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
+    host                   = "https://${local.env.controlplanes.controlplane1.ip_addr}:6443"
     cluster_ca_certificate = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.ca_certificate)
     client_certificate     = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_certificate)
     client_key             = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_key)
@@ -47,14 +47,14 @@ provider "helm" {
 }
 
 provider "kubernetes" {
-  host                   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
+  host                   = "https://${local.env.controlplanes.controlplane1.ip_addr}:6443"
   cluster_ca_certificate = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.ca_certificate)
   client_certificate     = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_certificate)
   client_key             = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_key)
 }
 
 provider "kubectl" {
-  host                   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
+  host                   = "https://${local.env.controlplanes.controlplane1.ip_addr}:6443"
   cluster_ca_certificate = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.ca_certificate)
   client_certificate     = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_certificate)
   client_key             = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_key)
@@ -63,7 +63,7 @@ provider "kubectl" {
 
 provider "flux" {
   kubernetes = {
-    host                   = "https://${var.controlplanes.controlplane1.ip_addr}:6443"
+    host                   = "https://${local.env.controlplanes.controlplane1.ip_addr}:6443"
     cluster_ca_certificate = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.ca_certificate)
     client_certificate     = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_certificate)
     client_key             = base64decode(module.talos.kubeconfig.kubernetes_client_configuration.client_key)

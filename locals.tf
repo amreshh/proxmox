@@ -1,0 +1,112 @@
+locals {
+  settings = {
+    dev = {
+      talos = {
+        version      = "1.14.2"
+        iso          = "local:iso/talos_1.14.2.iso"
+        image        = "factory.talos.dev/metal-installer/9ed5fecdacb36b5c5427b87d409f1065cfb2df69b0f71c58b868d9d466d8dab3:v1.14.2"
+        vm_disk      = "/dev/nvme0n1"
+        cluster_name = "dev"
+        time_servers = ["10.10.10.1"]
+        dns_servers  = ["10.10.10.1/32"]
+      }
+      kubernetes_version = "1.37.1"
+      kubernetes_extra_manifests = [
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_gateways.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_httproutes.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_referencegrants.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_grpcroutes.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_tlsroutes.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_backendtlspolicies.yaml"
+      ]
+      cilium_version = "1.20.2"
+      flux_version = {
+        version      = "2.19.1"
+        sync_version = "1.15.1"
+      }
+      controlplanes = {
+        controlplane1 = {
+          name      = "k8s-controlplane-1"
+          vm_id     = 100
+          memory    = 8192
+          cores     = 2
+          disk_size = 50
+          mac_addr  = "52:54:00:62:d5:d2"
+          ip_addr   = "10.10.10.20"
+        }
+      }
+      workers = {
+        worker1 = {
+          name      = "k8s-worker-1"
+          vm_id     = 101
+          memory    = 16384
+          cores     = 4
+          disk_size = 100
+          mac_addr  = "52:54:00:04:51:28"
+          ip_addr   = "10.10.10.21"
+        }
+      }
+    }
+
+    prd = {
+      talos = {
+        version      = "1.14.2"
+        iso          = "local:iso/talos_1.14.2.iso"
+        image        = "factory.talos.dev/metal-installer/9ed5fecdacb36b5c5427b87d409f1065cfb2df69b0f71c58b868d9d466d8dab3:v1.14.2"
+        vm_disk      = "/dev/nvme0n1"
+        cluster_name = "prd"
+        time_servers = ["192.168.10.1"]
+        dns_servers  = ["192.168.10.1/32"]
+      }
+      kubernetes_version = "1.37.1"
+      kubernetes_extra_manifests = [
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_gateways.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_httproutes.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_referencegrants.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_grpcroutes.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_tlsroutes.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_backendtlspolicies.yaml"
+      ]
+      cilium_version = "1.20.2"
+      flux_version = {
+        version      = "2.19.1"
+        sync_version = "1.15.1"
+      }
+      controlplanes = {
+        controlplane1 = {
+          name      = "k8s-controlplane-1"
+          vm_id     = 101
+          memory    = 8192
+          cores     = 2
+          disk_size = 100
+          mac_addr  = "02:00:00:00:00:01"
+          ip_addr   = "192.168.10.20"
+        }
+      }
+      workers = {
+        worker1 = {
+          name      = "k8s-worker-1"
+          vm_id     = 102
+          memory    = 16384
+          cores     = 4
+          disk_size = 100
+          mac_addr  = "02:00:00:00:00:02"
+          ip_addr   = "192.168.10.21"
+        }
+        worker2 = {
+          name      = "k8s-worker-2"
+          vm_id     = 103
+          memory    = 16384
+          cores     = 4
+          disk_size = 100
+          mac_addr  = "02:00:00:00:00:03"
+          ip_addr   = "192.168.10.22"
+        }
+      }
+    }
+  }
+
+  env = local.settings[terraform.workspace]
+}

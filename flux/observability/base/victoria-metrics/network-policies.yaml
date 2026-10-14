@@ -64,6 +64,23 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
+  name: allow victoria-metrics-k8s-stack
+spec:
+  description: allow victoria-metrics-k8s-stack egress
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: victoria-metrics-k8s-stack
+  egress:
+    - toFQDNs:
+        - matchName: raw.githubusercontent.com
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
   name: allow-vmsingle
 spec:
   description: allow vmsingle ingress

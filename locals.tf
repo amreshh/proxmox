@@ -2,27 +2,28 @@ locals {
   settings = {
     dev = {
       talos = {
-        version      = "1.13.9"
-        iso          = "local:iso/talos_1.13.9.iso"
-        image        = "factory.talos.dev/metal-installer/9ed5fecdacb36b5c5427b87d409f1065cfb2df69b0f71c58b868d9d466d8dab3:v1.13.9"
+        version      = "1.14.2"
+        iso          = "local:iso/talos_1.14.2.iso"
+        image        = "factory.talos.dev/metal-installer/9ed5fecdacb36b5c5427b87d409f1065cfb2df69b0f71c58b868d9d466d8dab3:v1.14.2"
         vm_disk      = "/dev/nvme0n1"
         cluster_name = "dev"
         time_servers = ["10.10.10.1"]
         dns_servers  = ["10.10.10.1/32"]
       }
-      kubernetes_version = "1.36.2"
+      kubernetes_version = "1.37.1"
       kubernetes_extra_manifests = [
-        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.1/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml",
-        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.1/config/crd/standard/gateway.networking.k8s.io_gateways.yaml",
-        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.1/config/crd/standard/gateway.networking.k8s.io_httproutes.yaml",
-        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.1/config/crd/standard/gateway.networking.k8s.io_referencegrants.yaml",
-        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.1/config/crd/standard/gateway.networking.k8s.io_grpcroutes.yaml",
-        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.1/config/crd/standard/gateway.networking.k8s.io_tlsroutes.yaml"
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_gateways.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_httproutes.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_referencegrants.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_grpcroutes.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_tlsroutes.yaml",
+        "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_backendtlspolicies.yaml"
       ]
-      cilium_version = "1.20.1"
+      cilium_version = "1.20.2"
       flux_version = {
-        version      = "2.19.0"
-        sync_version = "1.15.0"
+        version      = "2.19.1"
+        sync_version = "1.15.1"
       }
       controlplanes = {
         controlplane1 = {

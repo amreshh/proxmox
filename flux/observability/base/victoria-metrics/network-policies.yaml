@@ -64,7 +64,7 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: allow victoria-metrics-k8s-stack
+  name: allow-victoria-metrics-k8s-stack
 spec:
   description: allow victoria-metrics-k8s-stack egress
   endpointSelector:

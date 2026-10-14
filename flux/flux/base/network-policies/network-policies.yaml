@@ -18,3 +18,20 @@ spec:
         - ports:
             - port: "443"
               protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-egress-helm-controller-to-raw-githubusercontent
+spec:
+  description: allow helm controller to access raw.githubusercontent.com
+  endpointSelector:
+    matchLabels:
+      app: helm-controller
+    egress:
+      - toFQDNs:
+          - matchName: raw.githubusercontent.com
+        toPorts:
+          - ports:
+              - port: "443"
+                protocol: TCP

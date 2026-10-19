@@ -73,7 +73,7 @@ locals {
         "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_tlsroutes.yaml",
         "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_backendtlspolicies.yaml"
       ]
-      cilium_version = "1.20.2"
+      cilium_version = "1.20.3"
       flux_version = {
         version      = "2.19.1"
         sync_version = "1.15.1"

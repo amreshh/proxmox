@@ -69,6 +69,7 @@ spec:
     machine-learning:
       controllers:
         main:
+          strategy: Recreate
           containers:
             main:
               env:

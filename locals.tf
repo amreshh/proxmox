@@ -23,6 +23,7 @@ locals {
         "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_tlsroutes.yaml",
         "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_backendtlspolicies.yaml"
       ]
+      # renovate: datasource=docker depName=quay.io/cilium/charts/cilium
       cilium_version = "1.20.2"
       flux_version = {
         version      = "2.19.1"

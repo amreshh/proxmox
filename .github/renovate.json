@@ -1,19 +1,26 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
+  "extends": ["config:recommended"],
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "Renovate Dashboard",
-  "labels": [
-    "renovatebot"
-  ],
-  "baseBranchPatterns": [
-    "dev"
-  ],
+  "labels": ["renovatebot"],
+  "baseBranchPatterns": ["dev"],
   "flux": {
-    "managerFilePatterns": [
-      "/flux/.+\\.ya?ml$/"
-    ]
-  }
+    "managerFilePatterns": ["/flux/.+\\.ya?ml$/"]
+  },
+  "packageRules": [
+    {
+      "description": "Track OpenTofu (not Terraform) for required_version and bump the range",
+      "matchManagers": ["terraform"],
+      "matchDepTypes": ["required_version"],
+      "overridePackageName": "opentofu/opentofu",
+      "overrideDepName": "opentofu",
+      "rangeStrategy": "bump"
+    },
+    {
+      "description": "Look up providers and modules in the OpenTofu registry",
+      "matchDatasources": ["terraform-provider", "terraform-module"],
+      "registryUrls": ["https://registry.opentofu.org"]
+    }
+  ]
 }

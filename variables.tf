@@ -9,3 +9,8 @@ variable "age_key" {
   description = "Encryption key for secrets"
   sensitive   = true
 }
+
+variable "state_passphrase" {
+  type      = string
+  sensitive = true
+}

@@ -1,10 +1,9 @@
-terraform {
   required_version = "~>1.12"
 
   required_providers {
     proxmox = {
       source  = "bpg/proxmox"
-      version = "0.116.1"
+      version = "0.117.0"
     }
     talos = {
       source  = "siderolabs/talos"
@@ -33,6 +32,23 @@ terraform {
     local = {
       source  = "hashicorp/local"
       version = "2.9.1"
+    }
+  }
+
+  encryption {
+    key_provider "pbkdf2" "passphrase" {
+      passphrase = var.state_passphrase
+    }
+    method "aes_gcm" "default" {
+      keys = key_provider.pbkdf2.passphrase
+    }
+    state {
+      method   = method.aes_gcm.default
+      enforced = true
+    }
+    plan {
+      method   = method.aes_gcm.default
+      enforced = true
     }
   }
 }

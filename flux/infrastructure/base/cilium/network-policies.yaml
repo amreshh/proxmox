@@ -2,13 +2,20 @@
 apiVersion: cilium.io/v2
 kind: CiliumClusterwideNetworkPolicy
 metadata:
-  name: allow-ingress
+  name: allow-gateway-ingress
 spec:
-  description: allow ingress from outside the cluster
-  endpointSelector: {}
+  description: allow external traffic through only the gateway
+  endpointSelector:
+    matchExpressions:
+      - key: reserved:ingress
+        operator: Exists
   ingress:
     - fromEntities:
         - world
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
   egress:
     - toEntities:
         - cluster

@@ -6,16 +6,6 @@ resources:
 
 patches:
   - target:
-      kind: CiliumCIDRGroup
-      name: talos-dns
-    patch: |-
-      - op: add
-        path: "/spec"
-        value:
-          externalCIDRs:
-            - 169.254.116.108/32
-            - 192.168.122.1/32
-  - target:
       kind: CiliumLoadBalancerIPPool
       name: default-lb-ip-pool
     patch: |-

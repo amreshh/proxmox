@@ -3,7 +3,7 @@ kind: CiliumNetworkPolicy
 metadata:
   name: allow-grafana
 spec:
-  description: allow grafana ingress from agents and egress for plugins
+  description: allow grafana ingress from agents and gateway, egress to datasources, plugins and kube-apiserver
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: grafana
@@ -21,9 +21,25 @@ spec:
         - ports:
             - port: "443"
               protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vmsingle
+      toPorts:
+        - ports:
             - port: "8428"
               protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vlsingle
+      toPorts:
+        - ports:
             - port: "9428"
+              protocol: TCP
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
               protocol: TCP
 ---
 apiVersion: cilium.io/v2
@@ -35,6 +51,15 @@ spec:
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: vmagent
+  ingress:
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "8429"
+              protocol: TCP
+            - port: "8435"
+              protocol: TCP
   egress:
     - toEndpoints:
         - matchExpressions:
@@ -59,6 +84,28 @@ spec:
             - port: "9153"
               protocol: TCP
             - port: "9187"
+              protocol: TCP
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP
+    - toEntities:
+        - host
+        - remote-node
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "10250"
+              protocol: TCP
+            - port: "9100"
+              protocol: TCP
+            - port: "9965"
+              protocol: TCP
+            - port: "10257"
+              protocol: TCP
+            - port: "10259"
               protocol: TCP
 ---
 apiVersion: cilium.io/v2
@@ -136,13 +183,19 @@ spec:
         - ports:
             - port: "9428"
               protocol: TCP
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: allow-kube-state-metrics
 spec:
-  description: allow kube-state-metrics ingress
+  description: allow kube-state-metrics ingress from vmagent and egress to kube-apiserver
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: kube-state-metrics
@@ -150,6 +203,13 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: vmagent
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumClusterwideNetworkPolicy

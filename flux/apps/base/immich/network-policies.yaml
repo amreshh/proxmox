@@ -9,19 +9,37 @@ spec:
       cnpg.io/cluster: immich-db
   ingress:
     - fromEndpoints:
-        - matchExpressions:
-            - key: app.kubernetes.io/name
-              operator: In
-              values:
-                - cloudnative-pg
-                - server
-                - vmagent
-        - matchExpressions:
-            - key: io.kubernetes.pod.namespace
-              operator: In
-              values:
-                - cloudnative-pg
-                - victoria-metrics
+        - matchLabels:
+            app.kubernetes.io/name: server
+        - matchLabels:
+            cnpg.io/cluster: immich-db
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: cloudnative-pg
+            app.kubernetes.io/name: cloudnative-pg
+      toPorts:
+        - ports:
+            - port: "8000"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: victoria-metrics
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "9187"
+              protocol: TCP
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy

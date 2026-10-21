@@ -35,6 +35,13 @@ spec:
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: vmagent
+  ingress:
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "8435"
+              protocol: TCP
   egress:
     - toEndpoints:
         - matchExpressions:

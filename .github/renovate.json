@@ -17,15 +17,30 @@
         "#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)\\s+\\w+\\s*=\\s*\"[^\"\\n]*?(?<currentValue>\\d+\\.\\d+\\.\\d+)[^\"\\n]*\""
       ],
       "extractVersionTemplate": "^v?(?<version>.*)$"
+    },
+    {
+      "customType": "regex",
+      "description": "OpenTofu version in terraform required_version",
+      "managerFilePatterns": ["/\\.tf$/"],
+      "matchStrings": ["required_version\\s*=\\s*\"(?<currentValue>[^\"]+)\""],
+      "depNameTemplate": "opentofu",
+      "packageNameTemplate": "opentofu/opentofu",
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "hashicorp",
+      "extractVersionTemplate": "^v(?<version>.*)$"
     }
   ],
   "packageRules": [
     {
-      "description": "Track OpenTofu (not Terraform) for required_version and bump the range",
+      "description": "required_version is handled by the OpenTofu custom manager, not the built-in one (which tracks hashicorp/terraform)",
       "matchManagers": ["terraform"],
       "matchDepTypes": ["required_version"],
-      "overridePackageName": "opentofu/opentofu",
-      "overrideDepName": "opentofu",
+      "enabled": false
+    },
+    {
+      "description": "Bump the OpenTofu required_version range",
+      "matchManagers": ["custom.regex"],
+      "matchDepNames": ["opentofu"],
       "rangeStrategy": "bump"
     },
     {

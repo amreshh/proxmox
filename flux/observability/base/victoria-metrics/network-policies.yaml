@@ -14,11 +14,15 @@ spec:
     - fromEntities:
         - ingress
   egress:
+    - toEntities:
+        - kube-apiserver
     - toFQDNs:
         - matchName: grafana.com
         - matchName: storage.googleapis.com
       toPorts:
         - ports:
+            - port: "6443"
+              protocol: TCP
             - port: "443"
               protocol: TCP
             - port: "8428"
@@ -35,7 +39,17 @@ spec:
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: vmagent
+  ingress:
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "8435"
+              protocol: TCP
   egress:
+    - toEntities:
+        - kube-apiserver
+        - host
     - toEndpoints:
         - matchExpressions:
             - key: io.kubernetes.pod.namespace
@@ -46,6 +60,12 @@ spec:
                 - immich
       toPorts:
         - ports:
+            - port: "6443"
+              protocol: TCP
+            - port: "10250"
+              protocol: TCP
+            - port: "9100"
+              protocol: TCP
             - port: "3000"
               protocol: TCP
             - port: "8428"
@@ -132,8 +152,12 @@ spec:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: vlsingle
+    - toEntities:
+        - kube-apiserver
       toPorts:
         - ports:
+            - port: "6443"
+              protocol: TCP
             - port: "9428"
               protocol: TCP
 ---
@@ -150,6 +174,13 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: vmagent
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumClusterwideNetworkPolicy

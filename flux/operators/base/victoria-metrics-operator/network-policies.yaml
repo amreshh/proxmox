@@ -10,3 +10,10 @@ spec:
   ingress:
     - fromEntities:
         - remote-node
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP

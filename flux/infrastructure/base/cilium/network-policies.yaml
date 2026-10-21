@@ -5,7 +5,10 @@ metadata:
   name: allow-ingress
 spec:
   description: allow ingress from outside the cluster
-  endpointSelector: {}
+  endpointSelector:
+    matchExpressions:
+      - key: reserved:ingress
+        operator: Exists
   ingress:
     - fromEntities:
         - world

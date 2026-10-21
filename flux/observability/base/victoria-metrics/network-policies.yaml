@@ -143,8 +143,12 @@ spec:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: vlsingle
+    - toEntities:
+        - kube-apiserver
       toPorts:
         - ports:
+            - port: "6443"
+              protocol: TCP
             - port: "9428"
               protocol: TCP
 ---

@@ -50,6 +50,7 @@ spec:
     - toEntities:
         - kube-apiserver
         - host
+        - remote-node
     - toEndpoints:
         - matchExpressions:
             - key: io.kubernetes.pod.namespace
@@ -79,6 +80,8 @@ spec:
             - port: "9153"
               protocol: TCP
             - port: "9187"
+              protocol: TCP
+            - port: "9965"
               protocol: TCP
 ---
 apiVersion: cilium.io/v2

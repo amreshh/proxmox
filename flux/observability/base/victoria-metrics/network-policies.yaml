@@ -14,11 +14,15 @@ spec:
     - fromEntities:
         - ingress
   egress:
+    - toEntities:
+        - kube-apiserver
     - toFQDNs:
         - matchName: grafana.com
         - matchName: storage.googleapis.com
       toPorts:
         - ports:
+            - port: "6443"
+              protocol: TCP
             - port: "443"
               protocol: TCP
             - port: "8428"

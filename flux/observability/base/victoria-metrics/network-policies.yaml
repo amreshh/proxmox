@@ -25,6 +25,7 @@ spec:
               operator: In
               values:
                 - vlsingle
+                - vmsingle
       toPorts:
         - ports:
             - port: "6443"

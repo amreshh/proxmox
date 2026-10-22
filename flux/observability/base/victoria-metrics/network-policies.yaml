@@ -11,29 +11,38 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
     - fromEntities:
         - ingress
   egress:
     - toEntities:
         - kube-apiserver
-    - toFQDNs:
-        - matchName: grafana.com
-        - matchName: storage.googleapis.com
-    - toEndpoints:
-        - matchExpressions:
-            - key: app.kubernetes.io/name
-              operator: In
-              values:
-                - vlsingle
-                - vmsingle
       toPorts:
         - ports:
             - port: "6443"
               protocol: TCP
+    - toFQDNs:
+        - matchName: grafana.com
+        - matchName: storage.googleapis.com
+      toPorts:
+        - ports:
             - port: "443"
               protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: "vmsingle"
+      toPorts:
+        - ports:
             - port: "8428"
               protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: "vlsingle"
+      toPorts:
+        - ports:
             - port: "9428"
               protocol: TCP
 ---

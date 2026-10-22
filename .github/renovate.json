@@ -24,8 +24,8 @@
       "description": "Track OpenTofu (not Terraform) for required_version and bump the range",
       "matchManagers": ["terraform"],
       "matchDepTypes": ["required_version"],
-      "overrideDepName": "opentofu",
       "overridePackageName": "opentofu/opentofu",
+      "commitMessageTopic": "OpenTofu",
       "rangeStrategy": "bump"
     },
     {

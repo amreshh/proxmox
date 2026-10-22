@@ -55,9 +55,9 @@ locals {
 
     prd = {
       talos = {
-        version      = "1.14.2"
-        iso          = "local:iso/talos_1.14.2.iso"
-        image        = "factory.talos.dev/metal-installer/9ed5fecdacb36b5c5427b87d409f1065cfb2df69b0f71c58b868d9d466d8dab3:v1.14.2"
+        version      = "1.14.4"
+        iso          = "local:iso/talos_1.14.4.iso"
+        image        = "factory.talos.dev/metal-installer/9ed5fecdacb36b5c5427b87d409f1065cfb2df69b0f71c58b868d9d466d8dab3:v1.14.4"
         vm_disk      = "/dev/nvme0n1"
         cluster_name = "prd"
         time_servers = ["192.168.10.1"]

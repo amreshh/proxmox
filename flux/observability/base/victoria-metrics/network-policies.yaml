@@ -17,6 +17,10 @@ spec:
               protocol: TCP
     - fromEntities:
         - ingress
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
   egress:
     - toEntities:
         - kube-apiserver
@@ -51,7 +55,7 @@ kind: CiliumNetworkPolicy
 metadata:
   name: allow-vmagent
 spec:
-  description: allow victoria-metrics agent to access other pods
+  description: allow victoria-metrics agent to scrape targets and remote write
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: vmagent
@@ -60,65 +64,82 @@ spec:
         - host
       toPorts:
         - ports:
+            - port: "8429"
+              protocol: TCP
             - port: "8435"
               protocol: TCP
   egress:
     - toEntities:
         - kube-apiserver
-        - host
-        - remote-node
-    - toEndpoints:
-        - matchExpressions:
-            - key: io.kubernetes.pod.namespace
-              operator: In
-              values:
-                - victoria-metrics
-                - kube-system
-                - immich
       toPorts:
         - ports:
             - port: "6443"
               protocol: TCP
-            - port: "10250"
+            - port: "10257"
               protocol: TCP
+            - port: "10259"
+              protocol: TCP
+    - toEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
             - port: "9100"
-              protocol: TCP
-            - port: "3000"
-              protocol: TCP
-            - port: "8428"
-              protocol: TCP
-            - port: "9429"
-              protocol: TCP
-            - port: "9428"
-              protocol: TCP
-            - port: "8080"
-              protocol: TCP
-            - port: "9153"
-              protocol: TCP
-            - port: "9187"
               protocol: TCP
             - port: "9965"
               protocol: TCP
----
-apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
-metadata:
-  name: allow-victoria-metrics-k8s-stack
-spec:
-  description: allow victoria-metrics-k8s-stack egress
-  endpointSelector:
-    matchLabels:
-      app.kubernetes.io/name: victoria-metrics-k8s-stack
-  egress:
-    - toEntities:
-        - kube-apiserver
-    - toFQDNs:
-        - matchName: raw.githubusercontent.com
+            - port: "10250"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s-app: kube-dns
+            io.kubernetes.pod.namespace: kube-system
       toPorts:
         - ports:
-            - port: "6443"
+            - port: "9153"
               protocol: TCP
-            - port: "443"
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: postgresql
+            io.kubernetes.pod.namespace: immich
+      toPorts:
+        - ports:
+            - port: "9187"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: kube-state-metrics
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vlagent
+      toPorts:
+        - ports:
+            - port: "9429"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vmsingle
+      toPorts:
+        - ports:
+            - port: "8428"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: grafana
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vlsingle
+      toPorts:
+        - ports:
+            - port: "9428"
               protocol: TCP
 ---
 apiVersion: cilium.io/v2
@@ -138,6 +159,10 @@ spec:
               values:
                 - vmagent
                 - grafana
+      toPorts:
+        - ports:
+            - port: "8428"
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -157,13 +182,17 @@ spec:
                 - vmagent
                 - vlagent
                 - grafana
+      toPorts:
+        - ports:
+            - port: "9428"
+              protocol: TCP
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
   name: allow-vlagent
 spec:
-  description: allow vlagent ingress
+  description: allow vlagent ingress from vmagent and egress to vlsingle
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: vlagent
@@ -171,17 +200,23 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "9429"
+              protocol: TCP
   egress:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: vlsingle
+      toPorts:
+        - ports:
+            - port: "9428"
+              protocol: TCP
     - toEntities:
         - kube-apiserver
       toPorts:
         - ports:
             - port: "6443"
-              protocol: TCP
-            - port: "9428"
               protocol: TCP
 ---
 apiVersion: cilium.io/v2
@@ -197,6 +232,10 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
   egress:
     - toEntities:
         - kube-apiserver
@@ -218,3 +257,32 @@ spec:
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: vmagent
+            io.kubernetes.pod.namespace: victoria-metrics
+      toPorts:
+        - ports:
+            - port: "9153"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-vm-stack-sync-job
+spec:
+  description: allow the chart's post-install sync job to fetch dashboards/rules and manage resources
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: victoria-metrics-k8s-stack
+      app.kubernetes.io/component: syncJob
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP
+    - toFQDNs:
+        - matchName: raw.githubusercontent.com
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

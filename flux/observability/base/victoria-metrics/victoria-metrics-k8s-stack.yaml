@@ -31,10 +31,50 @@ spec:
           resources:
             requests:
               storage: 50Gi
+    defaultDashboards:
+      dashboards:
+        k8s-resources-windows-cluster:
+          enabled: false
+        k8s-resources-windows-namespace:
+          enabled: false
+        k8s-resources-windows-pod:
+          enabled: false
+        k8s-windows-cluster-rsrc-use:
+          enabled: false
+        k8s-windows-node-rsrc-use:
+          enabled: false
+        nodes-aix:
+          enabled: false
+        nodes-darwin:
+          enabled: false
+        prometheus:
+          enabled: false
+        prometheus-remote-write:
+          enabled: false
+        k8s-resources-multicluster:
+          enabled: false
+      sources:
+        victorialogs-single-node:
+          enabled: true
+        victorialogs-vlagent:
+          enabled: true
+    kubeEtcd:
+      enabled: true
+      service:
+        port: 2381
+        targetPort: 2381
+      vmScrape:
+        spec:
+          endpoints:
+            - port: http-metrics
+              scheme: http
     alertmanager:
       enabled: false
     vmalert:
-      enabled: false
+      enabled: true
+      spec:
+        extraArgs:
+          notifier.blackhole: "true"
     kubeScheduler:
       enabled: true
       vmScrape:

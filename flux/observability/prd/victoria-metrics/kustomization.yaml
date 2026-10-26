@@ -13,3 +13,11 @@ patches:
         path: "/spec/hostnames"
         value:
           - grafana.kubernetes.home
+  - target:
+      kind: HelmRelease
+      name: victoria-metrics-k8s-stack
+    patch: |-
+      - op: add
+        path: "/spec/values/kubeEtcd/endpoints"
+        value:
+          - 192.168.10.20

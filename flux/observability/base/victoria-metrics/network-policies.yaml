@@ -79,6 +79,8 @@ spec:
               protocol: TCP
             - port: "10259"
               protocol: TCP
+            - port: "2381"
+              protocol: TCP
     - toEntities:
         - host
         - remote-node
@@ -136,6 +138,15 @@ spec:
               protocol: TCP
     - toEndpoints:
         - matchLabels:
+            app.kubernetes.io/name: vmalert
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+            - port: "8435"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
             app.kubernetes.io/name: vlsingle
       toPorts:
         - ports:
@@ -158,6 +169,7 @@ spec:
               operator: In
               values:
                 - vmagent
+                - vmalert
                 - grafana
       toPorts:
         - ports:
@@ -285,4 +297,47 @@ spec:
       toPorts:
         - ports:
             - port: "443"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-vmalert
+spec:
+  description: allow vmalert to evaluate rules against vmsingle
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: vmalert
+  ingress:
+    # kubelet probes
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+            - port: "8435"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+            - port: "8435"
+              protocol: TCP
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "6443"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vmsingle
+      toPorts:
+        - ports:
+            - port: "8428"
               protocol: TCP

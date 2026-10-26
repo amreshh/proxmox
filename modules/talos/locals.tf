@@ -54,6 +54,14 @@ locals {
         kind       = "KubeProxyConfig"
         enabled    = false
       }),
+      # TODO: plain-HTTP etcd metrics for vmagent (2379 requires etcd client certs)
+      yamlencode({
+        cluster = {
+          etcd = {
+            extraArgs = { "listen-metrics-urls" = "http://0.0.0.0:2381" }
+          }
+        }
+      }),
       yamlencode({
         apiVersion = "v1alpha1"
         kind       = "KubeFlannelCNIConfig"

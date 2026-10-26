@@ -1,4 +1,3 @@
-# TODO: Check to restrict this further
 apiVersion: cilium.io/v2
 kind: CiliumClusterwideNetworkPolicy
 metadata:

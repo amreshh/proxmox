@@ -99,6 +99,8 @@ spec:
                 insecureSkipVerify: true
     grafana:
       enabled: true
+      deploymentStrategy:
+        type: Recreate
       initChownData:
         enabled: false
       podSecurityContext:

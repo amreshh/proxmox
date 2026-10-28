@@ -27,3 +27,31 @@ configMapGenerator:
       labels:
         grafana_dashboard: "1"
       disableNameSuffixHash: true
+  - name: cilium-agent-grafana-dashboard
+    files:
+      - cilium-agent-grafana-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+      disableNameSuffixHash: true
+  - name: cilium-operator-grafana-dashboard
+    files:
+      - cilium-operator-grafana-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+      disableNameSuffixHash: true
+  - name: hubble-grafana-dashboard
+    files:
+      - hubble-grafana-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+      disableNameSuffixHash: true
+  - name: hubble-namespace-traffic-grafana-dashboard
+    files:
+      - hubble-namespace-traffic-grafana-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+      disableNameSuffixHash: true

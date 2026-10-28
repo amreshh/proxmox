@@ -48,6 +48,39 @@ resource "helm_release" "cilium" {
   cleanup_on_fail = true
   lint            = true
 
+  values = [yamlencode({
+    hubble = {
+      export = {
+        static = {
+          enabled   = true
+          filePath  = "stdout"
+          allowList = [jsonencode({ event_type = [{ type = 5 }] })]
+          denyList  = [jsonencode({ source_label = ["reserved:host"] })]
+          fieldMask = [
+            "time",
+            "verdict",
+            "drop_reason_desc",
+            "traffic_direction",
+            "IP.source",
+            "IP.destination",
+            "l4",
+            "source.namespace",
+            "source.pod_name",
+            "source.identity",
+            "destination.namespace",
+            "destination.pod_name",
+            "destination.identity",
+            "destination_names",
+            "ingress_allowed_by",
+            "egress_allowed_by",
+            "ingress_denied_by",
+            "egress_denied_by",
+          ]
+        }
+      }
+    }
+  })]
+
   set = [
     {
       name  = "ipam.mode"
@@ -183,10 +216,13 @@ resource "helm_release" "cilium" {
     {
       name = "hubble.metrics.enabled"
       value = [
-        "flow:sourceContext=workload-name|reserved-identity;destinationContext=workload-name|reserved-identity",
+        "flow:sourceContext=pod|reserved-identity;destinationContext=pod|reserved-identity;labelsContext=source_namespace\\,destination_namespace\\,traffic_direction",
         "tcp",
         "drop",
-        "httpV2:sourceContext=workload-name;destinationContext=workload-name"
+        "httpV2:sourceContext=workload-name;destinationContext=workload-name",
+        "dns:query;sourceContext=workload-name|reserved-identity;destinationContext=workload-name|reserved-identity",
+        "icmp",
+        "port-distribution"
       ]
       # value = [
       #   "dns",

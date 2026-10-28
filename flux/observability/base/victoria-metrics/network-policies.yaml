@@ -88,6 +88,12 @@ spec:
         - ports:
             - port: "9100"
               protocol: TCP
+            - port: "9962"
+              protocol: TCP
+            - port: "9963"
+              protocol: TCP
+            - port: "9964"
+              protocol: TCP
             - port: "9965"
               protocol: TCP
             - port: "10250"
@@ -158,7 +164,7 @@ kind: CiliumNetworkPolicy
 metadata:
   name: allow-vmsingle
 spec:
-  description: allow vmsingle ingress
+  description: allow vmsingle ingress and egress to vmalert
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: vmsingle
@@ -174,6 +180,14 @@ spec:
       toPorts:
         - ports:
             - port: "8428"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vmalert
+      toPorts:
+        - ports:
+            - port: "8080"
               protocol: TCP
 ---
 apiVersion: cilium.io/v2
@@ -309,7 +323,6 @@ spec:
     matchLabels:
       app.kubernetes.io/name: vmalert
   ingress:
-    # kubelet probes
     - fromEntities:
         - host
       toPorts:
@@ -326,6 +339,13 @@ spec:
             - port: "8080"
               protocol: TCP
             - port: "8435"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vmsingle
+      toPorts:
+        - ports:
+            - port: "8080"
               protocol: TCP
   egress:
     - toEntities:

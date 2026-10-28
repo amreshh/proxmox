@@ -1,0 +1,1052 @@
+{
+  "title": "Hubble / Namespace Traffic",
+  "uid": "hubble-namespace-traffic",
+  "tags": [
+    "cilium",
+    "hubble"
+  ],
+  "editable": true,
+  "schemaVersion": 39,
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "refresh": "1m",
+  "graphTooltip": 1,
+  "templating": {
+    "list": [
+      {
+        "name": "DS_PROMETHEUS",
+        "label": "Datasource",
+        "type": "datasource",
+        "query": "prometheus",
+        "current": {},
+        "hide": 0
+      },
+      {
+        "name": "DS_LOGS",
+        "label": "Logs datasource",
+        "type": "datasource",
+        "query": "victoriametrics-logs-datasource",
+        "current": {},
+        "hide": 0
+      },
+      {
+        "name": "namespace",
+        "label": "Namespace",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "query": {
+          "query": "label_values(kube_pod_info, namespace)",
+          "refId": "ns"
+        },
+        "definition": "label_values(kube_pod_info, namespace)",
+        "regex": "",
+        "refresh": 2,
+        "sort": 1,
+        "current": {},
+        "includeAll": false,
+        "multi": false
+      },
+      {
+        "name": "verdict",
+        "label": "Verdict",
+        "type": "custom",
+        "query": "All : allowed|dropped,Allowed : allowed,Dropped : dropped",
+        "current": {
+          "text": "All",
+          "value": "allowed|dropped"
+        },
+        "options": [
+          {
+            "text": "All",
+            "value": "allowed|dropped",
+            "selected": true
+          },
+          {
+            "text": "Allowed",
+            "value": "allowed",
+            "selected": false
+          },
+          {
+            "text": "Dropped",
+            "value": "dropped",
+            "selected": false
+          }
+        ],
+        "includeAll": false,
+        "multi": false
+      },
+      {
+        "name": "exclude",
+        "label": "Kubelet health checks",
+        "type": "custom",
+        "query": "Hide : reserved.host,Show : none",
+        "current": {
+          "text": "Hide",
+          "value": "reserved.host"
+        },
+        "options": [
+          {
+            "text": "Hide",
+            "value": "reserved.host",
+            "selected": true
+          },
+          {
+            "text": "Show",
+            "value": "none",
+            "selected": false
+          }
+        ],
+        "includeAll": false,
+        "multi": false
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "nodeGraph",
+      "title": "Connections in $namespace",
+      "description": "New connections during the selected time range. Ring: share of allowed (green) vs dropped (red) connections. Red edges have dropped connections. Right-click a node for the full pod name.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 20,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "edges_main",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "label_replace(label_join((label_replace(((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0) or (sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0) * 0) and on (source, destination) (sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"color\", \"#F2495C\", \"\", \"\")\nor label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0) unless on (source, destination) (sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"color\", \"#8E8E8E\", \"\", \"\"))\nand on (source, destination) label_match(label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"allowed\") or label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"dropped\"), \"v\", \"$verdict\"), \"id\", \" -> \", \"source\", \"destination\"), \"target\", \"$1\", \"destination\", \"(.*)\")",
+          "instant": true,
+          "range": false,
+          "format": "table"
+        },
+        {
+          "refId": "edges_sec",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "label_replace(label_join((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0) and on (source, destination) label_match(label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"allowed\") or label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"dropped\"), \"v\", \"$verdict\"), \"id\", \" -> \", \"source\", \"destination\"), \"target\", \"$1\", \"destination\", \"(.*)\")",
+          "instant": true,
+          "range": false,
+          "format": "table"
+        },
+        {
+          "refId": "nodes_main",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "label_join(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace((sum by (id) (\n  label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"destination\", \"(.*)\")\n) or sum by (id) (\n  label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"destination\", \"(.*)\")\n) * 0) and on (id) sum by (id) (\n  label_replace(label_match(label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"allowed\") or label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"dropped\"), \"v\", \"$verdict\"), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace(label_match(label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"allowed\") or label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"dropped\"), \"v\", \"$verdict\"), \"id\", \"$1\", \"destination\", \"(.*)\")\n), \"title\", \"$1\", \"id\", \"(.*)\"), \"detail__pod\", \"$1\", \"id\", \"(.*)\"), \"subtitle\", \"$1\", \"id\", \"([^/]+)/.+\"), \"title\", \"$1\", \"id\", \"[^/]+/(.+)\"), \"title\", \"$1\", \"title\", \"(.+)-[a-z0-9]{6,10}-[a-z0-9]{5}\"), \"title\", \"$1\", \"title\", \"(.+)-[a-z0-9]{5}\"), \"subtitle\", \"outside pods\", \"id\", \"reserved:.*\"), \"title\", \"$1\", \"id\", \"reserved:(.*)\"), \"group\", \"2\", \"id\", \".*\"), \"group\", \"1\", \"id\", \"$namespace/.*\"), \"group\", \"0\", \"id\", \"reserved:.*\"), \"fixedx\", \"-420\", \"group\", \"0\"), \"fixedx\", \"0\", \"group\", \"1\"), \"fixedx\", \"420\", \"group\", \"2\"), \"sortkey\", \"|\", \"group\", \"subtitle\", \"title\", \"id\")",
+          "instant": true,
+          "range": false,
+          "format": "table"
+        },
+        {
+          "refId": "nodes_sec",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "label_join(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(sum by (id) (\n  label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"destination\", \"(.*)\")\n) and on (id) sum by (id) (\n  label_replace(label_match(label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"allowed\") or label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"dropped\"), \"v\", \"$verdict\"), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace(label_match(label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"allowed\") or label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"dropped\"), \"v\", \"$verdict\"), \"id\", \"$1\", \"destination\", \"(.*)\")\n), \"title\", \"$1\", \"id\", \"(.*)\"), \"detail__pod\", \"$1\", \"id\", \"(.*)\"), \"subtitle\", \"$1\", \"id\", \"([^/]+)/.+\"), \"title\", \"$1\", \"id\", \"[^/]+/(.+)\"), \"title\", \"$1\", \"title\", \"(.+)-[a-z0-9]{6,10}-[a-z0-9]{5}\"), \"title\", \"$1\", \"title\", \"(.+)-[a-z0-9]{5}\"), \"subtitle\", \"outside pods\", \"id\", \"reserved:.*\"), \"title\", \"$1\", \"id\", \"reserved:(.*)\"), \"group\", \"2\", \"id\", \".*\"), \"group\", \"1\", \"id\", \"$namespace/.*\"), \"group\", \"0\", \"id\", \"reserved:.*\"), \"fixedx\", \"-420\", \"group\", \"0\"), \"fixedx\", \"0\", \"group\", \"1\"), \"fixedx\", \"420\", \"group\", \"2\"), \"sortkey\", \"|\", \"group\", \"subtitle\", \"title\", \"id\")",
+          "instant": true,
+          "range": false,
+          "format": "table"
+        },
+        {
+          "refId": "nodes_arc_allowed",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "label_join(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace((sum by (id) (\n  label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"destination\", \"(.*)\")\n) or sum by (id) (\n  label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"destination\", \"(.*)\")\n) * 0) / ((sum by (id) (\n  label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"destination\", \"(.*)\")\n) or sum by (id) (\n  label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"destination\", \"(.*)\")\n) * 0) + (sum by (id) (\n  label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"destination\", \"(.*)\")\n) or sum by (id) (\n  label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"destination\", \"(.*)\")\n) * 0)) and on (id) sum by (id) (\n  label_replace(label_match(label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"allowed\") or label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"dropped\"), \"v\", \"$verdict\"), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace(label_match(label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"allowed\") or label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"dropped\"), \"v\", \"$verdict\"), \"id\", \"$1\", \"destination\", \"(.*)\")\n), \"title\", \"$1\", \"id\", \"(.*)\"), \"detail__pod\", \"$1\", \"id\", \"(.*)\"), \"subtitle\", \"$1\", \"id\", \"([^/]+)/.+\"), \"title\", \"$1\", \"id\", \"[^/]+/(.+)\"), \"title\", \"$1\", \"title\", \"(.+)-[a-z0-9]{6,10}-[a-z0-9]{5}\"), \"title\", \"$1\", \"title\", \"(.+)-[a-z0-9]{5}\"), \"subtitle\", \"outside pods\", \"id\", \"reserved:.*\"), \"title\", \"$1\", \"id\", \"reserved:(.*)\"), \"group\", \"2\", \"id\", \".*\"), \"group\", \"1\", \"id\", \"$namespace/.*\"), \"group\", \"0\", \"id\", \"reserved:.*\"), \"fixedx\", \"-420\", \"group\", \"0\"), \"fixedx\", \"0\", \"group\", \"1\"), \"fixedx\", \"420\", \"group\", \"2\"), \"sortkey\", \"|\", \"group\", \"subtitle\", \"title\", \"id\")",
+          "instant": true,
+          "range": false,
+          "format": "table"
+        },
+        {
+          "refId": "nodes_arc_dropped",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "label_join(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace((sum by (id) (\n  label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"destination\", \"(.*)\")\n) or sum by (id) (\n  label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"destination\", \"(.*)\")\n) * 0) / ((sum by (id) (\n  label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"destination\", \"(.*)\")\n) or sum by (id) (\n  label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"destination\", \"(.*)\")\n) * 0) + (sum by (id) (\n  label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"destination\", \"(.*)\")\n) or sum by (id) (\n  label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"id\", \"$1\", \"destination\", \"(.*)\")\n) * 0)) and on (id) sum by (id) (\n  label_replace(label_match(label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"allowed\") or label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"dropped\"), \"v\", \"$verdict\"), \"id\", \"$1\", \"source\", \"(.*)\")\n  or label_replace(label_match(label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"allowed\") or label_set((sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"dropped\"), \"v\", \"$verdict\"), \"id\", \"$1\", \"destination\", \"(.*)\")\n), \"title\", \"$1\", \"id\", \"(.*)\"), \"detail__pod\", \"$1\", \"id\", \"(.*)\"), \"subtitle\", \"$1\", \"id\", \"([^/]+)/.+\"), \"title\", \"$1\", \"id\", \"[^/]+/(.+)\"), \"title\", \"$1\", \"title\", \"(.+)-[a-z0-9]{6,10}-[a-z0-9]{5}\"), \"title\", \"$1\", \"title\", \"(.+)-[a-z0-9]{5}\"), \"subtitle\", \"outside pods\", \"id\", \"reserved:.*\"), \"title\", \"$1\", \"id\", \"reserved:(.*)\"), \"group\", \"2\", \"id\", \".*\"), \"group\", \"1\", \"id\", \"$namespace/.*\"), \"group\", \"0\", \"id\", \"reserved:.*\"), \"fixedx\", \"-420\", \"group\", \"0\"), \"fixedx\", \"0\", \"group\", \"1\"), \"fixedx\", \"420\", \"group\", \"2\"), \"sortkey\", \"|\", \"group\", \"subtitle\", \"title\", \"id\")",
+          "instant": true,
+          "range": false,
+          "format": "table"
+        },
+        {
+          "refId": "cfg",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "vector(0.1)",
+          "instant": true,
+          "range": false,
+          "format": "table"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {},
+          "filter": {
+            "id": "byRefId",
+            "options": "/^edges_/"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {},
+          "filter": {
+            "id": "byRefId",
+            "options": "/^nodes_/"
+          }
+        },
+        {
+          "id": "calculateField",
+          "filter": {
+            "id": "byRefId",
+            "options": "/edges_/"
+          },
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "Value #edges_main"
+              ],
+              "reducer": "sum"
+            },
+            "alias": "mainstat",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "calculateField",
+          "filter": {
+            "id": "byRefId",
+            "options": "/edges_/"
+          },
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "Value #edges_sec"
+              ],
+              "reducer": "sum"
+            },
+            "alias": "secondarystat",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "calculateField",
+          "filter": {
+            "id": "byRefId",
+            "options": "/nodes_/"
+          },
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "Value #nodes_main"
+              ],
+              "reducer": "sum"
+            },
+            "alias": "mainstat",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "calculateField",
+          "filter": {
+            "id": "byRefId",
+            "options": "/nodes_/"
+          },
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "Value #nodes_sec"
+              ],
+              "reducer": "sum"
+            },
+            "alias": "secondarystat",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "calculateField",
+          "filter": {
+            "id": "byRefId",
+            "options": "/nodes_/"
+          },
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "Value #nodes_arc_allowed"
+              ],
+              "reducer": "sum"
+            },
+            "alias": "arc__allowed",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "calculateField",
+          "filter": {
+            "id": "byRefId",
+            "options": "/nodes_/"
+          },
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "Value #nodes_arc_dropped"
+              ],
+              "reducer": "sum"
+            },
+            "alias": "arc__dropped",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "sortBy",
+          "filter": {
+            "id": "byRefId",
+            "options": "/nodes_/"
+          },
+          "options": {
+            "sort": [
+              {
+                "field": "sortkey"
+              }
+            ]
+          }
+        },
+        {
+          "id": "partitionByValues",
+          "filter": {
+            "id": "byRefId",
+            "options": "/nodes_/"
+          },
+          "options": {
+            "fields": [
+              "group"
+            ],
+            "keepFields": true
+          }
+        },
+        {
+          "id": "calculateField",
+          "filter": {
+            "id": "byRefId",
+            "options": "/nodes_/"
+          },
+          "options": {
+            "mode": "index",
+            "index": {
+              "asPercentile": false
+            },
+            "alias": "row",
+            "timeSeries": false
+          }
+        },
+        {
+          "id": "convertFieldType",
+          "filter": {
+            "id": "byRefId",
+            "options": "/nodes_/"
+          },
+          "options": {
+            "conversions": [
+              {
+                "targetField": "fixedx",
+                "destinationType": "number"
+              }
+            ]
+          }
+        },
+        {
+          "id": "calculateField",
+          "filter": {
+            "id": "byRefId",
+            "options": "/nodes_/"
+          },
+          "options": {
+            "mode": "windowFunctions",
+            "alias": "rowmid",
+            "timeSeries": false,
+            "window": {
+              "field": "row",
+              "reducer": "mean",
+              "windowAlignment": "centered",
+              "windowSize": 2,
+              "windowSizeMode": "percentage"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "filter": {
+            "id": "byRefId",
+            "options": "/nodes_/"
+          },
+          "options": {
+            "mode": "binary",
+            "alias": "rowc",
+            "replaceFields": false,
+            "timeSeries": false,
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "row"
+                }
+              },
+              "operator": "-",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "rowmid"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "filter": {
+            "id": "byRefId",
+            "options": "/nodes_/"
+          },
+          "options": {
+            "mode": "binary",
+            "alias": "fixedy",
+            "replaceFields": false,
+            "timeSeries": false,
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "rowc"
+                }
+              },
+              "operator": "*",
+              "right": {
+                "fixed": "130"
+              }
+            }
+          }
+        },
+        {
+          "id": "merge",
+          "filter": {
+            "id": "byRefId",
+            "options": "/nodes_/"
+          },
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "row": true,
+              "rowmid": true,
+              "rowc": true,
+              "group": true,
+              "sortkey": true,
+              "Value #edges_main": true,
+              "Value #edges_sec": true,
+              "Value #nodes_main": true,
+              "Value #nodes_sec": true,
+              "Value #nodes_arc_allowed": true,
+              "Value #nodes_arc_dropped": true
+            },
+            "renameByName": {
+              "mainstat": "Top number: allowed connections",
+              "secondarystat": "Bottom number: dropped connections",
+              "arc__allowed": "Ring: share allowed",
+              "arc__dropped": "Ring: share dropped"
+            }
+          }
+        },
+        {
+          "id": "configFromData",
+          "options": {
+            "configRefId": "cfg",
+            "applyTo": {
+              "id": "byType",
+              "options": "number"
+            },
+            "mappings": [
+              {
+                "fieldName": "Value #cfg",
+                "handlerKey": "decimals"
+              }
+            ]
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "id"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Filter/Show only dropped",
+                    "url": "/d/hubble-namespace-traffic/hubble-namespace-traffic?${__url_time_range}&${namespace:queryparam}&${exclude:queryparam}&${DS_PROMETHEUS:queryparam}&${DS_LOGS:queryparam}&var-verdict=dropped"
+                  },
+                  {
+                    "title": "Filter/Show only allowed",
+                    "url": "/d/hubble-namespace-traffic/hubble-namespace-traffic?${__url_time_range}&${namespace:queryparam}&${exclude:queryparam}&${DS_PROMETHEUS:queryparam}&${DS_LOGS:queryparam}&var-verdict=allowed"
+                  },
+                  {
+                    "title": "Filter/Show all",
+                    "url": "/d/hubble-namespace-traffic/hubble-namespace-traffic?${__url_time_range}&${namespace:queryparam}&${exclude:queryparam}&${DS_PROMETHEUS:queryparam}&${DS_LOGS:queryparam}&var-verdict=allowed%7Cdropped"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "nodes": {
+          "mainStatUnit": "allowed",
+          "secondaryStatUnit": "dropped",
+          "arcs": [
+            {
+              "field": "arc__allowed",
+              "color": "#73BF69"
+            },
+            {
+              "field": "arc__dropped",
+              "color": "#F2495C"
+            }
+          ]
+        },
+        "edges": {
+          "mainStatUnit": "allowed",
+          "secondaryStatUnit": "dropped"
+        },
+        "zoomMode": "cooperative"
+      }
+    },
+    {
+      "id": 2,
+      "type": "table",
+      "title": "Pod connections in $namespace",
+      "description": "New connections during the selected time range per source/destination pod and protocol.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "((sum by (source, destination, protocol) (\n  sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0) or (sum by (source, destination, protocol) (\n  sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0) * 0) and on (source, destination, protocol) label_match(label_set((sum by (source, destination, protocol) (\n  sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"allowed\") or label_set((sum by (source, destination, protocol) (\n  sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"dropped\"), \"v\", \"$verdict\")",
+          "instant": true,
+          "range": false,
+          "format": "table"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "((sum by (source, destination, protocol) (\n  sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0) or (sum by (source, destination, protocol) (\n  sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0) * 0) and on (source, destination, protocol) label_match(label_set((sum by (source, destination, protocol) (\n  sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"allowed\") or label_set((sum by (source, destination, protocol) (\n  sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n  or sum by (source, destination, protocol, traffic_direction) (increase(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__range]))\n) > 0), \"v\", \"dropped\"), \"v\", \"$verdict\")",
+          "instant": true,
+          "range": false,
+          "format": "table"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            },
+            "indexByName": {
+              "source": 0,
+              "destination": 1,
+              "protocol": 2,
+              "Value #A": 3,
+              "Value #B": 4
+            },
+            "renameByName": {
+              "source": "Source",
+              "destination": "Destination",
+              "protocol": "Protocol",
+              "Value #A": "Allowed",
+              "Value #B": "Dropped"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "field": "Dropped",
+                "desc": true
+              }
+            ]
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0,
+          "custom": {
+            "filterable": true
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Allowed"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Show only allowed",
+                    "url": "/d/hubble-namespace-traffic/hubble-namespace-traffic?${__url_time_range}&${namespace:queryparam}&${exclude:queryparam}&${DS_PROMETHEUS:queryparam}&${DS_LOGS:queryparam}&var-verdict=allowed"
+                  },
+                  {
+                    "title": "Show all",
+                    "url": "/d/hubble-namespace-traffic/hubble-namespace-traffic?${__url_time_range}&${namespace:queryparam}&${exclude:queryparam}&${DS_PROMETHEUS:queryparam}&${DS_LOGS:queryparam}&var-verdict=allowed%7Cdropped"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Dropped"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Show only dropped",
+                    "url": "/d/hubble-namespace-traffic/hubble-namespace-traffic?${__url_time_range}&${namespace:queryparam}&${exclude:queryparam}&${DS_PROMETHEUS:queryparam}&${DS_LOGS:queryparam}&var-verdict=dropped"
+                  },
+                  {
+                    "title": "Show all",
+                    "url": "/d/hubble-namespace-traffic/hubble-namespace-traffic?${__url_time_range}&${namespace:queryparam}&${exclude:queryparam}&${DS_PROMETHEUS:queryparam}&${DS_LOGS:queryparam}&var-verdict=allowed%7Cdropped"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "text",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm"
+      }
+    },
+    {
+      "id": 6,
+      "type": "table",
+      "title": "Connection log in $namespace",
+      "description": "Every new connection Hubble saw (one policy verdict per enforcing endpoint, so pod-to-pod connections appear once as egress at the source and once as ingress at the destination). Destination shows the DNS name when the IP was resolved through Cilium's DNS proxy.",
+      "datasource": {
+        "type": "victoriametrics-logs-datasource",
+        "uid": "${DS_LOGS}"
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 24,
+        "x": 0,
+        "y": 32
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "victoriametrics-logs-datasource",
+            "uid": "${DS_LOGS}"
+          },
+          "expr": "{kubernetes.container_name=\"cilium-agent\"} flow.verdict:* (flow.source.namespace:=\"$namespace\" or flow.destination.namespace:=\"$namespace\")\n| format \"<flow.IP.source>\" as source\n| format if (flow.source.identity:=1) \"reserved:host\" as source\n| format if (flow.source.identity:=2) \"reserved:world\" as source\n| format if (flow.source.identity:=4) \"reserved:health\" as source\n| format if (flow.source.identity:=6) \"reserved:remote-node\" as source\n| format if (flow.source.identity:=7) \"reserved:kube-apiserver\" as source\n| format if (flow.source.identity:=8) \"reserved:ingress\" as source\n| format if (flow.source.identity:=9) \"reserved:world\" as source\n| format if (flow.source.pod_name:*) \"<flow.source.namespace>/<flow.source.pod_name>\" as source\n| format \"<flow.IP.destination>\" as destination\n| format if (flow.destination.identity:=1) \"reserved:host\" as destination\n| format if (flow.destination.identity:=2) \"reserved:world\" as destination\n| format if (flow.destination.identity:=4) \"reserved:health\" as destination\n| format if (flow.destination.identity:=6) \"reserved:remote-node\" as destination\n| format if (flow.destination.identity:=7) \"reserved:kube-apiserver\" as destination\n| format if (flow.destination.identity:=8) \"reserved:ingress\" as destination\n| format if (flow.destination.identity:=9) \"reserved:world\" as destination\n| format if (flow.destination.pod_name:*) \"<flow.destination.namespace>/<flow.destination.pod_name>\" as destination\n| format if (flow.destination_names:*) \"<flow.destination_names>\" as destination\n| replace_regexp (\"[\\\\[\\\\]\\\"]\", \"\") at destination\n| format \"<flow.l4.TCP.destination_port><flow.l4.UDP.destination_port><flow.l4.SCTP.destination_port>\" as port\n| format if (flow.l4.TCP.destination_port:*) \"TCP\" as protocol\n| format if (flow.l4.UDP.destination_port:*) \"UDP\" as protocol\n| format if (flow.l4.ICMPv4.type:*) \"ICMP\" as protocol\n| filter -source:~\"^$exclude$\"\n| format \"allowed\" as verdict\n| format if (flow.verdict:=\"DROPPED\") \"dropped\" as verdict\n| filter verdict:~\"^($verdict)$\"\n| format \"<flow.ingress_allowed_by><flow.egress_allowed_by><flow.ingress_denied_by><flow.egress_denied_by>\" as policy_raw\n| extract_regexp \"\\\"name\\\":\\\"(?P<policy_name>[^\\\"]+)\" from policy_raw\n| extract_regexp \"\\\"namespace\\\":\\\"(?P<policy_ns>[^\\\"]+)\" from policy_raw\n| extract_regexp \"\\\"kind\\\":\\\"(?P<policy_kind>[^\\\"]+)\" from policy_raw\n| format \"\" as policy\n| format if (policy_kind:=\"CiliumNetworkPolicy\") \"<policy_ns>/<policy_name>\" as policy\n| format if (policy_kind:=\"CiliumClusterwideNetworkPolicy\") \"<policy_name> (clusterwide)\" as policy\n| format if (policy_kind:=\"NetworkPolicy\") \"<policy_ns>/<policy_name> (k8s)\" as policy\n| format if (policy_raw:\"allow-localhost-ingress\") \"allow-localhost (Cilium built-in)\" as policy\n| format if (verdict:=\"dropped\" policy:=\"\") \"no policy allows this (default deny)\" as policy\n| stats by (source, destination, verdict, policy, flow.drop_reason_desc, port, protocol, flow.traffic_direction) count() as connections\n| sort by (verdict desc, connections desc)",
+          "queryType": "stats"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true
+            },
+            "indexByName": {
+              "source": 0,
+              "destination": 1,
+              "verdict": 2,
+              "policy": 3,
+              "flow.drop_reason_desc": 4,
+              "port": 5,
+              "protocol": 6,
+              "flow.traffic_direction": 7
+            },
+            "renameByName": {
+              "source": "Source",
+              "destination": "Destination",
+              "verdict": "Verdict",
+              "policy": "Policy",
+              "flow.drop_reason_desc": "Drop reason",
+              "port": "Port",
+              "protocol": "Protocol",
+              "flow.traffic_direction": "Direction",
+              "Value": "Connections",
+              "Value #A": "Connections"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "field": "Verdict",
+                "desc": true
+              }
+            ]
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "filterable": true
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Source"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 380
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Policy"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 300
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Destination"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 380
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Verdict"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Show only ${__value.raw}",
+                    "url": "/d/hubble-namespace-traffic/hubble-namespace-traffic?${__url_time_range}&${namespace:queryparam}&${exclude:queryparam}&${DS_PROMETHEUS:queryparam}&${DS_LOGS:queryparam}&var-verdict=${__value.raw}"
+                  },
+                  {
+                    "title": "Show all",
+                    "url": "/d/hubble-namespace-traffic/hubble-namespace-traffic?${__url_time_range}&${namespace:queryparam}&${exclude:queryparam}&${DS_PROMETHEUS:queryparam}&${DS_LOGS:queryparam}&var-verdict=allowed%7Cdropped"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "dropped": {
+                        "color": "red",
+                        "index": 0,
+                        "text": "DROPPED"
+                      },
+                      "allowed": {
+                        "color": "green",
+                        "index": 1,
+                        "text": "ALLOWED"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm"
+      }
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Allowed connections/s by source pod",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 46
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "(sum by (source) (\n  sum by (source, traffic_direction) (rate(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__rate_interval]))\n  or sum by (source, traffic_direction) (rate(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__rate_interval]))\n  or sum by (source, traffic_direction) (rate(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__rate_interval]))\n) > 0)",
+          "legendFormat": "{{source}}",
+          "range": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "cps",
+          "custom": {
+            "fillOpacity": 10,
+            "showPoints": "never"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": [
+            "mean",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Allowed connections/s by destination pod",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 46
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "(sum by (destination) (\n  sum by (destination, traffic_direction) (rate(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__rate_interval]))\n  or sum by (destination, traffic_direction) (rate(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__rate_interval]))\n  or sum by (destination, traffic_direction) (rate(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", destination_namespace=\"\", verdict!=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__rate_interval]))\n) > 0)",
+          "legendFormat": "{{destination}}",
+          "range": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "cps",
+          "custom": {
+            "fillOpacity": 10,
+            "showPoints": "never"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": [
+            "mean",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Dropped connections/s",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 55
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "expr": "(sum by (source, destination) (\n  sum by (source, destination, traffic_direction) (rate(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", destination_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__rate_interval]))\n  or sum by (source, destination, traffic_direction) (rate(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"ingress\", source_namespace=\"$namespace\", destination_namespace!=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__rate_interval]))\n  or sum by (source, destination, traffic_direction) (rate(hubble_flows_processed_total{type=\"PolicyVerdict\", traffic_direction=\"egress\", source_namespace=\"$namespace\", verdict=\"DROPPED\", source!~\"$exclude\", destination!~\"$exclude\"}[$__rate_interval]))\n) > 0)",
+          "legendFormat": "{{source}} -> {{destination}}",
+          "range": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "cps",
+          "custom": {
+            "fillOpacity": 10,
+            "showPoints": "never"
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#F2495C"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": [
+            "mean",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    }
+  ]
+}

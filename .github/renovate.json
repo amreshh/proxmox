@@ -17,6 +17,15 @@
         "#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)\\s+\\w+\\s*=\\s*\"[^\"\\n]*?(?<currentValue>\\d+\\.\\d+\\.\\d+)[^\"\\n]*\""
       ],
       "extractVersionTemplate": "^v?(?<version>.*)$"
+    },
+    {
+      "customType": "regex",
+      "description": "Gateway API CRD URLs in .tf files",
+      "managerFilePatterns": ["/\\.tf$/"],
+      "matchStrings": [
+        "https://raw\\.githubusercontent\\.com/(?<depName>kubernetes-sigs/gateway-api)/(?<currentValue>v\\d+\\.\\d+\\.\\d+)/"
+      ],
+      "datasourceTemplate": "github-releases"
     }
   ],
   "packageRules": [

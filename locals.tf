@@ -55,8 +55,11 @@ locals {
 
     prd = {
       talos = {
-        version      = "1.14.4"
-        iso          = "local:iso/talos_1.14.4.iso"
+        # renovate: datasource=github-releases depName=siderolabs/talos
+        version = "1.14.4"
+        # renovate: datasource=github-releases depName=siderolabs/talos
+        iso = "local:iso/talos_1.14.4.iso"
+        # renovate: datasource=github-releases depName=siderolabs/talos
         image        = "factory.talos.dev/metal-installer/9ed5fecdacb36b5c5427b87d409f1065cfb2df69b0f71c58b868d9d466d8dab3:v1.14.4"
         vm_disk      = "/dev/nvme0n1"
         cluster_name = "prd"
@@ -73,6 +76,7 @@ locals {
         "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_tlsroutes.yaml",
         "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.6.3/config/crd/standard/gateway.networking.k8s.io_backendtlspolicies.yaml"
       ]
+      # renovate: datasource=docker depName=quay.io/cilium/charts/cilium
       cilium_version = "1.20.4"
       flux_version = {
         version      = "2.19.1"

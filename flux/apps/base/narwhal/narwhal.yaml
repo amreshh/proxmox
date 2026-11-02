@@ -5,9 +5,6 @@ metadata:
   labels:
     app.kubernetes.io/name: narwhal
 spec:
-  # One replica: a ReadWriteOnce volume can only be mounted by one node.
-  # With a ReadWriteMany volume (NFS, CephFS, EFS…) you can scale out and
-  # switch the strategy to RollingUpdate.
   replicas: 1
   strategy:
     type: Recreate
@@ -24,7 +21,6 @@ spec:
         runAsNonRoot: true
         runAsUser: 65532
         runAsGroup: 65532
-        # Makes the volume writable for the app user.
         fsGroup: 65532
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile:
@@ -41,19 +37,12 @@ spec:
               value: /data
             - name: NARWHAL_ROOT_NAME
               value: Storage
-            # Set to "true" to disable every write operation.
             - name: NARWHAL_READ_ONLY
               value: "false"
-            # 0 = unlimited. Keep in sync with the ingress body-size limit.
             - name: NARWHAL_MAX_UPLOAD_MB
               value: "0"
-            # Optional fixed sidebar entries, e.g. "Documents=/docs,Media=/media".
-            # When empty the sidebar lists the top-level folders.
             - name: NARWHAL_PLACES
               value: ""
-            # Host names to answer to (your ingress host), e.g. "files.example.com".
-            # Requests for any other host get 403, which blocks DNS rebinding.
-            # Empty = any host.
             - name: NARWHAL_ALLOWED_HOSTS
               value: ""
             - name: RUST_LOG

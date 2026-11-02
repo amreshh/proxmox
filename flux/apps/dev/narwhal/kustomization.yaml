@@ -3,6 +3,11 @@ kind: Kustomization
 resources:
   - ../../base/narwhal
 
+images:
+  - name: narwhal
+    newName: ghcr.io/amreshh/narwhal
+    newTag: latest
+
 patches:
   - target:
       kind: HTTPRoute
@@ -12,3 +17,10 @@ patches:
         path: "/spec/hostnames"
         value:
           - narwhal.dev.kubernetes.home
+  - target:
+      kind: Deployment
+      name: narwhal
+    patch: |-
+      - op: replace
+        path: "/spec/template/spec/containers/0/imagePullPolicy"
+        value: Always

@@ -3,12 +3,8 @@ kind: Kustomization
 namespace: narwhal
 resources:
   - namespace.yaml
+  - network-policies.yaml
   - pvc.yaml
   - narwhal.yaml
   - services.yaml
   - routes.yaml
-
-images:
-  - name: narwhal
-    newName: ghcr.io/amreshh/narwhal
-    newTag: latest

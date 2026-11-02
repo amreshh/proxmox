@@ -10,3 +10,4 @@ spec:
   ingress:
     - fromEntities:
         - ingress
+        - host

@@ -27,7 +27,7 @@ locals {
       cilium_version = "1.20.4"
       flux_version = {
         # renovate: datasource=helm depName=flux2 registryUrl=https://fluxcd-community.github.io/helm-charts
-        version = "2.19.1"
+        version = "2.20.0"
         # renovate: datasource=helm depName=flux2-sync registryUrl=https://fluxcd-community.github.io/helm-charts
         sync_version = "1.16.0"
       }
@@ -82,7 +82,7 @@ locals {
       cilium_version = "1.20.4"
       flux_version = {
         # renovate: datasource=helm depName=flux2 registryUrl=https://fluxcd-community.github.io/helm-charts
-        version = "2.19.1"
+        version = "2.20.0"
         # renovate: datasource=helm depName=flux2-sync registryUrl=https://fluxcd-community.github.io/helm-charts
         sync_version = "1.16.0"
       }

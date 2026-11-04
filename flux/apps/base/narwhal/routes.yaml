@@ -12,5 +12,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: narwhal-service
+        - name: narwhal
           port: 80

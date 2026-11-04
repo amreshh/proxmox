@@ -1,0 +1,13 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-narwhal
+spec:
+  description: allow narwhal ingress
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: narwhal
+  ingress:
+    - fromEntities:
+        - ingress
+        - host

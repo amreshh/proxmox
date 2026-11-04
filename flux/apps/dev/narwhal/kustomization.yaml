@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base/narwhal
+
+images:
+  - name: narwhal
+    newName: ghcr.io/amreshh/narwhal
+    newTag: latest
+
+patches:
+  - target:
+      kind: HTTPRoute
+      name: narwhal
+    patch: |-
+      - op: add
+        path: "/spec/hostnames"
+        value:
+          - narwhal.dev.kubernetes.home
+  - target:
+      kind: Deployment
+      name: narwhal
+    patch: |-
+      - op: replace
+        path: "/spec/template/spec/containers/0/imagePullPolicy"
+        value: Always

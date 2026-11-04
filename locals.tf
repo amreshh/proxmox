@@ -26,7 +26,9 @@ locals {
       # renovate: datasource=docker depName=quay.io/cilium/charts/cilium
       cilium_version = "1.20.4"
       flux_version = {
-        version      = "2.19.1"
+        # renovate: datasource=helm depName=flux2 registryUrl=https://fluxcd-community.github.io/helm-charts
+        version = "2.19.1"
+        # renovate: datasource=helm depName=flux2-sync registryUrl=https://fluxcd-community.github.io/helm-charts
         sync_version = "1.15.1"
       }
       controlplanes = {
@@ -79,7 +81,9 @@ locals {
       # renovate: datasource=docker depName=quay.io/cilium/charts/cilium
       cilium_version = "1.20.4"
       flux_version = {
-        version      = "2.19.1"
+        # renovate: datasource=helm depName=flux2 registryUrl=https://fluxcd-community.github.io/helm-charts
+        version = "2.19.1"
+        # renovate: datasource=helm depName=flux2-sync registryUrl=https://fluxcd-community.github.io/helm-charts
         sync_version = "1.15.1"
       }
       controlplanes = {

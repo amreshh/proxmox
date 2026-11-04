@@ -14,7 +14,7 @@
       "description": "Versions in .tf files annotated with a # renovate: comment",
       "managerFilePatterns": ["/\\.tf$/"],
       "matchStrings": [
-        "#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)\\s+\\w+\\s*=\\s*\"[^\"\\n]*?(?<currentValue>\\d+\\.\\d+\\.\\d+)[^\"\\n]*\""
+        "#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)(?:\\s+registryUrl=(?<registryUrl>\\S+))?\\s+\\w+\\s*=\\s*\"[^\"\\n]*?(?<currentValue>\\d+\\.\\d+\\.\\d+)[^\"\\n]*\""
       ],
       "extractVersionTemplate": "^v?(?<version>.*)$"
     },

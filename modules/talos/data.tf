@@ -32,7 +32,9 @@ data "talos_client_configuration" "talosconfig" {
 }
 
 data "talos_cluster_health" "talos_cluster_health" {
-  client_configuration = talos_machine_secrets.machine_secrets.client_configuration
+  client_configuration   = talos_machine_secrets.machine_secrets.client_configuration
+  skip_kubernetes_checks = true
+
   control_plane_nodes = [
     for k, v in var.controlplanes : v.ip_addr
   ]
@@ -44,4 +46,9 @@ data "talos_cluster_health" "talos_cluster_health" {
   timeouts = {
     read = "10m"
   }
+
+  depends_on = [
+    talos_machine_bootstrap.talos,
+    talos_machine_configuration_apply.workers,
+  ]
 }

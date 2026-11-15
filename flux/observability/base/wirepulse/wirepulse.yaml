@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wirepulse
+  namespace: wirepulse
+  labels:
+    app.kubernetes.io/name: wirepulse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: wirepulse
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: wirepulse
+    spec:
+      serviceAccountName: wirepulse
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: wirepulse
+          image: wirepulse:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: HUBBLE_RELAY_ADDR
+              value: http://hubble-relay.kube-system.svc.cluster.local:80
+            - name: CILIUM_NAMESPACE
+              value: kube-system
+            - name: RUST_LOG
+              value: info,tower_http=warn,kube=warn
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet: { path: /healthz, port: http }
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /healthz, port: http }
+            periodSeconds: 20
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits: { memory: 512Mi }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]

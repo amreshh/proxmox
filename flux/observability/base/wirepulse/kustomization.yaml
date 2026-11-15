@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# no top-level namespace: rbac.yaml has a Role/RoleBinding in kube-system,
+# so each resource sets its own namespace
+resources:
+  - namespace.yaml
+  - network-policies.yaml
+  - rbac.yaml
+  - wirepulse.yaml
+  - services.yaml
+  - routes.yaml

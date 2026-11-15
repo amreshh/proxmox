@@ -1,0 +1,28 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base/wirepulse
+
+images:
+  - name: wirepulse
+    newName: ghcr.io/amreshh/wirepulse
+    newTag: 0.1.0
+
+patches:
+  - target:
+      kind: HTTPRoute
+      name: wirepulse
+    patch: |-
+      - op: add
+        path: "/spec/hostnames"
+        value:
+          - wirepulse.kubernetes.home
+  - target:
+      kind: Deployment
+      name: wirepulse
+    patch: |-
+      - op: add
+        path: "/spec/template/spec/containers/0/env/-"
+        value:
+          name: WIREPULSE_ALLOWED_HOSTS
+          value: wirepulse.kubernetes.home

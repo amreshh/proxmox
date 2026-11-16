@@ -6,7 +6,7 @@ resources:
 images:
   - name: wirepulse
     newName: ghcr.io/amreshh/wirepulse
-    newTag: 0.1.0
+    newTag: 0.1.3
 
 patches:
   - target:

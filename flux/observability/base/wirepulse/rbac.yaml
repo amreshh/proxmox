@@ -21,9 +21,8 @@ rules:
       - ciliumclusterwidenetworkpolicies
       - ciliumnodeconfigs
     verbs: ["get", "list"]
-  # watched: the endpoints tab streams changes instead of re-listing
   - apiGroups: ["cilium.io"]
-    resources: ["ciliumendpoints", "ciliumendpointslices"]
+    resources: ["ciliumendpoints", "ciliumendpointslices", "ciliumnodes"]
     verbs: ["get", "list", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1

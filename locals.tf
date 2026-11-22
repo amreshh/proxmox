@@ -24,7 +24,7 @@ locals {
         "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.7.0/config/crd/standard/gateway.networking.k8s.io_backendtlspolicies.yaml"
       ]
       # renovate: datasource=docker depName=quay.io/cilium/charts/cilium
-      cilium_version = "1.20.4"
+      cilium_version = "1.20.5"
       flux_version = {
         # renovate: datasource=helm depName=flux2 registryUrl=https://fluxcd-community.github.io/helm-charts
         version = "2.20.0"
@@ -79,7 +79,7 @@ locals {
         "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.7.0/config/crd/standard/gateway.networking.k8s.io_backendtlspolicies.yaml"
       ]
       # renovate: datasource=docker depName=quay.io/cilium/charts/cilium
-      cilium_version = "1.20.4"
+      cilium_version = "1.20.5"
       flux_version = {
         # renovate: datasource=helm depName=flux2 registryUrl=https://fluxcd-community.github.io/helm-charts
         version = "2.20.0"
